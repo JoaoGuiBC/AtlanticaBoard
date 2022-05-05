@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "prettier"
+    ],
+    "settings": {
+        "import/extensions": [".js", ".jsx", ".ts", ".tsx"]
+    },
+    "rules": {
+        "prettier/prettier": ["error"],
+        "no-undef": "off",
+        "no-new": "off",
+        "no-param-reassign": "off",
+        "react/prop-types": "off",
+        "linebreak-style": "off",
+        "camelcase": "off",
+        "react/jsx-one-expression-per-line": "off",
+        "import/no-unresolved": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/function-component-definition": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "import/no-extraneous-dependencies": "off",
+        "react/jsx-no-bind": "off",
+        "react/jsx-no-useless-fragment": "off",
+        "import/prefer-default-export": "off",
+        "import/extensions": "off",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".tsx"
+                ]
+            }
+        ]
+    }
+}
