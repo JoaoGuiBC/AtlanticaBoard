@@ -1,8 +1,15 @@
 import { Button, Flex, Stack } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 import { Input } from '../components/Form/Input';
 
 export function SignIn() {
+  const navigate = useNavigate();
+
+  function handleSignIn() {
+    navigate('/dashboard');
+  }
+
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Flex
@@ -25,6 +32,7 @@ export function SignIn() {
           colorScheme="blue"
           size="lg"
           borderRadius={4}
+          onClick={handleSignIn}
         >
           Entrar
         </Button>

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { Dashboard } from '../pages/dashboard';
+import { Infographics } from '../pages/dashboard/infographics';
 import { SignIn } from '../pages/signIn';
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
 
@@ -12,8 +12,7 @@ export function Router() {
           <Route path="/" element={<Navigate to="/signIn" />} />
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signIn/test" element={<SignIn />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/users" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Infographics />} />
         </Routes>
       </SidebarDrawerProvider>
     </BrowserRouter>
