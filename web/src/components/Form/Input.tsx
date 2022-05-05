@@ -9,24 +9,34 @@ import {
   InputRightElement,
   Input as ChakraInput,
   InputProps as ChakraInputProps,
+  Text,
+  Flex,
 } from '@chakra-ui/react';
 
 interface InputProps extends ChakraInputProps {
   name: string;
   label?: string;
+  info?: string;
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, type, ...rest },
+  { name, label, info, type, ...rest },
   ref,
 ) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <FormControl>
-      {!!label && (
+      {label && (
         <FormLabel fontSize={15} fontWeight="normal" htmlFor={name}>
-          {label}
+          <Flex>
+            <Text>{label}</Text>
+            {info && (
+              <Text fontSize="xs" ml={2} lineHeight={2} textColor="gray.400">
+                {info}
+              </Text>
+            )}
+          </Flex>
         </FormLabel>
       )}
 
