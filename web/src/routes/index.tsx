@@ -6,6 +6,8 @@ import { SignIn } from '../pages/signIn';
 import { Infographics } from '../pages/dashboard/infographics';
 import { ClientList } from '../pages/dashboard/clients';
 import { CreateClient } from '../pages/dashboard/clients/create';
+import { EmployeeList } from '../pages/dashboard/employees';
+import { CreateEmployee } from '../pages/dashboard/employees/create';
 
 export function Router() {
   return (
@@ -21,6 +23,9 @@ export function Router() {
 
           <Route path="/clientes" element={<ClientList />} />
           <Route path="/clientes/criar" element={<CreateClient />} />
+
+          <Route path="/funcionarios" element={<EmployeeList />} />
+          <Route path="/funcionarios/criar" element={<CreateEmployee />} />
         </Routes>
       </SidebarDrawerProvider>
     </BrowserRouter>

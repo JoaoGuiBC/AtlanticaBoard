@@ -1,4 +1,4 @@
-import { RiAddLine, RiPencilLine } from 'react-icons/ri';
+import { RiAddLine, RiDeleteBinLine, RiPencilLine } from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
@@ -14,6 +14,7 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  VStack,
 } from '@chakra-ui/react';
 
 import { Header } from '../../../components/Header';
@@ -115,24 +116,46 @@ export function ClientList() {
                     </Td>
 
                     <Td>
-                      <Button
-                        as="a"
-                        size="sm"
-                        fontSize="sm"
-                        borderRadius={4}
-                        colorScheme="blue"
-                        leftIcon={
-                          isWideVersion && (
+                      <VStack>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          w="100%"
+                          borderRadius={4}
+                          colorScheme="blue"
+                          leftIcon={
+                            isWideVersion && (
+                              <Icon as={RiPencilLine} fontSize="16" />
+                            )
+                          }
+                        >
+                          {isWideVersion ? (
+                            'Editar'
+                          ) : (
                             <Icon as={RiPencilLine} fontSize="16" />
-                          )
-                        }
-                      >
-                        {isWideVersion ? (
-                          'Editar'
-                        ) : (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )}
-                      </Button>
+                          )}
+                        </Button>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          w="100%"
+                          borderRadius={4}
+                          colorScheme="red"
+                          leftIcon={
+                            isWideVersion && (
+                              <Icon as={RiDeleteBinLine} fontSize="16" />
+                            )
+                          }
+                        >
+                          {isWideVersion ? (
+                            'Excluir'
+                          ) : (
+                            <Icon as={RiDeleteBinLine} fontSize="16" />
+                          )}
+                        </Button>
+                      </VStack>
                     </Td>
                   </Tr>
                 ))}
