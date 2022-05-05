@@ -3,12 +3,12 @@ import { useLocation, Link, LinkProps } from 'react-router-dom';
 
 interface ActiveLinkProps extends LinkProps {
   children: ReactElement;
-  shouldMatchExactHref?: boolean;
+  shouldMatchExactHref: boolean;
 }
 
 export function ActiveLink({
   children,
-  shouldMatchExactHref = false,
+  shouldMatchExactHref,
   ...rest
 }: ActiveLinkProps) {
   const route = useLocation();

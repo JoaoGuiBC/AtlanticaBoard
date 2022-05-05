@@ -7,11 +7,18 @@ interface NavLinkProps extends FlexProps {
   icon: ElementType;
   children: string;
   href: string;
+  shouldMatchExactHref?: boolean;
 }
 
-export function NavLink({ href, icon, children, ...rest }: NavLinkProps) {
+export function NavLink({
+  href,
+  icon,
+  shouldMatchExactHref = false,
+  children,
+  ...rest
+}: NavLinkProps) {
   return (
-    <ActiveLink to={href}>
+    <ActiveLink to={href} shouldMatchExactHref={shouldMatchExactHref}>
       <Flex display="flex" align="center" {...rest}>
         <Icon as={icon} fontSize="20" />
         <Text ml="4" fontWeight="medium">
