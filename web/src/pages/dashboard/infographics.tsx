@@ -54,28 +54,39 @@ const series = [{ name: 'series1', data: [3, 5, 5, 8, 5, 10, 2] }];
 
 export function Infographics() {
   return (
-    <Flex direction="column" h="10vh">
+    <>
       <Header />
+      <Flex direction="column" h="10vh">
+        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+          <Sidebar />
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <Sidebar />
+          <SimpleGrid flex="1" gap="4" minChildWidth="320px">
+            <Box p={['4', '10']} bg="gray.800" borderRadius={4}>
+              <Text fontSize="lg" mb="4">
+                Projetos aceitos por dia
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
+            </Box>
 
-        <SimpleGrid flex="1" gap="4" minChildWidth="320px">
-          <Box p={['4', '10']} bg="gray.800" borderRadius={4}>
-            <Text fontSize="lg" mb="4">
-              Projetos aceitos por dia
-            </Text>
-            <Chart options={options} series={series} type="area" height={160} />
-          </Box>
-
-          <Box p={['4', '10']} bg="gray.800" borderRadius={4}>
-            <Text fontSize="lg" mb="4">
-              Projetos aceitos por dia
-            </Text>
-            <Chart options={options} series={series} type="area" height={160} />
-          </Box>
-        </SimpleGrid>
+            <Box p={['4', '10']} bg="gray.800" borderRadius={4}>
+              <Text fontSize="lg" mb="4">
+                Projetos aceitos por dia
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
+            </Box>
+          </SimpleGrid>
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 }
