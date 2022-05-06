@@ -1,4 +1,9 @@
-import { forwardRef, ForwardRefRenderFunction, useState } from 'react';
+import {
+  forwardRef,
+  ForwardRefRenderFunction,
+  ReactNode,
+  useState,
+} from 'react';
 import { RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
 import {
   Button,
@@ -11,16 +16,18 @@ import {
   InputProps as ChakraInputProps,
   Text,
   Flex,
+  InputLeftAddon,
 } from '@chakra-ui/react';
 
 interface InputProps extends ChakraInputProps {
   name: string;
   label?: string;
   info?: string;
+  leftContent?: string | ReactNode;
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, info, type, ...rest },
+  { name, label, info, type, leftContent, ...rest },
   ref,
 ) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -41,6 +48,8 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       )}
 
       <InputGroup size="lg">
+        {leftContent && <InputLeftAddon children={leftContent} bg="gray.800" />}
+
         <ChakraInput
           name={name}
           id={name}

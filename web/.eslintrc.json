@@ -46,6 +46,7 @@
         "no-nested-ternary": "off",
         "jsx-a11y/anchor-is-valid": "off",
         "react/require-default-props": "off",
+        "react/no-children-prop": "off",
         "react/jsx-filename-extension": [
             1,
             {

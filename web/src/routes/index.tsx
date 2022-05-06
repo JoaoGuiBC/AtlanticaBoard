@@ -3,11 +3,17 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
 
 import { SignIn } from '../pages/signIn';
+
 import { Infographics } from '../pages/dashboard/infographics';
+
 import { ClientList } from '../pages/dashboard/clients';
 import { CreateClient } from '../pages/dashboard/clients/create';
+
 import { EmployeeList } from '../pages/dashboard/employees';
 import { CreateEmployee } from '../pages/dashboard/employees/create';
+
+import { ProductList } from '../pages/dashboard/products';
+import { CreateProduct } from '../pages/dashboard/products/create';
 
 export function Router() {
   return (
@@ -26,6 +32,9 @@ export function Router() {
 
           <Route path="/funcionarios" element={<EmployeeList />} />
           <Route path="/funcionarios/criar" element={<CreateEmployee />} />
+
+          <Route path="/produtos" element={<ProductList />} />
+          <Route path="/produtos/criar" element={<CreateProduct />} />
         </Routes>
       </SidebarDrawerProvider>
     </BrowserRouter>

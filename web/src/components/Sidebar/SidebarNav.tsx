@@ -21,7 +21,7 @@ export function SidebarNav() {
         <NavLink icon={RiContactsLine} href="/clientes">
           Clientes
         </NavLink>
-        <NavLink icon={RiToolsLine} href="/users">
+        <NavLink icon={RiToolsLine} href="/produtos">
           Produtos
         </NavLink>
         <NavLink icon={RiTeamLine} href="/funcionarios" shouldMatchExactHref>

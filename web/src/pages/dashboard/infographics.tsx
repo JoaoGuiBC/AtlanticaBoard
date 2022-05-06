@@ -75,7 +75,7 @@ export function Infographics() {
 
             <Box p={['4', '10']} bg="gray.800" borderRadius={4}>
               <Text fontSize="lg" mb="4">
-                Projetos aceitos por dia
+                Projetos concluídos por dia
               </Text>
               <Chart
                 options={options}
