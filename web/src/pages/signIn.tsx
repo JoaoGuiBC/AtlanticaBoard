@@ -1,21 +1,45 @@
 import { Button, Flex, Stack } from '@chakra-ui/react';
-import { FormEvent, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import { Input } from '../components/Form/Input';
 
 import { useAuth } from '../contexts/AuthContext';
 
+type SignInFormData = {
+  email: string;
+  password: string;
+};
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .email('Informe um e-mail válido')
+    .required('Campo obrigatório'),
+  password: yup.string().required('Campo obrigatório'),
+});
+
 export function SignIn() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const navigate = useNavigate();
 
-  const { signIn, user } = useAuth();
+  const { signIn, user, isAuthLoading } = useAuth();
 
-  async function handleSignIn(event: FormEvent) {
-    event.preventDefault();
-
-    signIn('joaoguibc@gmail.com', 'metalhead159');
+  function handleSignIn({ email, password }: SignInFormData) {
+    signIn(email, password);
   }
+
+  const onSubmit = (data: any) => handleSignIn(data);
 
   useEffect(() => {
     if (user.email) {
@@ -33,11 +57,16 @@ export function SignIn() {
         p="8"
         borderRadius={4}
         flexDir="column"
-        onSubmit={handleSignIn}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing="8">
-          <Input type="email" name="email" label="E-mail" />
-          <Input type="password" name="password" label="Senha" />
+          <Input label="E-mail" error={errors.email} {...register('email')} />
+          <Input
+            type="password"
+            label="Senha"
+            error={errors.password}
+            {...register('password')}
+          />
         </Stack>
 
         <Button
@@ -46,6 +75,7 @@ export function SignIn() {
           colorScheme="blue"
           size="lg"
           borderRadius={4}
+          isLoading={isAuthLoading}
         >
           Entrar
         </Button>

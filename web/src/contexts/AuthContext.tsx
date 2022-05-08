@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useToast } from '@chakra-ui/react';
 
@@ -23,13 +23,16 @@ interface AuthProviderProps {
 
 type AuthContextData = {
   user: User;
+  isAuthLoading: boolean;
   signIn: (email: string, password: string) => void; // eslint-disable-line
+  logOut: () => Promise<void>;
 };
 
 const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
 
   const toast = useToast();
 
@@ -48,21 +51,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async authUser => {
-      if (authUser) {
-        if (authUser.email) {
-          await getUserInfo(authUser.email);
-        }
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
   async function signIn(email: string, password: string) {
+    setIsAuthLoading(true);
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
@@ -80,6 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           isClosable: true,
         });
 
+        setIsAuthLoading(false);
         return;
       }
 
@@ -90,11 +82,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
         position: 'top-right',
         isClosable: true,
       });
+
+      setIsAuthLoading(false);
     }
   }
 
+  async function logOut() {
+    setIsAuthLoading(true);
+    await signOut(auth);
+
+    setUser({} as User);
+    setIsAuthLoading(false);
+  }
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async authUser => {
+      if (authUser) {
+        if (authUser.email) {
+          await getUserInfo(authUser.email);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthLoading, signIn, logOut }}>
       {children}
     </AuthContext.Provider>
   );

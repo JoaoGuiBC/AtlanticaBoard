@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react';
 import { RiEyeLine, RiEyeOffLine } from 'react-icons/ri';
+import { FieldError } from 'react-hook-form';
 import {
   Button,
   FormControl,
@@ -17,23 +18,25 @@ import {
   Text,
   Flex,
   InputLeftAddon,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 
 interface InputProps extends ChakraInputProps {
   name: string;
   label?: string;
   info?: string;
+  error?: FieldError;
   leftContent?: string | ReactNode;
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, label, info, type, leftContent, ...rest },
+  { name, label, info, type, error = null, leftContent, ...rest },
   ref,
 ) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
-    <FormControl>
+    <FormControl isInvalid={!!error}>
       {label && (
         <FormLabel fontSize={15} fontWeight="normal" htmlFor={name}>
           <Flex>
@@ -84,6 +87,8 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           </InputRightElement>
         )}
       </InputGroup>
+
+      <FormErrorMessage>{error?.message}</FormErrorMessage>
     </FormControl>
   );
 };
