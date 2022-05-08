@@ -1,8 +1,7 @@
-import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
-import { useAuth } from '../contexts/AuthContext';
+import { ProtectedRoute } from '../components/ProtectedRoute';
 
 import { SignIn } from '../pages/signIn';
 
@@ -16,21 +15,6 @@ import { CreateEmployee } from '../pages/dashboard/employees/create';
 
 import { ProductList } from '../pages/dashboard/products';
 import { CreateProduct } from '../pages/dashboard/products/create';
-
-interface ProtectedRouteProps {
-  component: ReactNode;
-  redirectTo: string;
-}
-
-function ProtectedRoute({ component, redirectTo }: ProtectedRouteProps) {
-  const { user } = useAuth();
-
-  if (!user) {
-    return <Navigate to={redirectTo} />;
-  }
-
-  return <>{component}</>;
-}
 
 export function Router() {
   return (
