@@ -3,24 +3,11 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 import { Input } from '../components/Form/Input';
 
 import { useAuth } from '../contexts/AuthContext';
-
-type SignInFormData = {
-  email: string;
-  password: string;
-};
-
-const schema = yup.object({
-  email: yup
-    .string()
-    .email('Informe um e-mail válido')
-    .required('Campo obrigatório'),
-  password: yup.string().required('Campo obrigatório'),
-});
+import { schema, SignInFormData } from '../utils/signInSchema';
 
 export function SignIn() {
   const {
