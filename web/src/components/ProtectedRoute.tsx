@@ -11,7 +11,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ component, redirectTo }: ProtectedRouteProps) {
   const { user } = useAuth();
 
-  if (!user) {
+  if (!user.email) {
     return <Navigate to={redirectTo} />;
   }
 

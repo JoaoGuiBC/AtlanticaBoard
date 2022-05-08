@@ -18,7 +18,7 @@ export function SignIn() {
   }
 
   useEffect(() => {
-    if (user) {
+    if (user.email) {
       navigate('/dashboard');
     }
   }, [user]);
