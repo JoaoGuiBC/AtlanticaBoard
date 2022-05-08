@@ -1,6 +1,8 @@
+import { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
+import { useAuth } from '../contexts/AuthContext';
 
 import { SignIn } from '../pages/signIn';
 
@@ -15,6 +17,21 @@ import { CreateEmployee } from '../pages/dashboard/employees/create';
 import { ProductList } from '../pages/dashboard/products';
 import { CreateProduct } from '../pages/dashboard/products/create';
 
+interface ProtectedRouteProps {
+  component: ReactNode;
+  redirectTo: string;
+}
+
+function ProtectedRoute({ component, redirectTo }: ProtectedRouteProps) {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to={redirectTo} />;
+  }
+
+  return <>{component}</>;
+}
+
 export function Router() {
   return (
     <BrowserRouter>
@@ -23,18 +40,70 @@ export function Router() {
           <Route path="/" element={<Navigate to="/signIn" />} />
 
           <Route path="/signIn" element={<SignIn />} />
-          <Route path="/signIn/test" element={<SignIn />} />
 
-          <Route path="/dashboard" element={<Infographics />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute
+                component={<Infographics />}
+                redirectTo="/signIn"
+              />
+            }
+          />
 
-          <Route path="/clientes" element={<ClientList />} />
-          <Route path="/clientes/criar" element={<CreateClient />} />
+          <Route
+            path="/clientes"
+            element={
+              <ProtectedRoute component={<ClientList />} redirectTo="/signIn" />
+            }
+          />
+          <Route
+            path="/clientes/criar"
+            element={
+              <ProtectedRoute
+                component={<CreateClient />}
+                redirectTo="/signIn"
+              />
+            }
+          />
 
-          <Route path="/funcionarios" element={<EmployeeList />} />
-          <Route path="/funcionarios/criar" element={<CreateEmployee />} />
+          <Route
+            path="/funcionarios"
+            element={
+              <ProtectedRoute
+                component={<EmployeeList />}
+                redirectTo="/signIn"
+              />
+            }
+          />
+          <Route
+            path="/funcionarios/criar"
+            element={
+              <ProtectedRoute
+                component={<CreateEmployee />}
+                redirectTo="/signIn"
+              />
+            }
+          />
 
-          <Route path="/produtos" element={<ProductList />} />
-          <Route path="/produtos/criar" element={<CreateProduct />} />
+          <Route
+            path="/produtos"
+            element={
+              <ProtectedRoute
+                component={<ProductList />}
+                redirectTo="/signIn"
+              />
+            }
+          />
+          <Route
+            path="/produtos/criar"
+            element={
+              <ProtectedRoute
+                component={<CreateProduct />}
+                redirectTo="/signIn"
+              />
+            }
+          />
         </Routes>
       </SidebarDrawerProvider>
     </BrowserRouter>
