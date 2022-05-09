@@ -48,6 +48,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         name: userData.name,
         isAdmin: userData.isAdmin,
       });
+    } else {
+      throw new Error('Não foi possivel recuperar os dados do usuário');
     }
   }
 
@@ -77,7 +79,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       toast({
         title: 'Erro ao fazer login',
-        description: 'Erro interno, por favor tente novamente mais tarde.',
+        description: error.message,
         status: 'error',
         position: 'top-right',
         isClosable: true,

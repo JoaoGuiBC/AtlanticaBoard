@@ -1,6 +1,6 @@
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
-import { getDocs, collection, query } from 'firebase/firestore';
+import { getDocs, collection, query, doc, deleteDoc } from 'firebase/firestore';
 import {
   Box,
   Button,
@@ -47,10 +47,10 @@ export function EmployeeList() {
       const employeesDocsRef = query(employeesCollectionRef);
       const employeesDocsSnaps = await getDocs(employeesDocsRef);
 
-      const parsedData = employeesDocsSnaps.docs.map(doc => ({
-        email: doc.data().email,
-        name: doc.data().name,
-        isAdmin: doc.data().isAdmin,
+      const parsedData = employeesDocsSnaps.docs.map(employeeDoc => ({
+        email: employeeDoc.data().email,
+        name: employeeDoc.data().name,
+        isAdmin: employeeDoc.data().isAdmin,
       }));
 
       setEmployees(parsedData);
@@ -59,6 +59,17 @@ export function EmployeeList() {
     }
 
     setIsFetchingEmployees(false);
+  }
+
+  async function deleteEmployee(email: string) {
+    const userDocRef = doc(firestore, 'funcionarios', email);
+    await deleteDoc(userDocRef);
+
+    const filteredEmployees = employees.filter(
+      employee => employee.email !== email,
+    );
+
+    setEmployees(filteredEmployees);
   }
 
   useEffect(() => {
@@ -122,6 +133,7 @@ export function EmployeeList() {
                             fontSize="sm"
                             borderRadius={4}
                             colorScheme="red"
+                            onClick={() => deleteEmployee(employee.email)}
                             leftIcon={
                               isWideVersion && (
                                 <Icon as={RiDeleteBinLine} fontSize="16" />
