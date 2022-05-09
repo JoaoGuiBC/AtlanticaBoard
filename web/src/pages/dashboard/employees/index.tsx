@@ -18,10 +18,10 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 
-import { firestore } from '../../../services/firebase';
+import { firestore } from '@services/firebase';
 
-import { Header } from '../../../components/Header';
-import { Sidebar } from '../../../components/Sidebar';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
 
 type Employees = {
   email: string;

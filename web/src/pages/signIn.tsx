@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Input } from '../components/Form/Input';
+import { Input } from '@components/Form/Input';
 
-import { useAuth } from '../contexts/AuthContext';
-import { schema, SignInFormData } from '../utils/signInSchema';
+import { useAuth } from '@contexts/AuthContext';
+import { schema, SignInFormData } from '@utils/signInSchema';
 
 export function SignIn() {
   const {

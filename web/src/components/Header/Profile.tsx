@@ -1,6 +1,6 @@
 import { Flex, Box, Text } from '@chakra-ui/react';
 
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '@contexts/AuthContext';
 
 interface ProfileProps {
   showProfileData?: boolean;

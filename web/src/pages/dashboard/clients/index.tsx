@@ -17,8 +17,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { Header } from '../../../components/Header';
-import { Sidebar } from '../../../components/Sidebar';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
 
 const usersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

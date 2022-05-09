@@ -11,11 +11,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { Header } from '../../../components/Header';
-import { Input } from '../../../components/Form/Input';
-import { Sidebar } from '../../../components/Sidebar';
-import { FieldMarker } from '../../../components/Form/FieldMarker';
-import { Textarea } from '../../../components/Form/Textarea';
+import { Header } from '@components/Header';
+import { Input } from '@components/Form/Input';
+import { Sidebar } from '@components/Sidebar';
+import { Textarea } from '@components/Form/Textarea';
 
 export function CreateProduct() {
   const navigate = useNavigate();

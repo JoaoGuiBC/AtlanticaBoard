@@ -9,7 +9,7 @@ import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useToast } from '@chakra-ui/react';
 
-import { auth, firestore } from '../services/firebase';
+import { auth, firestore } from '@services/firebase';
 
 type User = {
   email: string;

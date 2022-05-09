@@ -2,7 +2,7 @@ import { Button, Flex, Icon } from '@chakra-ui/react';
 import { RiLogoutBoxLine, RiUserAddLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '@contexts/AuthContext';
 
 export function NotificationsNav() {
   const { logOut } = useAuth();
