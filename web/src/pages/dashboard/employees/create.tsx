@@ -1,5 +1,8 @@
-import { FormEvent } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import {
   Box,
   Button,
@@ -14,16 +17,45 @@ import { Header } from '@components/Header';
 import { Input } from '@components/Form/Input';
 import { Sidebar } from '@components/Sidebar';
 
+import {
+  CreateEmployeeFormData,
+  schema,
+} from '@utils/schemas/createEmployeeSchema';
+import { auth, firestore } from '@services/firebase';
+
 export function CreateEmployee() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const navigate = useNavigate();
 
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
+  async function handleCreateEmployee({
+    name,
+    email,
+    password,
+  }: CreateEmployeeFormData) {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
+      }
+    }
 
-    console.log('Sucesso!');
+    await setDoc(doc(firestore, 'funcionarios', email), {
+      name,
+      email,
+      isAdmin: false,
+    });
 
-    navigate('/funcionarios');
+    // navigate('/funcionarios');
   }
+
+  const onSubmit = (data: any) => handleCreateEmployee(data);
 
   return (
     <>
@@ -39,7 +71,7 @@ export function CreateEmployee() {
             borderRadius={4}
             bg="gray.800"
             p={['6', '8']}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <Heading size="lg" fontWeight="normal">
               Adicionar funcionário
@@ -49,29 +81,37 @@ export function CreateEmployee() {
 
             <VStack spacing="8">
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-                <Input name="name" label="Nome" info="obrigatório" />
+                <Input
+                  label="Nome"
+                  info="obrigatório"
+                  error={errors.name}
+                  {...register('name')}
+                />
 
                 <Input
-                  name="email"
                   type="email"
                   label="E-mail"
                   info="obrigatório"
+                  error={errors.email}
+                  {...register('email')}
                 />
               </SimpleGrid>
 
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
                 <Input
-                  name="password"
                   label="Senha"
                   info="obrigatório"
                   type="password"
+                  error={errors.password}
+                  {...register('password')}
                 />
 
                 <Input
-                  name="passwordConfirm"
                   label="Confirme a senha"
                   info="obrigatório"
                   type="password"
+                  error={errors.confirm_password}
+                  {...register('confirm_password')}
                 />
               </SimpleGrid>
             </VStack>

@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '@components/Form/Input';
 
 import { useAuth } from '@contexts/AuthContext';
-import { schema, SignInFormData } from '@utils/signInSchema';
+import { schema, SignInFormData } from '@utils/schemas/signInSchema';
 
 export function SignIn() {
   const {
