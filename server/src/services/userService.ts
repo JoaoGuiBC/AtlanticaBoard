@@ -32,4 +32,15 @@ export class UserService {
 
     return { user, token };
   }
+
+  revalidate(id: string) {
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = sign({}, secret, {
+      subject: id,
+      expiresIn,
+    });
+
+    return token;
+  }
 }

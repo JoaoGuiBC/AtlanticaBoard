@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql';
 
 import { EmployeesService } from '@services/employeesService';
 
@@ -11,6 +11,7 @@ export class EmployeeResolver {
   private employeesService = new EmployeesService();
 
   @Query(() => [Employee])
+  @Authorized()
   async listEmployees() {
     const employees = await this.employeesService.listEmployees();
 
@@ -18,6 +19,7 @@ export class EmployeeResolver {
   }
 
   @Mutation(() => String)
+  @Authorized()
   async createEmployee(@Arg('data') data: CreateEmployeeInput) {
     await this.employeesService.createEmployee(data);
 
