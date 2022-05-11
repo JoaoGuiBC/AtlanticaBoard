@@ -18,7 +18,7 @@ async function main() {
 
   const { url } = await server.listen();
 
-  console.log(`Server is running on: ${url}`);
+  console.log(`Server is running on: ${url}`); // eslint-disable-line
 }
 
 main();
