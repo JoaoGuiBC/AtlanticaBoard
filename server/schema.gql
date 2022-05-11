@@ -24,5 +24,11 @@ type Mutation {
 
 type Query {
   listEmployees: [Employee!]!
-  signIn: String!
+  signIn(email: String!, password: String!): SignInResponse!
+}
+
+"""The logged user model"""
+type SignInResponse {
+  token: String!
+  user: Employee!
 }

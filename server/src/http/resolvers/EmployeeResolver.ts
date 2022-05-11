@@ -8,7 +8,7 @@ import { Employee } from '../models/Employee';
 
 @Resolver()
 export class EmployeeResolver {
-  private employeesService: EmployeesService = new EmployeesService();
+  private employeesService = new EmployeesService();
 
   @Query(() => [Employee])
   async listEmployees() {
