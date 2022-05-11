@@ -3,6 +3,26 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreateEmployeeInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""The employee model"""
+type Employee {
+  email: String!
+  id: ID!
+  isAdmin: Boolean!
+  name: String!
+  password: String!
+}
+
+type Mutation {
+  createEmployee(data: CreateEmployeeInput!): String!
+}
+
 type Query {
-  hello: String!
+  listEmployees: [Employee!]!
+  signIn: String!
 }

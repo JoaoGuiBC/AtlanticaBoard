@@ -4,11 +4,12 @@ import path from 'path';
 import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
 
-import { UserResolver } from './resolvers/UserResolver';
+import { UserResolver } from '@resolvers/UserResolver';
+import { EmployeeResolver } from '@resolvers/EmployeeResolver';
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, EmployeeResolver],
     emitSchemaFile: path.resolve(__dirname, '..', 'schema.gql'),
   });
 
