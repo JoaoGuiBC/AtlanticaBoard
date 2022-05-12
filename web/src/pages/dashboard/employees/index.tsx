@@ -1,6 +1,5 @@
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
-import { getDocs, collection, query, doc, deleteDoc } from 'firebase/firestore';
 import {
   Box,
   Button,
@@ -17,8 +16,6 @@ import {
   Tr,
   useBreakpointValue,
 } from '@chakra-ui/react';
-
-import { firestore } from '@services/firebase';
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
@@ -43,33 +40,12 @@ export function EmployeeList() {
     setIsFetchingEmployees(true);
 
     try {
-      const employeesCollectionRef = collection(firestore, 'funcionarios');
-      const employeesDocsRef = query(employeesCollectionRef);
-      const employeesDocsSnaps = await getDocs(employeesDocsRef);
-
-      const parsedData = employeesDocsSnaps.docs.map(employeeDoc => ({
-        email: employeeDoc.data().email,
-        name: employeeDoc.data().name,
-        isAdmin: employeeDoc.data().isAdmin,
-      }));
-
-      setEmployees(parsedData);
+      // setEmployees(parsedData);
     } catch (_) {
       setDidFetchFailed(true);
     }
 
     setIsFetchingEmployees(false);
-  }
-
-  async function deleteEmployee(email: string) {
-    const userDocRef = doc(firestore, 'funcionarios', email);
-    await deleteDoc(userDocRef);
-
-    const filteredEmployees = employees.filter(
-      employee => employee.email !== email,
-    );
-
-    setEmployees(filteredEmployees);
   }
 
   useEffect(() => {
@@ -133,7 +109,7 @@ export function EmployeeList() {
                             fontSize="sm"
                             borderRadius={4}
                             colorScheme="red"
-                            onClick={() => deleteEmployee(employee.email)}
+                            // onClick={() => deleteEmployee(employee.email)}
                             leftIcon={
                               isWideVersion && (
                                 <Icon as={RiDeleteBinLine} fontSize="16" />

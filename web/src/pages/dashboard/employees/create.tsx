@@ -1,8 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import {
   Box,
   Button,
@@ -21,7 +19,6 @@ import {
   CreateEmployeeFormData,
   schema,
 } from '@utils/schemas/createEmployeeSchema';
-import { auth, firestore } from '@services/firebase';
 
 export function CreateEmployee() {
   const {
@@ -34,28 +31,7 @@ export function CreateEmployee() {
 
   const navigate = useNavigate();
 
-  async function handleCreateEmployee({
-    name,
-    email,
-    password,
-  }: CreateEmployeeFormData) {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-      }
-    }
-
-    await setDoc(doc(firestore, 'funcionarios', email), {
-      name,
-      email,
-      isAdmin: false,
-    });
-
-    // navigate('/funcionarios');
-  }
-
-  const onSubmit = (data: any) => handleCreateEmployee(data);
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <>

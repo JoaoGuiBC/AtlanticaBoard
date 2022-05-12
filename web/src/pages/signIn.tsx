@@ -20,7 +20,7 @@ export function SignIn() {
 
   const navigate = useNavigate();
 
-  const { signIn, user, isAuthLoading } = useAuth();
+  const { signIn, user, loading } = useAuth();
 
   function handleSignIn({ email, password }: SignInFormData) {
     signIn(email, password);
@@ -62,7 +62,7 @@ export function SignIn() {
           colorScheme="blue"
           size="lg"
           borderRadius={4}
-          isLoading={isAuthLoading}
+          isLoading={loading}
         >
           Entrar
         </Button>
