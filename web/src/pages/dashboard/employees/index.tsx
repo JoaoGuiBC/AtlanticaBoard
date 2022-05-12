@@ -1,5 +1,5 @@
+import { useEffect } from 'react';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -15,42 +15,51 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
+import { useListEmployeesQuery } from '@graphql/generated/graphql';
+import { useAuth } from '@contexts/AuthContext';
 
-type Employees = {
+type Employee = {
+  id: string;
   email: string;
   name: string;
   isAdmin: boolean;
 };
 
 export function EmployeeList() {
-  const [isFetchingEmployees, setIsFetchingEmployees] = useState(false);
-  const [didFetchFailed, setDidFetchFailed] = useState(false);
-  const [employees, setEmployees] = useState<Employees[]>([]);
+  const { user, logOut } = useAuth();
+  const toast = useToast();
+
+  const { data, loading, error } = useListEmployeesQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+  });
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
 
-  async function getEmployeesData() {
-    setIsFetchingEmployees(true);
-
-    try {
-      // setEmployees(parsedData);
-    } catch (_) {
-      setDidFetchFailed(true);
-    }
-
-    setIsFetchingEmployees(false);
-  }
-
   useEffect(() => {
-    getEmployeesData();
-  }, []);
+    if (error?.message === 'Autenticação inválida, por favor refaça login') {
+      toast({
+        title: 'Erro com seu login',
+        description: error.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+
+      logOut();
+    }
+  }, [error]);
 
   return (
     <>
@@ -67,11 +76,11 @@ export function EmployeeList() {
               </Heading>
             </Flex>
 
-            {isFetchingEmployees ? (
+            {loading ? (
               <Flex justify="center">
                 <Spinner />
               </Flex>
-            ) : didFetchFailed ? (
+            ) : error ? (
               <Flex justify="center">
                 <Text>Falha ao obter os dados dos usuários.</Text>
               </Flex>
@@ -85,8 +94,8 @@ export function EmployeeList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {employees.map(employee => (
-                    <Tr key={employee.email}>
+                  {data?.listEmployees.map((employee: Employee) => (
+                    <Tr key={employee.id}>
                       <Td>
                         <Box>
                           <Text fontWeight="bold" color="blue.400">

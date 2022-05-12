@@ -1,0 +1,8 @@
+query ListEmployees {
+  listEmployees {
+   email,
+   id,
+   isAdmin,
+   name,
+  }
+}

@@ -6,7 +6,8 @@ import {
   useState,
 } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { useSignInLazyQuery } from 'src/graphql/generated/graphql';
+
+import { useSignInLazyQuery } from '@graphql/generated/graphql';
 
 type User = {
   id: string;

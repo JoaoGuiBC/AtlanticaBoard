@@ -21,7 +21,8 @@
       "@contexts/*": ["./src/contexts/*"],
       "@pages/*": ["./src/pages/*"],
       "@utils/*": ["./src/utils/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@graphql/*": ["./src/graphql/*"]
     }
   },
   "include": ["src"],

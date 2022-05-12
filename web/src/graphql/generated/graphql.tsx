@@ -66,6 +66,11 @@ export type SignInResponse = {
   user: Employee;
 };
 
+export type ListEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListEmployeesQuery = { __typename?: 'Query', listEmployees: Array<{ __typename?: 'Employee', email: string, id: string, isAdmin: boolean, name: string }> };
+
 export type SignInQueryVariables = Exact<{
   password: Scalars['String'];
   email: Scalars['String'];
@@ -75,6 +80,43 @@ export type SignInQueryVariables = Exact<{
 export type SignInQuery = { __typename?: 'Query', signIn: { __typename?: 'SignInResponse', token: string, user: { __typename?: 'Employee', name: string, email: string, isAdmin: boolean, id: string } } };
 
 
+export const ListEmployeesDocument = gql`
+    query ListEmployees {
+  listEmployees {
+    email
+    id
+    isAdmin
+    name
+  }
+}
+    `;
+
+/**
+ * __useListEmployeesQuery__
+ *
+ * To run a query within a React component, call `useListEmployeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListEmployeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListEmployeesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListEmployeesQuery(baseOptions?: Apollo.QueryHookOptions<ListEmployeesQuery, ListEmployeesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListEmployeesQuery, ListEmployeesQueryVariables>(ListEmployeesDocument, options);
+      }
+export function useListEmployeesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListEmployeesQuery, ListEmployeesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListEmployeesQuery, ListEmployeesQueryVariables>(ListEmployeesDocument, options);
+        }
+export type ListEmployeesQueryHookResult = ReturnType<typeof useListEmployeesQuery>;
+export type ListEmployeesLazyQueryHookResult = ReturnType<typeof useListEmployeesLazyQuery>;
+export type ListEmployeesQueryResult = Apollo.QueryResult<ListEmployeesQuery, ListEmployeesQueryVariables>;
 export const SignInDocument = gql`
     query SignIn($password: String!, $email: String!) {
   signIn(password: $password, email: $email) {
