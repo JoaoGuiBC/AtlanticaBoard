@@ -20,7 +20,10 @@ import {
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
-import { useListEmployeesQuery } from '@graphql/generated/graphql';
+import {
+  useDeleteEmployeeMutation,
+  useListEmployeesQuery,
+} from '@graphql/generated/graphql';
 import { useAuth } from '@contexts/AuthContext';
 
 type Employee = {
@@ -34,7 +37,19 @@ export function EmployeeList() {
   const { user, logOut } = useAuth();
   const toast = useToast();
 
-  const { data, loading, error } = useListEmployeesQuery({
+  const {
+    data,
+    loading,
+    error: listError,
+    refetch,
+  } = useListEmployeesQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+  });
+  const [loadDelete, { error }] = useDeleteEmployeeMutation({
     context: {
       headers: {
         Authorization: user.token,
@@ -47,6 +62,14 @@ export function EmployeeList() {
     lg: true,
   });
 
+  async function handleDeleteEmployee(id: string) {
+    await loadDelete({ variables: { deleteEmployeeId: id } });
+
+    if (!error) {
+      refetch();
+    }
+  }
+
   useEffect(() => {
     if (error) {
       toast({
@@ -56,11 +79,22 @@ export function EmployeeList() {
         position: 'top-right',
         isClosable: true,
       });
-      if (error?.message === 'Autenticação inválida, por favor refaça login') {
+    }
+    if (listError) {
+      toast({
+        title: 'Erro',
+        description: listError?.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (
+        listError?.message === 'Autenticação inválida, por favor refaça login'
+      ) {
         logOut();
       }
     }
-  }, [error]);
+  }, [listError, error]);
 
   return (
     <>
@@ -119,7 +153,7 @@ export function EmployeeList() {
                             fontSize="sm"
                             borderRadius={4}
                             colorScheme="red"
-                            // onClick={() => deleteEmployee(employee.email)}
+                            onClick={() => handleDeleteEmployee(employee.id)}
                             leftIcon={
                               isWideVersion && (
                                 <Icon as={RiDeleteBinLine} fontSize="16" />
