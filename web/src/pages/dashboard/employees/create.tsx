@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,12 +9,15 @@ import {
   Flex,
   Heading,
   SimpleGrid,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 
 import { Header } from '@components/Header';
 import { Input } from '@components/Form/Input';
 import { Sidebar } from '@components/Sidebar';
+import { useAuth } from '@contexts/AuthContext';
+import { useCreateEmployeeMutation } from '@graphql/generated/graphql';
 
 import {
   CreateEmployeeFormData,
@@ -21,6 +25,19 @@ import {
 } from '@utils/schemas/createEmployeeSchema';
 
 export function CreateEmployee() {
+  const { user, logOut } = useAuth();
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const [loadCreation, { error }] = useCreateEmployeeMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onCompleted: () => navigate('/funcionarios'),
+  });
+
   const {
     register,
     handleSubmit,
@@ -29,9 +46,36 @@ export function CreateEmployee() {
     resolver: yupResolver(schema),
   });
 
-  const navigate = useNavigate();
+  async function handleOnSubmit({
+    email,
+    name,
+    password,
+  }: CreateEmployeeFormData) {
+    await loadCreation({
+      variables: { data: { email, name, password } },
+    });
+  }
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => handleOnSubmit(data);
+
+  useEffect(() => {
+    if (error) {
+      if (error?.message) {
+        toast({
+          title: 'Erro',
+          description: error?.message,
+          status: 'error',
+          position: 'top-right',
+          isClosable: true,
+        });
+        if (
+          error?.message === 'Autenticação inválida, por favor refaça login'
+        ) {
+          logOut();
+        }
+      }
+    }
+  }, [error]);
 
   return (
     <>

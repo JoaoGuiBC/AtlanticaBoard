@@ -48,16 +48,17 @@ export function EmployeeList() {
   });
 
   useEffect(() => {
-    if (error?.message === 'Autenticação inválida, por favor refaça login') {
+    if (error) {
       toast({
-        title: 'Erro com seu login',
-        description: error.message,
+        title: 'Erro',
+        description: error?.message,
         status: 'error',
         position: 'top-right',
         isClosable: true,
       });
-
-      logOut();
+      if (error?.message === 'Autenticação inválida, por favor refaça login') {
+        logOut();
+      }
     }
   }, [error]);
 

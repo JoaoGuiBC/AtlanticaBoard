@@ -66,6 +66,13 @@ export type SignInResponse = {
   user: Employee;
 };
 
+export type CreateEmployeeMutationVariables = Exact<{
+  data: CreateEmployeeInput;
+}>;
+
+
+export type CreateEmployeeMutation = { __typename?: 'Mutation', createEmployee: string };
+
 export type ListEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -80,6 +87,37 @@ export type SignInQueryVariables = Exact<{
 export type SignInQuery = { __typename?: 'Query', signIn: { __typename?: 'SignInResponse', token: string, user: { __typename?: 'Employee', name: string, email: string, isAdmin: boolean, id: string } } };
 
 
+export const CreateEmployeeDocument = gql`
+    mutation CreateEmployee($data: CreateEmployeeInput!) {
+  createEmployee(data: $data)
+}
+    `;
+export type CreateEmployeeMutationFn = Apollo.MutationFunction<CreateEmployeeMutation, CreateEmployeeMutationVariables>;
+
+/**
+ * __useCreateEmployeeMutation__
+ *
+ * To run a mutation, you first call `useCreateEmployeeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEmployeeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEmployeeMutation, { data, loading, error }] = useCreateEmployeeMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateEmployeeMutation(baseOptions?: Apollo.MutationHookOptions<CreateEmployeeMutation, CreateEmployeeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEmployeeMutation, CreateEmployeeMutationVariables>(CreateEmployeeDocument, options);
+      }
+export type CreateEmployeeMutationHookResult = ReturnType<typeof useCreateEmployeeMutation>;
+export type CreateEmployeeMutationResult = Apollo.MutationResult<CreateEmployeeMutation>;
+export type CreateEmployeeMutationOptions = Apollo.BaseMutationOptions<CreateEmployeeMutation, CreateEmployeeMutationVariables>;
 export const ListEmployeesDocument = gql`
     query ListEmployees {
   listEmployees {

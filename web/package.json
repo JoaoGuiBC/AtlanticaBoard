@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "generate": "graphql-codegen --config codegen.yml"
+    "generate": "graphql-codegen --config --overwrite codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.6.2",
