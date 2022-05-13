@@ -48,6 +48,7 @@ export function EmployeeList() {
         Authorization: user.token,
       },
     },
+    initialFetchPolicy: 'network-only',
   });
   const [loadDelete, { error }] = useDeleteEmployeeMutation({
     context: {
@@ -125,7 +126,7 @@ export function EmployeeList() {
                   <Tr>
                     <Th>Nome</Th>
                     <Th>E-Mail</Th>
-                    <Th width="8" />
+                    {user.isAdmin && <Th width="8" />}
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -145,29 +146,31 @@ export function EmployeeList() {
                         </Text>
                       </Td>
 
-                      <Td>
-                        {!employee.isAdmin && (
-                          <Button
-                            as="a"
-                            size="sm"
-                            fontSize="sm"
-                            borderRadius={4}
-                            colorScheme="red"
-                            onClick={() => handleDeleteEmployee(employee.id)}
-                            leftIcon={
-                              isWideVersion && (
+                      {user.isAdmin && (
+                        <Td>
+                          {!employee.isAdmin && (
+                            <Button
+                              as="a"
+                              size="sm"
+                              fontSize="sm"
+                              borderRadius={4}
+                              colorScheme="red"
+                              onClick={() => handleDeleteEmployee(employee.id)}
+                              leftIcon={
+                                isWideVersion && (
+                                  <Icon as={RiDeleteBinLine} fontSize="16" />
+                                )
+                              }
+                            >
+                              {isWideVersion ? (
+                                'Excluir'
+                              ) : (
                                 <Icon as={RiDeleteBinLine} fontSize="16" />
-                              )
-                            }
-                          >
-                            {isWideVersion ? (
-                              'Excluir'
-                            ) : (
-                              <Icon as={RiDeleteBinLine} fontSize="16" />
-                            )}
-                          </Button>
-                        )}
-                      </Td>
+                              )}
+                            </Button>
+                          )}
+                        </Td>
+                      )}
                     </Tr>
                   ))}
                 </Tbody>
