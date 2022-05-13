@@ -6,11 +6,12 @@ import { buildSchema } from 'type-graphql';
 
 import { UserResolver } from '@resolvers/UserResolver';
 import { EmployeeResolver } from '@resolvers/EmployeeResolver';
+import { ClientResolver } from '@resolvers/ClientResolver';
 import { authChecker } from './http/middlewares/authCheckerMiddleware';
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [UserResolver, EmployeeResolver],
+    resolvers: [UserResolver, EmployeeResolver, ClientResolver],
     emitSchemaFile: path.resolve(__dirname, '..', 'schema.gql'),
     authChecker,
   });

@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model Employee {
@@ -19,5 +19,43 @@ model Employee {
 
   isAdmin Boolean @default(false)
 
+  created_at DateTime @default(now())
+
   @@map("employees")
+}
+
+model Client {
+  id String @id @default(uuid())
+
+  name        String
+  email       String  @unique
+  contact     String?
+  phoneNumber String?
+
+  document          String  @unique
+  stateRegistration String?
+
+  created_at DateTime @default(now())
+
+  address Address[]
+
+  @@map("clients")
+}
+
+model Address {
+  id String @id @default(uuid())
+
+  street   String
+  number   Int?
+  state    String?
+  city     String?
+  district String?
+  cep      String?
+
+  created_at DateTime @default(now())
+
+  clientId String?
+  Client   Client? @relation(fields: [clientId], references: [id])
+
+  @@map("adresses")
 }

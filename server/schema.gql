@@ -3,6 +3,44 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""The address model"""
+type Address {
+  cep: String
+  city: String
+  district: String
+  id: ID!
+  number: Float
+  state: String
+  street: String!
+}
+
+"""The client model"""
+type Client {
+  address: [Address!]!
+  contact: String
+  document: String!
+  email: String!
+  id: ID!
+  name: String!
+  phoneNumber: String
+  stateRegistration: String
+}
+
+input CreateClientInput {
+  cep: String
+  city: String
+  contact: String
+  district: String
+  document: String!
+  email: String!
+  name: String!
+  number: Float
+  phoneNumber: String
+  state: String
+  stateRegistration: String
+  street: String!
+}
+
 input CreateEmployeeInput {
   email: String!
   name: String!
@@ -19,11 +57,13 @@ type Employee {
 }
 
 type Mutation {
+  createClient(data: CreateClientInput!): String!
   createEmployee(data: CreateEmployeeInput!): String!
   deleteEmployee(id: String!): String!
 }
 
 type Query {
+  listClients: [Client!]!
   listEmployees: [Employee!]!
   revalidateJWT(userId: String!): String!
   signIn(email: String!, password: String!): SignInResponse!
