@@ -7,7 +7,10 @@ import {
 } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-import { useSignInLazyQuery } from '@graphql/generated/graphql';
+import {
+  useRevalidateJwtLazyQuery,
+  useSignInLazyQuery,
+} from '@graphql/generated/graphql';
 
 type User = {
   id: string;
@@ -26,6 +29,7 @@ type AuthContextData = {
   loading: boolean;
   signIn: (email: string, password: string) => void; // eslint-disable-line
   logOut: () => Promise<void>;
+  revalidate: (loggedUser: User) => Promise<void>; // eslint-disable-line
 };
 
 const AuthContext = createContext({} as AuthContextData);
@@ -33,6 +37,7 @@ const AuthContext = createContext({} as AuthContextData);
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User);
   const [loadSignIn, { loading }] = useSignInLazyQuery();
+  const [loadRevalidate, { error }] = useRevalidateJwtLazyQuery();
 
   const toast = useToast();
 
@@ -54,10 +59,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
           token: loadedData?.signIn.token!,
         }),
       );
-    } catch (error: any) {
+    } catch (signInError: any) {
       toast({
         title: 'Erro ao fazer login',
-        description: error.message,
+        description: signInError.message,
         status: 'error',
         position: 'top-right',
         isClosable: true,
@@ -66,7 +71,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function logOut() {
+    localStorage.removeItem('@atlanticaboard:user');
     setUser({} as User);
+  }
+
+  async function revalidate(loggedUser: User) {
+    const { data } = await loadRevalidate({
+      context: {
+        headers: {
+          Authorization: loggedUser.token,
+        },
+      },
+      variables: {
+        userId: loggedUser.id,
+      },
+    });
+
+    loggedUser.token = data?.revalidateJWT!;
+
+    setUser(loggedUser);
   }
 
   useEffect(() => {
@@ -75,12 +98,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (foundUser) {
       const parsedUser: User = JSON.parse(foundUser);
 
-      setUser(parsedUser);
+      revalidate(parsedUser);
     }
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Erro',
+        description: error?.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (error?.message === 'Autenticação inválida, por favor refaça login') {
+        logOut();
+      }
+    }
+  }, [error]);
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, logOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, logOut, revalidate }}>
       {children}
     </AuthContext.Provider>
   );

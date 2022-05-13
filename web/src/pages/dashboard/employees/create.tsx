@@ -25,7 +25,7 @@ import {
 } from '@utils/schemas/createEmployeeSchema';
 
 export function CreateEmployee() {
-  const { user, logOut } = useAuth();
+  const { user, logOut, revalidate } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -51,6 +51,7 @@ export function CreateEmployee() {
     name,
     password,
   }: CreateEmployeeFormData) {
+    await revalidate(user);
     await loadCreation({
       variables: { data: { email, name, password } },
     });
