@@ -10,7 +10,9 @@ interface CreateEmployeeParams {
 
 export class EmployeesService {
   async listEmployees() {
-    const employees = await prisma.employee.findMany();
+    const employees = await prisma.employee.findMany({
+      orderBy: [{ isAdmin: 'desc' }, { name: 'asc' }],
+    });
 
     return employees;
   }
@@ -31,5 +33,17 @@ export class EmployeesService {
     });
 
     return newEmployee;
+  }
+
+  async deleteEmployee(id: string) {
+    const employeeExist = await prisma.employee.findUnique({
+      where: { id },
+    });
+
+    if (!employeeExist) {
+      throw new Error('Funcionário não cadastrado');
+    }
+
+    await prisma.employee.delete({ where: { id } });
   }
 }

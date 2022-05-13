@@ -23,6 +23,14 @@ export class EmployeeResolver {
   async createEmployee(@Arg('data') data: CreateEmployeeInput) {
     await this.employeesService.createEmployee(data);
 
-    return 'Usuário criado com sucesso';
+    return 'Funcionário criado com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async deleteEmployee(@Arg('id') id: string) {
+    await this.employeesService.deleteEmployee(id);
+
+    return 'Funcionário deletado com sucesso';
   }
 }
