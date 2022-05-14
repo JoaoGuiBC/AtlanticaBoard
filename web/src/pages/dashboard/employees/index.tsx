@@ -116,7 +116,7 @@ export function EmployeeList() {
               <Flex justify="center">
                 <Spinner />
               </Flex>
-            ) : error ? (
+            ) : listError ? (
               <Flex justify="center">
                 <Text>Falha ao obter os dados dos usuários.</Text>
               </Flex>

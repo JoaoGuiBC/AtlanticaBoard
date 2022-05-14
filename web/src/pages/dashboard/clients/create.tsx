@@ -1,4 +1,5 @@
-import { FormEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -8,6 +9,7 @@ import {
   Heading,
   HStack,
   SimpleGrid,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 
@@ -15,17 +17,64 @@ import { Header } from '@components/Header';
 import { Input } from '@components/Form/Input';
 import { Sidebar } from '@components/Sidebar';
 import { FieldMarker } from '@components/Form/FieldMarker';
+import {
+  schema,
+  CreateClientFormData,
+} from '@utils/schemas/createClientSchema';
+import { useCreateClientMutation } from '@graphql/generated/graphql';
+import { useAuth } from '@contexts/AuthContext';
+import { useEffect } from 'react';
 
 export function CreateClient() {
   const navigate = useNavigate();
+  const { user, logOut, revalidate } = useAuth();
+  const toast = useToast();
 
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
+  const [loadCreate, { error, loading }] = useCreateClientMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onCompleted: () => navigate('/clientes'),
+  });
 
-    console.log('Sucesso!');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-    navigate('/clientes');
+  async function handleOnSubmit(data: CreateClientFormData) {
+    if (data.state) {
+      data.state = data.state?.toUpperCase();
+    }
+    await revalidate(user);
+    await loadCreate({ variables: { data } });
   }
+
+  const onSubmit = (data: any) => handleOnSubmit(data);
+
+  useEffect(() => {
+    if (error) {
+      if (error?.message) {
+        toast({
+          title: 'Erro',
+          description: error?.message,
+          status: 'error',
+          position: 'top-right',
+          isClosable: true,
+        });
+        if (
+          error?.message === 'Autenticação inválida, por favor refaça login'
+        ) {
+          logOut();
+        }
+      }
+    }
+  }, [error]);
 
   return (
     <>
@@ -41,7 +90,7 @@ export function CreateClient() {
             borderRadius={4}
             bg="gray.800"
             p={['6', '8']}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <Heading size="lg" fontWeight="normal">
               Criar cliente
@@ -50,52 +99,109 @@ export function CreateClient() {
             <Divider my="6" borderColor="gray.600" />
 
             <VStack spacing="8">
-              <Input name="name" label="Nome" info="obrigatório" />
+              <Input
+                label="Nome"
+                info="obrigatório"
+                error={errors.name}
+                {...register('name')}
+              />
 
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
                 <Input
-                  name="email"
                   type="email"
                   label="E-mail"
                   info="obrigatório"
+                  error={errors.email}
+                  {...register('email')}
                 />
-                <Input name="contact" label="Contato" />
-                <Input name="phone" label="Telefone" />
+                <Input
+                  label="Contato"
+                  error={errors.contact}
+                  {...register('contact')}
+                />
+                <Input
+                  label="Telefone"
+                  error={errors.phoneNumber}
+                  {...register('phoneNumber')}
+                />
               </SimpleGrid>
             </VStack>
 
             <FieldMarker title="Fiscal" />
 
             <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-              <Input name="cpfCnpj" label="CPF / CNPJ" info="obrigatório" />
-              <Input name="stateRegistration" label="Inscrição estadual" />
+              <Input
+                label="CPF / CNPJ"
+                info="obrigatório"
+                error={errors.document}
+                {...register('document')}
+              />
+              <Input
+                label="Inscrição estadual"
+                error={errors.stateRegistration}
+                {...register('stateRegistration')}
+              />
             </SimpleGrid>
 
             <FieldMarker title="Endereço" />
 
             <VStack spacing="8">
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-                <Input name="address" label="Endereço" info="obrigatório" />
-                <Input name="number" label="Número" type="number" />
+                <Input
+                  label="Endereço"
+                  info="obrigatório"
+                  error={errors.street}
+                  {...register('street')}
+                />
+                <Input
+                  label="Número"
+                  error={errors.number}
+                  type="number"
+                  {...register('number')}
+                />
               </SimpleGrid>
 
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-                <Input name="state" label="Estado" />
-                <Input name="city" label="Cidade" />
-                <Input name="district" label="Bairro" />
+                <Input
+                  label="Estado"
+                  error={errors.state}
+                  maxLength={2}
+                  info="informe em formato de UF"
+                  autoCapitalize="characters"
+                  {...register('state')}
+                />
+                <Input
+                  label="Cidade"
+                  error={errors.city}
+                  {...register('city')}
+                />
+                <Input
+                  label="Bairro"
+                  error={errors.district}
+                  {...register('district')}
+                />
               </SimpleGrid>
 
-              <Input name="cep" label="CEP" />
+              <Input label="CEP" error={errors.cep} {...register('cep')} />
             </VStack>
 
             <Flex mt="8" justify="flex-end">
               <HStack spacing="4">
                 <Link to="/clientes">
-                  <Button as="a" colorScheme="whiteAlpha" borderRadius={4}>
+                  <Button
+                    type="button"
+                    colorScheme="whiteAlpha"
+                    borderRadius={4}
+                  >
                     Cancelar
                   </Button>
                 </Link>
-                <Button type="submit" colorScheme="blue" borderRadius={4}>
+                <Button
+                  type="submit"
+                  colorScheme="blue"
+                  borderRadius={4}
+                  isLoading={loading}
+                >
                   Salvar
                 </Button>
               </HStack>

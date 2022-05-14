@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { RiAddLine, RiDeleteBinLine, RiPencilLine } from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -6,6 +7,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -14,19 +16,54 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
-
-const usersCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import { useAuth } from '@contexts/AuthContext';
+import { useListClientsQuery } from '@graphql/generated/graphql';
 
 export function ClientList() {
+  const { user, logOut } = useAuth();
+  const toast = useToast();
+
+  const {
+    data,
+    loading,
+    error: listError,
+  } = useListClientsQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    initialFetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
+  });
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  useEffect(() => {
+    if (listError) {
+      toast({
+        title: 'Erro',
+        description: listError?.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (
+        listError?.message === 'Autenticação inválida, por favor refaça login'
+      ) {
+        logOut();
+      }
+    }
+  }, [listError]);
 
   return (
     <>
@@ -44,7 +81,6 @@ export function ClientList() {
 
               <RouterLink to="/clientes/criar">
                 <Button
-                  as="a"
                   size="sm"
                   fontSize="sm"
                   colorScheme="blue"
@@ -56,111 +92,129 @@ export function ClientList() {
               </RouterLink>
             </Flex>
 
-            <Table colorScheme="whiteAlpha">
-              <Thead>
-                <Tr>
-                  <Th>Cliente</Th>
-                  <Th>Fiscal</Th>
-                  <Th>Endereço</Th>
-                  <Th width="8" />
-                </Tr>
-              </Thead>
-              <Tbody>
-                {usersCount.map(key => (
-                  <Tr key={key}>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold" color="blue.400">
-                          Empresa {key}
-                        </Text>
-                        <Text fontSize="sm" color="gray.300">
-                          joaoguibc@gmail.com
-                        </Text>
-                        <Text fontSize="sm" color="gray.400">
-                          João
-                        </Text>
-                        <Text fontSize="sm" color="gray.400">
-                          (47) 99205-4832
-                        </Text>
-                      </Box>
-                    </Td>
-
-                    <Td>
-                      <Text fontSize="sm" color="gray.100">
-                        CPF / CNPJ
-                      </Text>
-                      <Text fontSize="sm" color="gray.400">
-                        91.243.472/0001-20
-                      </Text>
-                      <Text fontSize="sm" color="gray.100" mt={2}>
-                        Inscrição estadual
-                      </Text>
-                      <Text fontSize="sm" color="gray.400">
-                        366.621.530.870
-                      </Text>
-                    </Td>
-
-                    <Td>
-                      <Text fontSize="sm" color="gray.200">
-                        Rua Paramaribo - 331
-                      </Text>
-                      <Text fontSize="sm" color="gray.400">
-                        Santa Regina
-                      </Text>
-                      <Text fontSize="sm" color="gray.400">
-                        Camboriú - SC
-                      </Text>
-                      <Text fontSize="sm" color="gray.500">
-                        88345-653
-                      </Text>
-                    </Td>
-
-                    <Td>
-                      <VStack>
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          w="100%"
-                          borderRadius={4}
-                          colorScheme="blue"
-                          leftIcon={
-                            isWideVersion && (
-                              <Icon as={RiPencilLine} fontSize="16" />
-                            )
-                          }
-                        >
-                          {isWideVersion ? (
-                            'Editar'
-                          ) : (
-                            <Icon as={RiPencilLine} fontSize="16" />
-                          )}
-                        </Button>
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          w="100%"
-                          borderRadius={4}
-                          colorScheme="red"
-                          leftIcon={
-                            isWideVersion && (
-                              <Icon as={RiDeleteBinLine} fontSize="16" />
-                            )
-                          }
-                        >
-                          {isWideVersion ? (
-                            'Excluir'
-                          ) : (
-                            <Icon as={RiDeleteBinLine} fontSize="16" />
-                          )}
-                        </Button>
-                      </VStack>
-                    </Td>
+            {loading ? (
+              <Flex justify="center">
+                <Spinner />
+              </Flex>
+            ) : listError ? (
+              <Flex justify="center">
+                <Text>Falha ao obter dados dos clientes.</Text>
+              </Flex>
+            ) : (
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th>Cliente</Th>
+                    <Th>Fiscal</Th>
+                    <Th>Endereço</Th>
+                    <Th width="8" />
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                </Thead>
+                <Tbody>
+                  {data?.listClients.map(client => (
+                    <Tr key={client.id}>
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold" color="blue.400">
+                            {client.name}
+                          </Text>
+                          <Text fontSize="sm" color="gray.300">
+                            {client.email}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            {client.contact}
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            {client.phoneNumber}
+                          </Text>
+                        </Box>
+                      </Td>
+
+                      <Td>
+                        <Text fontSize="sm" color="gray.100">
+                          CPF / CNPJ
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                          {client.document}
+                        </Text>
+                        {client.stateRegistration && (
+                          <>
+                            <Text fontSize="sm" color="gray.100" mt={2}>
+                              Inscrição estadual
+                            </Text>
+                            <Text fontSize="sm" color="gray.400">
+                              {client.stateRegistration}
+                            </Text>
+                          </>
+                        )}
+                      </Td>
+
+                      <Td>
+                        <Text fontSize="sm" color="gray.200">
+                          {client.address[0].street}{' '}
+                          {client.address[0].number &&
+                            `- ${client.address[0].number}`}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                          {client.address[0].district}
+                        </Text>
+                        <Text fontSize="sm" color="gray.400">
+                          {client.address[0].city}{' '}
+                          {client.address[0].state &&
+                            `- ${client.address[0].state}`}
+                        </Text>
+                        <Text fontSize="sm" color="gray.500">
+                          {client.address[0].cep}
+                        </Text>
+                      </Td>
+
+                      <Td>
+                        <VStack>
+                          <Button
+                            as="a"
+                            size="sm"
+                            fontSize="sm"
+                            w="100%"
+                            borderRadius={4}
+                            colorScheme="blue"
+                            leftIcon={
+                              isWideVersion && (
+                                <Icon as={RiPencilLine} fontSize="16" />
+                              )
+                            }
+                          >
+                            {isWideVersion ? (
+                              'Editar'
+                            ) : (
+                              <Icon as={RiPencilLine} fontSize="16" />
+                            )}
+                          </Button>
+                          <Button
+                            as="a"
+                            size="sm"
+                            fontSize="sm"
+                            w="100%"
+                            borderRadius={4}
+                            colorScheme="red"
+                            leftIcon={
+                              isWideVersion && (
+                                <Icon as={RiDeleteBinLine} fontSize="16" />
+                              )
+                            }
+                          >
+                            {isWideVersion ? (
+                              'Excluir'
+                            ) : (
+                              <Icon as={RiDeleteBinLine} fontSize="16" />
+                            )}
+                          </Button>
+                        </VStack>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            )}
           </Box>
         </Flex>
       </Box>

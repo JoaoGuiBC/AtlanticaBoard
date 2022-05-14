@@ -29,7 +29,7 @@ export function CreateEmployee() {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const [loadCreation, { error }] = useCreateEmployeeMutation({
+  const [loadCreation, { error, loading }] = useCreateEmployeeMutation({
     context: {
       headers: {
         Authorization: user.token,
@@ -138,7 +138,12 @@ export function CreateEmployee() {
             </VStack>
 
             <Flex mt="8" justify="flex-end">
-              <Button type="submit" colorScheme="blue" borderRadius={4}>
+              <Button
+                type="submit"
+                colorScheme="blue"
+                borderRadius={4}
+                isLoading={loading}
+              >
                 Salvar
               </Button>
             </Flex>

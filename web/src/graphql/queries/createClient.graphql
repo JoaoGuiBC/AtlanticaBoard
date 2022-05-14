@@ -1,0 +1,18 @@
+input CreateClientInput {
+  cep: String
+  city: String
+  contact: String
+  district: String
+  document: String!
+  email: String!
+  name: String!
+  number: Float
+  phoneNumber: String
+  state: String
+  stateRegistration: String
+  street: String!
+}
+
+mutation CreateClient($data: CreateClientInput!) {
+  createClient(data: $data)
+}

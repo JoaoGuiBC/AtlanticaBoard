@@ -1,0 +1,19 @@
+query ListClients {
+  listClients {
+    id
+    name
+    contact
+    address {
+      street
+      number
+      state
+      city
+      district
+      cep
+    }
+    email
+    phoneNumber
+    document
+    stateRegistration
+  }
+}
