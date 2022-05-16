@@ -163,17 +163,17 @@ export function CreateClient() {
 
               <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
                 <Input
+                  label="Cidade"
+                  error={errors.city}
+                  {...register('city')}
+                />
+                <Input
                   label="Estado"
                   error={errors.state}
                   maxLength={2}
                   info="informe em formato de UF"
                   autoCapitalize="characters"
                   {...register('state')}
-                />
-                <Input
-                  label="Cidade"
-                  error={errors.city}
-                  {...register('city')}
                 />
                 <Input
                   label="Bairro"

@@ -39,7 +39,7 @@ export function EmployeeList() {
 
   const {
     data,
-    loading,
+    loading: listLoading,
     error: listError,
     refetch,
   } = useListEmployeesQuery({
@@ -50,7 +50,7 @@ export function EmployeeList() {
     },
     initialFetchPolicy: 'network-only',
   });
-  const [loadDelete, { error }] = useDeleteEmployeeMutation({
+  const [loadDelete, { error, loading }] = useDeleteEmployeeMutation({
     context: {
       headers: {
         Authorization: user.token,
@@ -112,7 +112,7 @@ export function EmployeeList() {
               </Heading>
             </Flex>
 
-            {loading ? (
+            {listLoading ? (
               <Flex justify="center">
                 <Spinner />
               </Flex>
@@ -155,6 +155,7 @@ export function EmployeeList() {
                               fontSize="sm"
                               borderRadius={4}
                               colorScheme="red"
+                              isLoading={loading}
                               onClick={() => handleDeleteEmployee(employee.id)}
                               leftIcon={
                                 isWideVersion && (

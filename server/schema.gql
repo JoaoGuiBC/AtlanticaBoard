@@ -59,7 +59,9 @@ type Employee {
 type Mutation {
   createClient(data: CreateClientInput!): String!
   createEmployee(data: CreateEmployeeInput!): String!
+  deleteClient(id: String!): String!
   deleteEmployee(id: String!): String!
+  updateClient(data: UpdateClientInput!): String!
 }
 
 type Query {
@@ -73,4 +75,17 @@ type Query {
 type SignInResponse {
   token: String!
   user: Employee!
+}
+
+input UpdateClientInput {
+  cep: String
+  city: String
+  contact: String
+  district: String
+  id: String!
+  idAddress: String!
+  number: Float
+  phoneNumber: String
+  state: String
+  stateRegistration: String
 }

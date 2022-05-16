@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { RiAddLine, RiDeleteBinLine, RiPencilLine } from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -16,6 +16,7 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  useDisclosure,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -23,16 +24,27 @@ import {
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import { useAuth } from '@contexts/AuthContext';
-import { useListClientsQuery } from '@graphql/generated/graphql';
+import {
+  useDeleteClientMutation,
+  useListClientsQuery,
+} from '@graphql/generated/graphql';
+import {
+  Client,
+  EditClientInfoModal,
+} from '@components/Modals/EditClientInfoModal';
 
 export function ClientList() {
+  const [selectedClient, setSelectedClient] = useState<Client>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logOut } = useAuth();
   const toast = useToast();
 
   const {
     data,
-    loading,
+    loading: listLoading,
     error: listError,
+    refetch,
   } = useListClientsQuery({
     context: {
       headers: {
@@ -43,10 +55,32 @@ export function ClientList() {
     fetchPolicy: 'network-only',
   });
 
+  const [loadDelete, { error, loading }] = useDeleteClientMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+  });
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
+
+  function handleOpenModal(client: Client) {
+    setSelectedClient(client);
+
+    onOpen();
+  }
+
+  async function handleDeleteClient(id: string) {
+    await loadDelete({ variables: { deleteClientId: id } });
+
+    if (!error) {
+      refetch();
+    }
+  }
 
   useEffect(() => {
     if (listError) {
@@ -68,6 +102,15 @@ export function ClientList() {
   return (
     <>
       <Header />
+
+      {isOpen && (
+        <EditClientInfoModal
+          isOpen={isOpen}
+          onClose={onClose}
+          refetch={refetch}
+          client={selectedClient}
+        />
+      )}
 
       <Box>
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -92,7 +135,7 @@ export function ClientList() {
               </RouterLink>
             </Flex>
 
-            {loading ? (
+            {listLoading ? (
               <Flex justify="center">
                 <Spinner />
               </Flex>
@@ -177,6 +220,7 @@ export function ClientList() {
                             w="100%"
                             borderRadius={4}
                             colorScheme="blue"
+                            onClick={() => handleOpenModal(client)}
                             leftIcon={
                               isWideVersion && (
                                 <Icon as={RiPencilLine} fontSize="16" />
@@ -196,6 +240,8 @@ export function ClientList() {
                             w="100%"
                             borderRadius={4}
                             colorScheme="red"
+                            isLoading={loading}
+                            onClick={() => handleDeleteClient(client.id)}
                             leftIcon={
                               isWideVersion && (
                                 <Icon as={RiDeleteBinLine} fontSize="16" />

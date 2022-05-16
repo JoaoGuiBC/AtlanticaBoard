@@ -4,6 +4,7 @@ query ListClients {
     name
     contact
     address {
+      id
       street
       number
       state

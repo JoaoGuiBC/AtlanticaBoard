@@ -1,0 +1,16 @@
+input UpdateClientInput {
+  id: string!
+  idAddress: string!
+  contact: string
+  phoneNumber: string
+  stateRegistration: string
+  number: number
+  state: string
+  city: string
+  district: string
+  cep: string
+}
+
+mutation UpdateClient($data: UpdateClientInput!) {
+  updateClient(data: $data)
+}
