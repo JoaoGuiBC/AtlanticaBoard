@@ -47,6 +47,13 @@ input CreateEmployeeInput {
   password: String!
 }
 
+input CreateProductInput {
+  cost: Float
+  description: String
+  name: String!
+  price: Float!
+}
+
 """The employee model"""
 type Employee {
   email: String!
@@ -59,14 +66,27 @@ type Employee {
 type Mutation {
   createClient(data: CreateClientInput!): String!
   createEmployee(data: CreateEmployeeInput!): String!
+  createProduct(data: CreateProductInput!): String!
   deleteClient(id: String!): String!
   deleteEmployee(id: String!): String!
+  deleteProduct(id: String!): String!
   updateClient(data: UpdateClientInput!): String!
+  updateProduct(data: UpdateProductInput!): String!
+}
+
+"""The product model"""
+type Product {
+  cost: Float
+  description: String
+  id: ID!
+  name: String!
+  price: Float!
 }
 
 type Query {
   listClients: [Client!]!
   listEmployees: [Employee!]!
+  listProducts: [Product!]!
   revalidateJWT(userId: String!): String!
   signIn(email: String!, password: String!): SignInResponse!
 }
@@ -88,4 +108,11 @@ input UpdateClientInput {
   phoneNumber: String
   state: String
   stateRegistration: String
+}
+
+input UpdateProductInput {
+  cost: Float
+  description: String
+  id: String!
+  price: Float!
 }

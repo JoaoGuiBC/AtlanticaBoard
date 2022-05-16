@@ -4,8 +4,8 @@ import {
   RiDashboardLine,
   RiTeamLine,
   RiToolsLine,
-  RiGitMergeLine,
-  RiInputMethodLine,
+  RiPencilRuler2Line,
+  RiFileList3Line,
 } from 'react-icons/ri';
 
 import { NavLink } from './NavLink';
@@ -33,11 +33,11 @@ export function SidebarNav() {
       </NavSection>
 
       <NavSection title="FUNCIONAL">
-        <NavLink icon={RiInputMethodLine} href="/forms">
-          Formulários
+        <NavLink icon={RiPencilRuler2Line} href="/forms">
+          Orçamentos
         </NavLink>
-        <NavLink icon={RiGitMergeLine} href="/automation">
-          Automação
+        <NavLink icon={RiFileList3Line} href="/automation">
+          Pedidos de compra
         </NavLink>
       </NavSection>
     </Stack>

@@ -45,7 +45,7 @@ export class ClientResolver {
   async deleteClient(@Arg('id') id: string) {
     await this.clientsService.deleteClient(id);
 
-    return 'Funcionário deletado com sucesso';
+    return 'Cliente deletado com sucesso';
   }
 
   @Mutation(() => String)

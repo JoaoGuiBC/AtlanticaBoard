@@ -59,3 +59,16 @@ model Address {
 
   @@map("adresses")
 }
+
+model Product {
+  id String @id @default(uuid())
+
+  name        String
+  price       Decimal
+  cost        Decimal?
+  description String?
+
+  created_at DateTime @default(now())
+
+  @@map("products")
+}
