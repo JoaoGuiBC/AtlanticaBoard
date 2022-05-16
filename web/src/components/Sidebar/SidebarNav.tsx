@@ -33,7 +33,7 @@ export function SidebarNav() {
       </NavSection>
 
       <NavSection title="FUNCIONAL">
-        <NavLink icon={RiPencilRuler2Line} href="/forms">
+        <NavLink icon={RiPencilRuler2Line} href="/orcamentos">
           Orçamentos
         </NavLink>
         <NavLink icon={RiFileList3Line} href="/automation">

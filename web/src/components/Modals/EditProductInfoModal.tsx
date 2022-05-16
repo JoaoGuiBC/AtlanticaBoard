@@ -27,7 +27,7 @@ import {
 import {
   UpdateProductFormData,
   schema,
-} from '@utils/schemas/updateProductSchema';
+} from '@utils/schemas/product/updateProductSchema';
 import { Textarea } from '@components/Form/Textarea';
 import { useAuth } from '@contexts/AuthContext';
 

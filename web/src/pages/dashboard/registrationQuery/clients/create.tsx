@@ -20,7 +20,7 @@ import { FieldMarker } from '@components/Form/FieldMarker';
 import {
   schema,
   CreateClientFormData,
-} from '@utils/schemas/createClientSchema';
+} from '@utils/schemas/client/createClientSchema';
 import { useCreateClientMutation } from '@graphql/generated/graphql';
 import { useAuth } from '@contexts/AuthContext';
 import { useEffect } from 'react';

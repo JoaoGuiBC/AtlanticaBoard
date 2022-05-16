@@ -5,16 +5,16 @@ import { ProtectedRoute } from '@components/ProtectedRoute';
 
 import { SignIn } from '@pages/signIn';
 
-import { Infographics } from '@pages/dashboard/infographics';
+import { Infographics } from '@pages/dashboard/general/infographics';
 
-import { ClientList } from '@pages/dashboard/clients';
-import { CreateClient } from '@pages/dashboard/clients/create';
+import { ClientList } from '@pages/dashboard/registrationQuery/clients';
+import { CreateClient } from '@pages/dashboard/registrationQuery/clients/create';
 
-import { EmployeeList } from '@pages/dashboard/employees';
-import { CreateEmployee } from '@pages/dashboard/employees/create';
+import { EmployeeList } from '@pages/dashboard/registrationQuery/employees';
+import { CreateEmployee } from '@pages/dashboard/registrationQuery/employees/create';
 
-import { ProductList } from '@pages/dashboard/products';
-import { CreateProduct } from '@pages/dashboard/products/create';
+import { ProductList } from '@pages/dashboard/registrationQuery/products';
+import { CreateProduct } from '@pages/dashboard/registrationQuery/products/create';
 
 export function Router() {
   return (

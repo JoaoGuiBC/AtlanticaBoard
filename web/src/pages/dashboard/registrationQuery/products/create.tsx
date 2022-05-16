@@ -23,7 +23,7 @@ import { useCreateProductMutation } from '@graphql/generated/graphql';
 import {
   CreateProductFormData,
   schema,
-} from '@utils/schemas/createProductSchema';
+} from '@utils/schemas/product/createProductSchema';
 
 export function CreateProduct() {
   const navigate = useNavigate();
