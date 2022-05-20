@@ -13,11 +13,18 @@ interface UpdateProductParams extends Omit<CreateProductParams, 'name'> {
 
 export class ProductsService {
   async listProducts() {
-    const Products = await prisma.product.findMany({
+    const products = await prisma.product.findMany({
       orderBy: { name: 'asc' },
     });
 
-    return Products;
+    return products;
+  }
+
+  async listProductById(id: string) {
+    console.log(id);
+    const product = await prisma.product.findUnique({ where: { id } });
+
+    return product!;
   }
 
   async createProduct({ name, description, price, cost }: CreateProductParams) {

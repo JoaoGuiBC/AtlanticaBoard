@@ -28,7 +28,7 @@ import {
 import {
   UpdateClientFormData,
   schema,
-} from '@utils/schemas/updateClientSchema';
+} from '@utils/schemas/client/updateClientSchema';
 import { useEffect } from 'react';
 import { useAuth } from '@contexts/AuthContext';
 

@@ -1,0 +1,18 @@
+input ProductInput {
+  base: Float!
+  height: Float!
+  price: Float!
+  productId: String!
+}
+
+input CreateBudgetInput {
+  clientId: String!
+  color: String
+  deadline: DateTime
+  discount: Float
+  products: [ProductInput!]!
+}
+
+mutation CreateBudget($data: CreateBudgetInput!) {
+  createBudget(data: $data)
+}

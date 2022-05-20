@@ -57,7 +57,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           name={name}
           id={name}
           size="lg"
-          pr="4.5rem"
+          pr={type === 'password' ? '4rem' : '0px'}
           type={!isPasswordVisible ? type : 'text'}
           focusBorderColor="blue.500"
           bgColor="gray.900"

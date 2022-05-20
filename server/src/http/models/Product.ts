@@ -1,5 +1,7 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 
+import { ProductBudget } from './ProductBudget';
+
 @ObjectType({ description: 'The product model' })
 export class Product {
   @Field(_type => ID)
@@ -16,4 +18,7 @@ export class Product {
 
   @Field({ nullable: true })
   description?: string;
+
+  @Field(() => [ProductBudget])
+  productBudget: ProductBudget[];
 }

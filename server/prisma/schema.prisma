@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -35,9 +35,10 @@ model Client {
   document          String  @unique
   stateRegistration String?
 
-  created_at DateTime @default(now())
-
   address Address[]
+  Budget  Budget[]
+
+  created_at DateTime @default(now())
 
   @@map("clients")
 }
@@ -52,10 +53,10 @@ model Address {
   district String?
   cep      String?
 
-  created_at DateTime @default(now())
-
   clientId String?
   Client   Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
 
   @@map("adresses")
 }
@@ -64,11 +65,51 @@ model Product {
   id String @id @default(uuid())
 
   name        String
-  price       Decimal
-  cost        Decimal?
+  price       Float
+  cost        Float?
   description String?
+
+  productBudget ProductBudget[]
 
   created_at DateTime @default(now())
 
   @@map("products")
+}
+
+model ProductBudget {
+  id String @id @default(uuid())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  base   Float
+  height Float
+  price  Float
+
+  budgetId String
+  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+
+  @@map("product_budgets")
+}
+
+model Budget {
+  id           String @id @default(uuid())
+  serialNumber Int    @default(autoincrement())
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  products ProductBudget[]
+
+  color    String?
+  deadline DateTime?
+  discount Float?
+
+  price Float @default(0)
+
+  created_at DateTime @default(now())
+
+  @@map("budgets")
 }

@@ -28,6 +28,12 @@ export class ClientsService {
     return clients;
   }
 
+  async listClientById(id: string) {
+    const client = await prisma.client.findUnique({ where: { id } });
+
+    return client!;
+  }
+
   async createClient({
     email,
     name,

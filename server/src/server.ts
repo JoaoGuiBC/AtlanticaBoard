@@ -8,6 +8,7 @@ import { UserResolver } from '@resolvers/UserResolver';
 import { EmployeeResolver } from '@resolvers/EmployeeResolver';
 import { ClientResolver } from '@resolvers/ClientResolver';
 import { ProductResolver } from '@resolvers/ProductResolver';
+import { BudgetResolver } from '@resolvers/BudgetResolver';
 
 import { authChecker } from './http/middlewares/authCheckerMiddleware';
 
@@ -18,6 +19,7 @@ async function main() {
       EmployeeResolver,
       ClientResolver,
       ProductResolver,
+      BudgetResolver,
     ],
     emitSchemaFile: path.resolve(__dirname, '..', 'schema.gql'),
     authChecker,

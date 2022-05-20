@@ -14,6 +14,19 @@ type Address {
   street: String!
 }
 
+"""The budget model"""
+type Budget {
+  client: Client!
+  color: String
+  created_at: DateTime!
+  deadline: DateTime
+  discount: Float
+  id: ID!
+  price: Float!
+  products: [ProductBudget!]!
+  serialNumber: Float!
+}
+
 """The client model"""
 type Client {
   address: [Address!]!
@@ -24,6 +37,14 @@ type Client {
   name: String!
   phoneNumber: String
   stateRegistration: String
+}
+
+input CreateBudgetInput {
+  clientId: String!
+  color: String
+  deadline: DateTime
+  discount: Float
+  products: [ProductInput!]!
 }
 
 input CreateClientInput {
@@ -54,6 +75,11 @@ input CreateProductInput {
   price: Float!
 }
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 """The employee model"""
 type Employee {
   email: String!
@@ -64,9 +90,11 @@ type Employee {
 }
 
 type Mutation {
+  createBudget(data: CreateBudgetInput!): String!
   createClient(data: CreateClientInput!): String!
   createEmployee(data: CreateEmployeeInput!): String!
   createProduct(data: CreateProductInput!): String!
+  deleteBudget(id: String!): String!
   deleteClient(id: String!): String!
   deleteEmployee(id: String!): String!
   deleteProduct(id: String!): String!
@@ -81,9 +109,28 @@ type Product {
   id: ID!
   name: String!
   price: Float!
+  productBudget: [ProductBudget!]!
+}
+
+"""The product budget model"""
+type ProductBudget {
+  base: Float!
+  budget: Budget!
+  height: Float!
+  id: ID!
+  price: Float!
+  product: Product!
+}
+
+input ProductInput {
+  base: Float!
+  height: Float!
+  price: Float!
+  productId: String!
 }
 
 type Query {
+  listBudgets: [Budget!]!
   listClients: [Client!]!
   listEmployees: [Employee!]!
   listProducts: [Product!]!

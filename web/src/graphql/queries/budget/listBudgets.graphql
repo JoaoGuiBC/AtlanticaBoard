@@ -1,0 +1,26 @@
+query ListBudgets {
+  listBudgets {
+    id
+    serialNumber
+    price
+    color
+    deadline
+    discount
+    created_at
+    products {
+      id
+      base
+      height
+      price
+      product {
+        name
+      }
+    }
+    client {
+      name
+      email
+      contact
+      phoneNumber
+    }
+  }
+}
