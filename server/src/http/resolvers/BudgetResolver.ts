@@ -10,7 +10,6 @@ import {
 
 import { BudgetsService } from '@services/budgetsService';
 import { ClientsService } from '@services/clientsService';
-import { ProductsService } from '@services/productsService';
 
 import { ProductBudget } from '@models/ProductBudget';
 import { Budget } from '@models/Budget';
@@ -22,7 +21,6 @@ import { Client } from '@models/Client';
 export class BudgetResolver {
   private budgetsService = new BudgetsService();
   private clientsService = new ClientsService();
-  private productsService = new ProductsService();
 
   @Query(() => [Budget])
   @Authorized()

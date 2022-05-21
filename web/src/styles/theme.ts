@@ -21,6 +21,13 @@ export const theme = extendTheme({
   },
   styles: {
     global: {
+      '&::-webkit-scrollbar': {
+        width: '2px',
+        backgroundColor: 'gray.700',
+      },
+      '&::-webkit-scrollbar-thumb': {
+        backgroundColor: 'blue.600',
+      },
       body: {
         bg: 'gray.900',
         color: 'gray.50',

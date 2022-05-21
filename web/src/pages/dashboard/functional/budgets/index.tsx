@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
-import { RiAddLine } from 'react-icons/ri';
+import {
+  RiAddLine,
+  RiCheckLine,
+  RiDeleteBinLine,
+  RiPencilLine,
+} from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
@@ -20,7 +25,10 @@ import {
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import { useAuth } from '@contexts/AuthContext';
-import { useListBudgetsQuery } from '@graphql/generated/graphql';
+import {
+  useDeleteBudgetMutation,
+  useListBudgetsQuery,
+} from '@graphql/generated/graphql';
 import { currencyFormatter } from '@utils/formatter/currencyFormatter';
 
 export function BudgetList() {
@@ -29,6 +37,7 @@ export function BudgetList() {
 
   const {
     data,
+    refetch,
     loading: listLoading,
     error: listError,
   } = useListBudgetsQuery({
@@ -41,13 +50,29 @@ export function BudgetList() {
     fetchPolicy: 'network-only',
   });
 
+  const [loadDelete, { error, loading }] = useDeleteBudgetMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+  });
+
+  async function handleDeleteBudget(id: string) {
+    await loadDelete({ variables: { deleteBudgetId: id } });
+
+    if (!error) {
+      refetch();
+    }
+  }
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
 
   useEffect(() => {
-    if (listError) {
+    if (listError || error) {
       toast({
         title: 'Erro',
         description: listError?.message,
@@ -61,7 +86,7 @@ export function BudgetList() {
         logOut();
       }
     }
-  }, [listError]);
+  }, [listError, error]);
 
   return (
     <>
@@ -127,7 +152,6 @@ export function BudgetList() {
                           {format(parseISO(budget.deadline), 'dd/MM/yyyy')}
                         </Text>
                       )}
-
                       <HStack
                         justify="space-between"
                         w="100%"
@@ -172,6 +196,7 @@ export function BudgetList() {
                                 fontWeight="light"
                                 color="gray.200"
                                 fontSize="md"
+                                maxW="64"
                               >
                                 info: {budget.color}
                               </Text>
@@ -179,13 +204,12 @@ export function BudgetList() {
                           </VStack>
                         )}
                       </HStack>
-
                       <VStack spacing="1" align="flex-start" paddingTop="20">
                         <Text fontSize="md">
                           Subtotal: {currencyFormatter(budget.price)}
                         </Text>
                         <Text fontSize="md">
-                          Disconto: {currencyFormatter(budget.discount)}
+                          Desconto: {currencyFormatter(budget.discount)}
                         </Text>
                         <Text fontWeight="bold" fontSize="lg">
                           Preço final:{' '}
@@ -194,15 +218,55 @@ export function BudgetList() {
                             : currencyFormatter(budget.price)}
                         </Text>
                       </VStack>
+
+                      <Flex
+                        paddingTop="14"
+                        wrap="wrap"
+                        maxWidth="32"
+                        gap="0.5rem"
+                      >
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          borderRadius={4}
+                          colorScheme="blue"
+                          leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          borderRadius={4}
+                          colorScheme="red"
+                          isLoading={loading}
+                          onClick={() => handleDeleteBudget(budget.id)}
+                          leftIcon={<Icon as={RiDeleteBinLine} fontSize="16" />}
+                        >
+                          Excluir
+                        </Button>
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          borderRadius={4}
+                          colorScheme="green"
+                          leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
+                        >
+                          Aprovar
+                        </Button>
+                      </Flex>
                     </VStack>
 
                     <Box>
                       <Heading fontSize="2xl" mb="4">
-                        Produtos
+                        {budget.products.length === 1 ? 'Produto' : 'Produtos'}
                       </Heading>
                       <VStack
                         w="96"
-                        maxH="sm"
+                        maxH="xl"
                         overflow="auto"
                         alignSelf="center"
                         spacing="8"

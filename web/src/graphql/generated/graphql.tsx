@@ -250,6 +250,13 @@ export type CreateBudgetMutationVariables = Exact<{
 
 export type CreateBudgetMutation = { __typename?: 'Mutation', createBudget: string };
 
+export type DeleteBudgetMutationVariables = Exact<{
+  deleteBudgetId: Scalars['String'];
+}>;
+
+
+export type DeleteBudgetMutation = { __typename?: 'Mutation', deleteBudget: string };
+
 export type ListBudgetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -373,6 +380,37 @@ export function useCreateBudgetMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateBudgetMutationHookResult = ReturnType<typeof useCreateBudgetMutation>;
 export type CreateBudgetMutationResult = Apollo.MutationResult<CreateBudgetMutation>;
 export type CreateBudgetMutationOptions = Apollo.BaseMutationOptions<CreateBudgetMutation, CreateBudgetMutationVariables>;
+export const DeleteBudgetDocument = gql`
+    mutation DeleteBudget($deleteBudgetId: String!) {
+  deleteBudget(id: $deleteBudgetId)
+}
+    `;
+export type DeleteBudgetMutationFn = Apollo.MutationFunction<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
+
+/**
+ * __useDeleteBudgetMutation__
+ *
+ * To run a mutation, you first call `useDeleteBudgetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBudgetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBudgetMutation, { data, loading, error }] = useDeleteBudgetMutation({
+ *   variables: {
+ *      deleteBudgetId: // value for 'deleteBudgetId'
+ *   },
+ * });
+ */
+export function useDeleteBudgetMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBudgetMutation, DeleteBudgetMutationVariables>(DeleteBudgetDocument, options);
+      }
+export type DeleteBudgetMutationHookResult = ReturnType<typeof useDeleteBudgetMutation>;
+export type DeleteBudgetMutationResult = Apollo.MutationResult<DeleteBudgetMutation>;
+export type DeleteBudgetMutationOptions = Apollo.BaseMutationOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
 export const ListBudgetsDocument = gql`
     query ListBudgets {
   listBudgets {

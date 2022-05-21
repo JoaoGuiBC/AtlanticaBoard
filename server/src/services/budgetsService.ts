@@ -73,6 +73,6 @@ export class BudgetsService {
       throw new Error('Orçamento não cadastrado');
     }
 
-    await prisma.client.delete({ where: { id } });
+    await prisma.budget.delete({ where: { id } });
   }
 }
