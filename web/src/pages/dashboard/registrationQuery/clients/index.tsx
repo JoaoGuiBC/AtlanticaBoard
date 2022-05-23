@@ -226,9 +226,9 @@ export function ClientList() {
                               colorScheme="blue"
                               onClick={() => handleOpenModal(client)}
                               leftIcon={
-                                isWideVersion && (
+                                isWideVersion ? (
                                   <Icon as={RiPencilLine} fontSize="16" />
-                                )
+                                ) : undefined
                               }
                             >
                               {isWideVersion ? (
@@ -247,9 +247,9 @@ export function ClientList() {
                               isLoading={loading}
                               onClick={() => handleDeleteClient(client.id)}
                               leftIcon={
-                                isWideVersion && (
+                                isWideVersion ? (
                                   <Icon as={RiDeleteBinLine} fontSize="16" />
-                                )
+                                ) : undefined
                               }
                             >
                               {isWideVersion ? (

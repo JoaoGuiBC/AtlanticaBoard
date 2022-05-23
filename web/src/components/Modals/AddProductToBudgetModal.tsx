@@ -78,7 +78,7 @@ export function AddProductToBudgetModal({
   const watchHeight = watch('height');
 
   function handleSelectProduct(id: string) {
-    const filterProduct = listData?.listProducts.find(
+    const filterProduct = listData?.listProducts.products.find(
       product => product.id === id,
     );
 
@@ -139,7 +139,7 @@ export function AddProductToBudgetModal({
               >
                 {!listLoading &&
                   !listError &&
-                  listData?.listProducts.map(product => (
+                  listData?.listProducts.products.map(product => (
                     <Option
                       key={product.id}
                       text={product.name}

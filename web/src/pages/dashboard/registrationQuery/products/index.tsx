@@ -192,9 +192,9 @@ export function ProductList() {
                           colorScheme="blue"
                           onClick={() => handleOpenModal(product)}
                           leftIcon={
-                            isWideVersion && (
+                            isWideVersion ? (
                               <Icon as={RiPencilLine} fontSize="16" />
-                            )
+                            ) : undefined
                           }
                         >
                           {isWideVersion ? (
@@ -213,9 +213,9 @@ export function ProductList() {
                           onClick={() => handleDeleteProduct(product.id)}
                           isLoading={loading}
                           leftIcon={
-                            isWideVersion && (
+                            isWideVersion ? (
                               <Icon as={RiDeleteBinLine} fontSize="16" />
-                            )
+                            ) : undefined
                           }
                         >
                           {isWideVersion ? (

@@ -158,9 +158,9 @@ export function EmployeeList() {
                               isLoading={loading}
                               onClick={() => handleDeleteEmployee(employee.id)}
                               leftIcon={
-                                isWideVersion && (
+                                isWideVersion ? (
                                   <Icon as={RiDeleteBinLine} fontSize="16" />
-                                )
+                                ) : undefined
                               }
                             >
                               {isWideVersion ? (

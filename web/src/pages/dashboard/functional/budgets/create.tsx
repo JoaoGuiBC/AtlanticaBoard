@@ -192,7 +192,7 @@ export function CreateBudget() {
             >
               {!listLoading &&
                 !listError &&
-                listData?.listClients.map(client => (
+                listData?.listClients.clients.map(client => (
                   <Option
                     key={client.id}
                     text={client.name}
@@ -272,9 +272,9 @@ export function CreateBudget() {
                             handleRemoveProduct(product.instanceId)
                           }
                           leftIcon={
-                            isWideVersion && (
+                            isWideVersion ? (
                               <Icon as={RiDeleteBinLine} fontSize="16" />
-                            )
+                            ) : undefined
                           }
                         >
                           {isWideVersion ? (
