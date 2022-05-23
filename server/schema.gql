@@ -191,6 +191,7 @@ input UpdateClientInput {
   phoneNumber: String
   state: String
   stateRegistration: String
+  street: String!
 }
 
 input UpdateProductInput {

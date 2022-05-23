@@ -1,6 +1,7 @@
 input UpdateClientInput {
   id: string!
   idAddress: string!
+  street: string!
   contact: string
   phoneNumber: string
   stateRegistration: string

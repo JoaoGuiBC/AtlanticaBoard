@@ -301,6 +301,7 @@ export type UpdateClientInput = {
   phoneNumber?: InputMaybe<Scalars['String']>;
   state?: InputMaybe<Scalars['String']>;
   stateRegistration?: InputMaybe<Scalars['String']>;
+  street: Scalars['String'];
 };
 
 export type UpdateProductInput = {

@@ -168,14 +168,13 @@ export function EditClientInfoModal({
 
               <VStack spacing="8">
                 <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
-                  <Text
-                    alignItems="center"
-                    display="flex"
-                    justifyContent="center"
-                    fontSize="3xl"
-                  >
-                    {client.address[0].street}
-                  </Text>
+                  <Input
+                    label="Endereço"
+                    info="obrigatório"
+                    defaultValue={client.address[0].street}
+                    error={errors.street}
+                    {...register('street')}
+                  />
                   <Input
                     label="Número"
                     type="number"

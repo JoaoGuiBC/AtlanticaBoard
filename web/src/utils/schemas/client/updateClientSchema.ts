@@ -9,6 +9,7 @@ export type UpdateClientFormData = {
   city?: string;
   district?: string;
   cep?: string;
+  street: string;
 };
 
 export const schema = yup.object({
@@ -29,6 +30,7 @@ export const schema = yup.object({
     .transform((v, o) => (o === '' ? null : v))
     .nullable()
     .typeError('Informe um número válido'),
+  street: yup.string().required('Campo obrigatório'),
   state: yup
     .string()
     .max(2, 'Informe apenas a UF do estado')

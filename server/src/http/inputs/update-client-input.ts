@@ -8,6 +8,9 @@ export class UpdateClientInput {
   @Field()
   idAddress: string;
 
+  @Field()
+  street: string;
+
   @Field({ nullable: true })
   contact?: string;
 

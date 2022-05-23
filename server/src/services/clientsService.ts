@@ -17,7 +17,7 @@ interface CreateClientParams {
 }
 
 interface UpdateClientParams
-  extends Omit<CreateClientParams, 'name' | 'email' | 'document' | 'street'> {
+  extends Omit<CreateClientParams, 'name' | 'email' | 'document'> {
   id: string;
   idAddress: string;
 }
@@ -101,6 +101,7 @@ export class ClientsService {
   async updateClient({
     id,
     idAddress,
+    street,
     cep,
     city,
     contact,
@@ -140,6 +141,7 @@ export class ClientsService {
       await prisma.address.update({
         where: { id: idAddress },
         data: {
+          street,
           cep,
           city,
           district,
