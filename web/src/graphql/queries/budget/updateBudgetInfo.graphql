@@ -1,0 +1,10 @@
+input UpdateBudgetInfoInput {
+  color: String
+  deadline: DateTime
+  discount: Float
+  id: String!
+}
+
+mutation UpdateBudgetInfo($data: UpdateBudgetInfoInput!) {
+  updateBudgetInfo(data: $data)
+}

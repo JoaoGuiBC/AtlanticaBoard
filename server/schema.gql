@@ -98,6 +98,8 @@ type Mutation {
   deleteClient(id: String!): String!
   deleteEmployee(id: String!): String!
   deleteProduct(id: String!): String!
+  updateBudgetInfo(data: UpdateBudgetInfoInput!): String!
+  updateBudgetProducts(data: UpdateBudgetProductsInput!): String!
   updateClient(data: UpdateClientInput!): String!
   updateProduct(data: UpdateProductInput!): String!
 }
@@ -122,6 +124,13 @@ type ProductBudget {
   product: Product!
 }
 
+input ProductBudgetList {
+  base: Float!
+  height: Float!
+  price: Float!
+  productId: String!
+}
+
 input ProductInput {
   base: Float!
   height: Float!
@@ -142,6 +151,18 @@ type Query {
 type SignInResponse {
   token: String!
   user: Employee!
+}
+
+input UpdateBudgetInfoInput {
+  color: String
+  deadline: DateTime
+  discount: Float
+  id: String!
+}
+
+input UpdateBudgetProductsInput {
+  budgetProducts: [ProductBudgetList!]!
+  id: String!
 }
 
 input UpdateClientInput {

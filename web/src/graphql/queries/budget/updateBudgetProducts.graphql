@@ -1,0 +1,15 @@
+input ProductBudgetList {
+  base: Float!
+  height: Float!
+  price: Float!
+  productId: String!
+}
+
+input UpdateBudgetProductsInput {
+  budgetProducts: [ProductBudgetList!]!
+  id: String!
+}
+
+mutation UpdateBudgetProducts($data: UpdateBudgetProductsInput!) {
+  updateBudgetProducts(data: $data)
+}

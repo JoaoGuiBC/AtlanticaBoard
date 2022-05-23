@@ -15,11 +15,24 @@ interface CreateBudgetParams {
   products: Product[];
 }
 
-// interface UpdateClientParams
-//   extends Omit<CreateClientParams, 'name' | 'email' | 'document' | 'street'> {
-//   id: string;
-//   idAddress: string;
-// }
+interface UpdateBudgetInfoParams {
+  id: string;
+  color?: string;
+  deadline?: Date;
+  discount?: number;
+}
+
+interface ProductBudget {
+  base: number;
+  height: number;
+  price: number;
+  productId: string;
+}
+
+interface UpdateBudgetProductsParams {
+  id: string;
+  budgetProducts: ProductBudget[];
+}
 
 export class BudgetsService {
   async listBudgets() {
@@ -74,5 +87,51 @@ export class BudgetsService {
     }
 
     await prisma.budget.delete({ where: { id } });
+  }
+
+  async updateBudgetInfo({
+    id,
+    color,
+    deadline,
+    discount,
+  }: UpdateBudgetInfoParams) {
+    const BudgetExist = await prisma.budget.findUnique({
+      where: { id },
+    });
+
+    if (!BudgetExist) {
+      throw new Error('Orçamento não cadastrado');
+    }
+
+    await prisma.budget.update({
+      where: { id },
+      data: {
+        color,
+        deadline,
+        discount,
+      },
+    });
+  }
+
+  async updateBudgetProducts({
+    id,
+    budgetProducts,
+  }: UpdateBudgetProductsParams) {
+    const BudgetExist = await prisma.budget.findUnique({
+      where: { id },
+    });
+
+    if (!BudgetExist) {
+      throw new Error('Orçamento não cadastrado');
+    }
+
+    await prisma.productBudget.deleteMany({ where: { budgetId: id } });
+
+    await prisma.budget.update({
+      where: { id },
+      data: {
+        products: { createMany: { data: budgetProducts } },
+      },
+    });
   }
 }

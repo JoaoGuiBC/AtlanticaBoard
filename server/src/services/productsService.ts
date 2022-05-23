@@ -21,7 +21,6 @@ export class ProductsService {
   }
 
   async listProductById(id: string) {
-    console.log(id);
     const product = await prisma.product.findUnique({ where: { id } });
 
     return product!;
@@ -58,7 +57,7 @@ export class ProductsService {
     });
 
     if (!ProductExist) {
-      throw new Error('Producte não cadastrado');
+      throw new Error('Produto não cadastrado');
     }
 
     await prisma.product.update({

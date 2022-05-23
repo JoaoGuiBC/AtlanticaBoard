@@ -16,6 +16,8 @@ import { Budget } from '@models/Budget';
 
 import { CreateBudgetInput } from '@inputs/create-budget-input';
 import { Client } from '@models/Client';
+import { UpdateBudgetInfoInput } from '@inputs/update-budget-info-input';
+import { UpdateBudgetProductsInput } from '@inputs/update-budget-products-input';
 
 @Resolver(() => Budget)
 export class BudgetResolver {
@@ -54,5 +56,21 @@ export class BudgetResolver {
     await this.budgetsService.deleteBudget(id);
 
     return 'Orçamento deletado com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async updateBudgetInfo(@Arg('data') data: UpdateBudgetInfoInput) {
+    await this.budgetsService.updateBudgetInfo(data);
+
+    return 'Informações atualizadas com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async updateBudgetProducts(@Arg('data') data: UpdateBudgetProductsInput) {
+    await this.budgetsService.updateBudgetProducts(data);
+
+    return 'Informações atualizadas com sucesso';
   }
 }

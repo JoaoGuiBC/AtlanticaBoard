@@ -112,6 +112,8 @@ export type Mutation = {
   deleteClient: Scalars['String'];
   deleteEmployee: Scalars['String'];
   deleteProduct: Scalars['String'];
+  updateBudgetInfo: Scalars['String'];
+  updateBudgetProducts: Scalars['String'];
   updateClient: Scalars['String'];
   updateProduct: Scalars['String'];
 };
@@ -157,6 +159,16 @@ export type MutationDeleteProductArgs = {
 };
 
 
+export type MutationUpdateBudgetInfoArgs = {
+  data: UpdateBudgetInfoInput;
+};
+
+
+export type MutationUpdateBudgetProductsArgs = {
+  data: UpdateBudgetProductsInput;
+};
+
+
 export type MutationUpdateClientArgs = {
   data: UpdateClientInput;
 };
@@ -186,6 +198,13 @@ export type ProductBudget = {
   id: Scalars['ID'];
   price: Scalars['Float'];
   product: Product;
+};
+
+export type ProductBudgetList = {
+  base: Scalars['Float'];
+  height: Scalars['Float'];
+  price: Scalars['Float'];
+  productId: Scalars['String'];
 };
 
 export type ProductInput = {
@@ -221,6 +240,18 @@ export type SignInResponse = {
   __typename?: 'SignInResponse';
   token: Scalars['String'];
   user: Employee;
+};
+
+export type UpdateBudgetInfoInput = {
+  color?: InputMaybe<Scalars['String']>;
+  deadline?: InputMaybe<Scalars['DateTime']>;
+  discount?: InputMaybe<Scalars['Float']>;
+  id: Scalars['String'];
+};
+
+export type UpdateBudgetProductsInput = {
+  budgetProducts: Array<ProductBudgetList>;
+  id: Scalars['String'];
 };
 
 export type UpdateClientInput = {
@@ -260,7 +291,21 @@ export type DeleteBudgetMutation = { __typename?: 'Mutation', deleteBudget: stri
 export type ListBudgetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListBudgetsQuery = { __typename?: 'Query', listBudgets: Array<{ __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } }> };
+export type ListBudgetsQuery = { __typename?: 'Query', listBudgets: Array<{ __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } }> };
+
+export type UpdateBudgetInfoMutationVariables = Exact<{
+  data: UpdateBudgetInfoInput;
+}>;
+
+
+export type UpdateBudgetInfoMutation = { __typename?: 'Mutation', updateBudgetInfo: string };
+
+export type UpdateBudgetProductsMutationVariables = Exact<{
+  data: UpdateBudgetProductsInput;
+}>;
+
+
+export type UpdateBudgetProductsMutation = { __typename?: 'Mutation', updateBudgetProducts: string };
 
 export type CreateClientMutationVariables = Exact<{
   data: CreateClientInput;
@@ -427,6 +472,7 @@ export const ListBudgetsDocument = gql`
       height
       price
       product {
+        id
         name
       }
     }
@@ -466,6 +512,68 @@ export function useListBudgetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ListBudgetsQueryHookResult = ReturnType<typeof useListBudgetsQuery>;
 export type ListBudgetsLazyQueryHookResult = ReturnType<typeof useListBudgetsLazyQuery>;
 export type ListBudgetsQueryResult = Apollo.QueryResult<ListBudgetsQuery, ListBudgetsQueryVariables>;
+export const UpdateBudgetInfoDocument = gql`
+    mutation UpdateBudgetInfo($data: UpdateBudgetInfoInput!) {
+  updateBudgetInfo(data: $data)
+}
+    `;
+export type UpdateBudgetInfoMutationFn = Apollo.MutationFunction<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>;
+
+/**
+ * __useUpdateBudgetInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateBudgetInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBudgetInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBudgetInfoMutation, { data, loading, error }] = useUpdateBudgetInfoMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBudgetInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>(UpdateBudgetInfoDocument, options);
+      }
+export type UpdateBudgetInfoMutationHookResult = ReturnType<typeof useUpdateBudgetInfoMutation>;
+export type UpdateBudgetInfoMutationResult = Apollo.MutationResult<UpdateBudgetInfoMutation>;
+export type UpdateBudgetInfoMutationOptions = Apollo.BaseMutationOptions<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>;
+export const UpdateBudgetProductsDocument = gql`
+    mutation UpdateBudgetProducts($data: UpdateBudgetProductsInput!) {
+  updateBudgetProducts(data: $data)
+}
+    `;
+export type UpdateBudgetProductsMutationFn = Apollo.MutationFunction<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>;
+
+/**
+ * __useUpdateBudgetProductsMutation__
+ *
+ * To run a mutation, you first call `useUpdateBudgetProductsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBudgetProductsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBudgetProductsMutation, { data, loading, error }] = useUpdateBudgetProductsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBudgetProductsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>(UpdateBudgetProductsDocument, options);
+      }
+export type UpdateBudgetProductsMutationHookResult = ReturnType<typeof useUpdateBudgetProductsMutation>;
+export type UpdateBudgetProductsMutationResult = Apollo.MutationResult<UpdateBudgetProductsMutation>;
+export type UpdateBudgetProductsMutationOptions = Apollo.BaseMutationOptions<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>;
 export const CreateClientDocument = gql`
     mutation CreateClient($data: CreateClientInput!) {
   createClient(data: $data)

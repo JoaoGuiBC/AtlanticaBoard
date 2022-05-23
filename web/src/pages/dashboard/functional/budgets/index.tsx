@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import {
   RiAddLine,
@@ -18,6 +18,7 @@ import {
   StackDivider,
   Text,
   useBreakpointValue,
+  useDisclosure,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -30,8 +31,15 @@ import {
   useListBudgetsQuery,
 } from '@graphql/generated/graphql';
 import { currencyFormatter } from '@utils/formatter/currencyFormatter';
+import {
+  Budget,
+  EditBudgetInfoModal,
+} from '@components/Modals/EditBudgetInfoModal';
 
 export function BudgetList() {
+  const [selectedBudget, setSelectedBudget] = useState<Budget>();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logOut } = useAuth();
   const toast = useToast();
 
@@ -71,6 +79,18 @@ export function BudgetList() {
     lg: true,
   });
 
+  function handleOpenModal(budget: Budget) {
+    setSelectedBudget(budget);
+
+    onOpen();
+  }
+
+  function handleCloseModal() {
+    setSelectedBudget(undefined);
+
+    onClose();
+  }
+
   useEffect(() => {
     if (listError || error) {
       toast({
@@ -91,6 +111,13 @@ export function BudgetList() {
   return (
     <>
       <Header />
+
+      <EditBudgetInfoModal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        refetch={refetch}
+        budget={selectedBudget}
+      />
 
       <Box>
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -231,6 +258,7 @@ export function BudgetList() {
                           fontSize="sm"
                           borderRadius={4}
                           colorScheme="blue"
+                          onClick={() => handleOpenModal(budget)}
                           leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
                         >
                           Editar
