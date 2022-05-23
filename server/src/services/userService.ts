@@ -2,7 +2,7 @@ import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 
 import { prisma } from '@database/prismaClient';
-import authConfig from 'src/config/auth';
+import authConfig from '@config/auth';
 
 interface AuthenticateParams {
   email: string;

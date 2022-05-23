@@ -31,6 +31,7 @@
     "paths": {
       "@services/*": ["./src/services/*"],
       "@database/*": ["./src/database/*"],
+      "@config/*": ["./src/config/*"],
       "@inputs/*": ["./src/http/inputs/*"],
       "@models/*": ["./src/http/models/*"],
       "@resolvers/*": ["./src/http/resolvers/*"],
