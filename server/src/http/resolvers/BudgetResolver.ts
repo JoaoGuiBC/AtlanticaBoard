@@ -6,6 +6,10 @@ import {
   Resolver,
   FieldResolver,
   Root,
+  Args,
+  Int,
+  ObjectType,
+  Field,
 } from 'type-graphql';
 
 import { BudgetsService } from '@services/budgetsService';
@@ -18,16 +22,26 @@ import { CreateBudgetInput } from '@inputs/create-budget-input';
 import { Client } from '@models/Client';
 import { UpdateBudgetInfoInput } from '@inputs/update-budget-info-input';
 import { UpdateBudgetProductsInput } from '@inputs/update-budget-products-input';
+import { PaginationArgs } from '../args/pagination-args';
+
+@ObjectType()
+class ListBudgetsValue {
+  @Field(_type => Int)
+  totalBudgets: number;
+
+  @Field(_type => [Budget])
+  budgets: Budget[];
+}
 
 @Resolver(() => Budget)
 export class BudgetResolver {
   private budgetsService = new BudgetsService();
   private clientsService = new ClientsService();
 
-  @Query(() => [Budget])
+  @Query(() => ListBudgetsValue)
   @Authorized()
-  async listBudgets() {
-    const budgets = await this.budgetsService.listBudgets();
+  async listBudgets(@Args() { skip, take }: PaginationArgs) {
+    const budgets = await this.budgetsService.listBudgets({ skip, take });
 
     return budgets;
   }

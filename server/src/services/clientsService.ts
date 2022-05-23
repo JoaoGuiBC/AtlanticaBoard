@@ -1,4 +1,5 @@
 import { prisma } from '@database/prismaClient';
+import { Pagination } from './pagination';
 
 interface CreateClientParams {
   name: string;
@@ -22,10 +23,16 @@ interface UpdateClientParams
 }
 
 export class ClientsService {
-  async listClients() {
-    const clients = await prisma.client.findMany({ orderBy: { name: 'asc' } });
+  async listClients({ skip, take }: Pagination) {
+    const clients = await prisma.client.findMany({
+      orderBy: { name: 'asc' },
+      skip,
+      take,
+    });
 
-    return clients;
+    const totalClients = await prisma.client.count();
+
+    return { clients, totalClients };
   }
 
   async listClientById(id: string) {

@@ -102,6 +102,24 @@ export type Employee = {
   password: Scalars['String'];
 };
 
+export type ListBudgetsValue = {
+  __typename?: 'ListBudgetsValue';
+  budgets: Array<Budget>;
+  totalBudgets: Scalars['Int'];
+};
+
+export type ListClientsValue = {
+  __typename?: 'ListClientsValue';
+  clients: Array<Client>;
+  totalClients: Scalars['Int'];
+};
+
+export type ListProductsValue = {
+  __typename?: 'ListProductsValue';
+  products: Array<Product>;
+  totalProducts: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBudget: Scalars['String'];
@@ -216,12 +234,30 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
-  listBudgets: Array<Budget>;
-  listClients: Array<Client>;
+  listBudgets: ListBudgetsValue;
+  listClients: ListClientsValue;
   listEmployees: Array<Employee>;
-  listProducts: Array<Product>;
+  listProducts: ListProductsValue;
   revalidateJWT: Scalars['String'];
   signIn: SignInResponse;
+};
+
+
+export type QueryListBudgetsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryListClientsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryListProductsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -288,10 +324,13 @@ export type DeleteBudgetMutationVariables = Exact<{
 
 export type DeleteBudgetMutation = { __typename?: 'Mutation', deleteBudget: string };
 
-export type ListBudgetsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListBudgetsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type ListBudgetsQuery = { __typename?: 'Query', listBudgets: Array<{ __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } }> };
+export type ListBudgetsQuery = { __typename?: 'Query', listBudgets: { __typename?: 'ListBudgetsValue', totalBudgets: number, budgets: Array<{ __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } }> } };
 
 export type UpdateBudgetInfoMutationVariables = Exact<{
   data: UpdateBudgetInfoInput;
@@ -321,10 +360,13 @@ export type DeleteClientMutationVariables = Exact<{
 
 export type DeleteClientMutation = { __typename?: 'Mutation', deleteClient: string };
 
-export type ListClientsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListClientsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type ListClientsQuery = { __typename?: 'Query', listClients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document: string, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> };
+export type ListClientsQuery = { __typename?: 'Query', listClients: { __typename?: 'ListClientsValue', totalClients: number, clients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document: string, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> } };
 
 export type UpdateClientMutationVariables = Exact<{
   data: UpdateClientInput;
@@ -381,10 +423,13 @@ export type DeleteProductMutationVariables = Exact<{
 
 export type DeleteProductMutation = { __typename?: 'Mutation', deleteProduct: string };
 
-export type ListProductsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListProductsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
 
 
-export type ListProductsQuery = { __typename?: 'Query', listProducts: Array<{ __typename?: 'Product', id: string, name: string, price: number, cost?: number | null, description?: string | null }> };
+export type ListProductsQuery = { __typename?: 'Query', listProducts: { __typename?: 'ListProductsValue', totalProducts: number, products: Array<{ __typename?: 'Product', id: string, name: string, price: number, cost?: number | null, description?: string | null }> } };
 
 export type UpdateProductMutationVariables = Exact<{
   data: UpdateProductInput;
@@ -457,30 +502,33 @@ export type DeleteBudgetMutationHookResult = ReturnType<typeof useDeleteBudgetMu
 export type DeleteBudgetMutationResult = Apollo.MutationResult<DeleteBudgetMutation>;
 export type DeleteBudgetMutationOptions = Apollo.BaseMutationOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
 export const ListBudgetsDocument = gql`
-    query ListBudgets {
-  listBudgets {
-    id
-    serialNumber
-    price
-    color
-    deadline
-    discount
-    created_at
-    products {
+    query ListBudgets($skip: Int, $take: Int) {
+  listBudgets(skip: $skip, take: $take) {
+    totalBudgets
+    budgets {
       id
-      base
-      height
+      serialNumber
       price
-      product {
+      color
+      deadline
+      discount
+      created_at
+      products {
         id
-        name
+        base
+        height
+        price
+        product {
+          id
+          name
+        }
       }
-    }
-    client {
-      name
-      email
-      contact
-      phoneNumber
+      client {
+        name
+        email
+        contact
+        phoneNumber
+      }
     }
   }
 }
@@ -498,6 +546,8 @@ export const ListBudgetsDocument = gql`
  * @example
  * const { data, loading, error } = useListBudgetsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
@@ -637,24 +687,27 @@ export type DeleteClientMutationHookResult = ReturnType<typeof useDeleteClientMu
 export type DeleteClientMutationResult = Apollo.MutationResult<DeleteClientMutation>;
 export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<DeleteClientMutation, DeleteClientMutationVariables>;
 export const ListClientsDocument = gql`
-    query ListClients {
-  listClients {
-    id
-    name
-    contact
-    address {
+    query ListClients($skip: Int, $take: Int) {
+  listClients(skip: $skip, take: $take) {
+    totalClients
+    clients {
       id
-      street
-      number
-      state
-      city
-      district
-      cep
+      name
+      contact
+      address {
+        id
+        street
+        number
+        state
+        city
+        district
+        cep
+      }
+      email
+      phoneNumber
+      document
+      stateRegistration
     }
-    email
-    phoneNumber
-    document
-    stateRegistration
   }
 }
     `;
@@ -671,6 +724,8 @@ export const ListClientsDocument = gql`
  * @example
  * const { data, loading, error } = useListClientsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */
@@ -953,13 +1008,16 @@ export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProduct
 export type DeleteProductMutationResult = Apollo.MutationResult<DeleteProductMutation>;
 export type DeleteProductMutationOptions = Apollo.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
 export const ListProductsDocument = gql`
-    query ListProducts {
-  listProducts {
-    id
-    name
-    price
-    cost
-    description
+    query ListProducts($skip: Int, $take: Int) {
+  listProducts(skip: $skip, take: $take) {
+    totalProducts
+    products {
+      id
+      name
+      price
+      cost
+      description
+    }
   }
 }
     `;
@@ -976,6 +1034,8 @@ export const ListProductsDocument = gql`
  * @example
  * const { data, loading, error } = useListProductsQuery({
  *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
  *   },
  * });
  */

@@ -1,18 +1,38 @@
-import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Args,
+  Authorized,
+  Field,
+  Int,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from 'type-graphql';
 
 import { Product } from '@models/Product';
 import { ProductsService } from '@services/productsService';
 import { CreateProductInput } from '@inputs/create-product-input';
 import { UpdateProductInput } from '@inputs/update-product-input';
+import { PaginationArgs } from '../args/pagination-args';
+
+@ObjectType()
+class ListProductsValue {
+  @Field(_type => Int)
+  totalProducts: number;
+
+  @Field(_type => [Product])
+  products: Product[];
+}
 
 @Resolver()
 export class ProductResolver {
   private productsService = new ProductsService();
 
-  @Query(() => [Product])
+  @Query(() => ListProductsValue)
   @Authorized()
-  async listProducts() {
-    const products = await this.productsService.listProducts();
+  async listProducts(@Args() { skip, take }: PaginationArgs) {
+    const products = await this.productsService.listProducts({ skip, take });
 
     return products;
   }

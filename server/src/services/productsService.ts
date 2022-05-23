@@ -1,4 +1,5 @@
 import { prisma } from '@database/prismaClient';
+import { Pagination } from './pagination';
 
 interface CreateProductParams {
   name: string;
@@ -12,12 +13,16 @@ interface UpdateProductParams extends Omit<CreateProductParams, 'name'> {
 }
 
 export class ProductsService {
-  async listProducts() {
+  async listProducts({ skip, take }: Pagination) {
     const products = await prisma.product.findMany({
       orderBy: { name: 'asc' },
+      skip,
+      take,
     });
 
-    return products;
+    const totalProducts = await prisma.product.count();
+
+    return { products, totalProducts };
   }
 
   async listProductById(id: string) {

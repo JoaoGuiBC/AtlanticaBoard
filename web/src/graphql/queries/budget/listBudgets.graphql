@@ -1,27 +1,30 @@
-query ListBudgets {
-  listBudgets {
-    id
-    serialNumber
-    price
-    color
-    deadline
-    discount
-    created_at
-    products {
+query ListBudgets($skip: Int, $take: Int) {
+  listBudgets(skip: $skip, take: $take) {
+    totalBudgets
+    budgets {
       id
-      base
-      height
+      serialNumber
       price
-      product {
+      color
+      deadline
+      discount
+      created_at
+      products {
         id
-        name
+        base
+        height
+        price
+        product {
+          id
+          name
+        }
       }
-    }
-    client {
-      name
-      email
-      contact
-      phoneNumber
+      client {
+        name
+        email
+        contact
+        phoneNumber
+      }
     }
   }
 }

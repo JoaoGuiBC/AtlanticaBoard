@@ -26,9 +26,9 @@ import {
 } from '@utils/schemas/product/createProductSchema';
 
 export function CreateProduct() {
+  const toast = useToast();
   const navigate = useNavigate();
   const { user, logOut, revalidate } = useAuth();
-  const toast = useToast();
 
   const [loadCreate, { error, loading }] = useCreateProductMutation({
     context: {

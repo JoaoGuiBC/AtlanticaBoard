@@ -26,8 +26,10 @@ import {
   Product,
   EditProductInfoModal,
 } from '@components/Modals/EditProductInfoModal';
+import { Pagination } from '@components/Pagination';
 
 export function ProductList() {
+  const [page, setPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,6 +47,7 @@ export function ProductList() {
         Authorization: user.token,
       },
     },
+    variables: { take: 10, skip: (page - 1) * 10 },
     initialFetchPolicy: 'network-only',
     fetchPolicy: 'network-only',
   });
@@ -139,91 +142,100 @@ export function ProductList() {
                 <Text>Falha ao obter dados dos produtos.</Text>
               </Flex>
             ) : (
-              <VStack>
-                {data?.listProducts.map(product => (
-                  <Flex
-                    w="100%"
-                    alignItems="center"
-                    justifyContent="space-between"
-                    borderTop="1px"
-                    py="5"
-                    borderColor="gray.600"
-                    key={product.id}
-                  >
-                    <VStack pr="5" alignItems="flex-start">
-                      <Text fontWeight="bold" color="blue.400">
-                        {product.name}
-                      </Text>
-
-                      <Text fontWeight="medium" color="gray.400">
-                        Valor:{' '}
-                        <Text as="span" fontWeight="light" color="gray.200">
-                          R$ {product.price}
+              <>
+                <VStack>
+                  {data?.listProducts.products.map(product => (
+                    <Flex
+                      w="100%"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      borderTop="1px"
+                      py="5"
+                      borderColor="gray.600"
+                      key={product.id}
+                    >
+                      <VStack pr="5" alignItems="flex-start">
+                        <Text fontWeight="bold" color="blue.400">
+                          {product.name}
                         </Text>
-                      </Text>
 
-                      {product.cost && (
                         <Text fontWeight="medium" color="gray.400">
-                          Custo:{' '}
+                          Valor:{' '}
                           <Text as="span" fontWeight="light" color="gray.200">
-                            R$ {product.cost}
+                            R$ {product.price}
                           </Text>
                         </Text>
-                      )}
 
-                      {product.description && (
-                        <Text fontWeight="normal" color="gray.200">
-                          {product.description}
-                        </Text>
-                      )}
-                    </VStack>
+                        {product.cost && (
+                          <Text fontWeight="medium" color="gray.400">
+                            Custo:{' '}
+                            <Text as="span" fontWeight="light" color="gray.200">
+                              R$ {product.cost}
+                            </Text>
+                          </Text>
+                        )}
 
-                    <VStack>
-                      <Button
-                        as="a"
-                        size="sm"
-                        fontSize="sm"
-                        w="100%"
-                        borderRadius={4}
-                        colorScheme="blue"
-                        onClick={() => handleOpenModal(product)}
-                        leftIcon={
-                          isWideVersion && (
+                        {product.description && (
+                          <Text fontWeight="normal" color="gray.200">
+                            {product.description}
+                          </Text>
+                        )}
+                      </VStack>
+
+                      <VStack>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          w="100%"
+                          borderRadius={4}
+                          colorScheme="blue"
+                          onClick={() => handleOpenModal(product)}
+                          leftIcon={
+                            isWideVersion && (
+                              <Icon as={RiPencilLine} fontSize="16" />
+                            )
+                          }
+                        >
+                          {isWideVersion ? (
+                            'Editar'
+                          ) : (
                             <Icon as={RiPencilLine} fontSize="16" />
-                          )
-                        }
-                      >
-                        {isWideVersion ? (
-                          'Editar'
-                        ) : (
-                          <Icon as={RiPencilLine} fontSize="16" />
-                        )}
-                      </Button>
-                      <Button
-                        as="a"
-                        size="sm"
-                        fontSize="sm"
-                        w="100%"
-                        borderRadius={4}
-                        colorScheme="red"
-                        onClick={() => handleDeleteProduct(product.id)}
-                        isLoading={loading}
-                        leftIcon={
-                          isWideVersion && (
+                          )}
+                        </Button>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          w="100%"
+                          borderRadius={4}
+                          colorScheme="red"
+                          onClick={() => handleDeleteProduct(product.id)}
+                          isLoading={loading}
+                          leftIcon={
+                            isWideVersion && (
+                              <Icon as={RiDeleteBinLine} fontSize="16" />
+                            )
+                          }
+                        >
+                          {isWideVersion ? (
+                            'Excluir'
+                          ) : (
                             <Icon as={RiDeleteBinLine} fontSize="16" />
-                          )
-                        }
-                      >
-                        {isWideVersion ? (
-                          'Excluir'
-                        ) : (
-                          <Icon as={RiDeleteBinLine} fontSize="16" />
-                        )}
-                      </Button>
-                    </VStack>
-                  </Flex>
-                ))}
-              </VStack>
+                          )}
+                        </Button>
+                      </VStack>
+                    </Flex>
+                  ))}
+                </VStack>
+
+                <Pagination
+                  totalCountOfRegisters={data?.listProducts.totalProducts || 0}
+                  currentPage={page}
+                  onPageChange={setPage}
+                  registerPerPage={10}
+                />
+              </>
             )}
           </Box>
         </Flex>

@@ -6,6 +6,10 @@ import {
   Resolver,
   FieldResolver,
   Root,
+  ObjectType,
+  Field,
+  Int,
+  Args,
 } from 'type-graphql';
 
 import { CreateClientInput } from '@inputs/create-client-input';
@@ -13,16 +17,26 @@ import { UpdateClientInput } from '@inputs/update-client-input';
 import { ClientsService } from '@services/clientsService';
 import { AddressService } from '@services/addressService';
 import { Client } from '@models/Client';
+import { PaginationArgs } from '../args/pagination-args';
+
+@ObjectType()
+class ListClientsValue {
+  @Field(_type => Int)
+  totalClients: number;
+
+  @Field(_type => [Client])
+  clients: Client[];
+}
 
 @Resolver(() => Client)
 export class ClientResolver {
   private clientsService = new ClientsService();
   private addressesService = new AddressService();
 
-  @Query(() => [Client])
+  @Query(() => ListClientsValue)
   @Authorized()
-  async listClients() {
-    const clients = await this.clientsService.listClients();
+  async listClients(@Args() { skip, take }: PaginationArgs) {
+    const clients = await this.clientsService.listClients({ skip, take });
 
     return clients;
   }

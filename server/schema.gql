@@ -89,6 +89,21 @@ type Employee {
   password: String!
 }
 
+type ListBudgetsValue {
+  budgets: [Budget!]!
+  totalBudgets: Int!
+}
+
+type ListClientsValue {
+  clients: [Client!]!
+  totalClients: Int!
+}
+
+type ListProductsValue {
+  products: [Product!]!
+  totalProducts: Int!
+}
+
 type Mutation {
   createBudget(data: CreateBudgetInput!): String!
   createClient(data: CreateClientInput!): String!
@@ -139,10 +154,10 @@ input ProductInput {
 }
 
 type Query {
-  listBudgets: [Budget!]!
-  listClients: [Client!]!
+  listBudgets(skip: Int, take: Int): ListBudgetsValue!
+  listClients(skip: Int, take: Int): ListClientsValue!
   listEmployees: [Employee!]!
-  listProducts: [Product!]!
+  listProducts(skip: Int, take: Int): ListProductsValue!
   revalidateJWT(userId: String!): String!
   signIn(email: String!, password: String!): SignInResponse!
 }

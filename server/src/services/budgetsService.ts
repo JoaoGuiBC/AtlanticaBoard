@@ -1,4 +1,5 @@
 import { prisma } from '@database/prismaClient';
+import { Pagination } from './pagination';
 
 type Product = {
   productId: string;
@@ -35,12 +36,16 @@ interface UpdateBudgetProductsParams {
 }
 
 export class BudgetsService {
-  async listBudgets() {
+  async listBudgets({ skip, take }: Pagination) {
     const budgets = await prisma.budget.findMany({
       orderBy: { created_at: 'desc' },
+      skip,
+      take,
     });
 
-    return budgets;
+    const totalBudgets = await prisma.budget.count();
+
+    return { budgets, totalBudgets };
   }
 
   async listBudgetProductsById(budgetId: string) {
