@@ -13,6 +13,7 @@ import {
 
 import { apolloClient } from '@lib/apollo';
 
+import { SignIn } from '@screens/SignIn';
 import { theme } from './src/styles/theme';
 import { Routes } from './src/routes';
 
@@ -48,7 +49,7 @@ export default function App() {
         <StatusBar barStyle="light-content" backgroundColor="#181B23" />
         <View onLayout={onLayoutRootView} />
 
-        <Routes />
+        <SignIn />
       </NativeBaseProvider>
     </ApolloProvider>
   );
