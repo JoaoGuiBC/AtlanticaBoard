@@ -1,0 +1,9 @@
+input CreateEmployeeInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+mutation CreateEmployee($data: CreateEmployeeInput!) {
+  createEmployee(data: $data)
+}
