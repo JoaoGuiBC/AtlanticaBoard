@@ -18,16 +18,16 @@ export const theme = extendTheme({
   fontConfig: {
     Roboto: {
       300: {
-        normal: 'Roboto',
+        normal: 'Roboto_300Light',
       },
       400: {
-        normal: 'Roboto',
+        normal: 'Roboto_400Regular',
       },
       500: {
-        normal: 'Roboto',
+        normal: 'Roboto_500Medium',
       },
       700: {
-        normal: 'Roboto',
+        normal: 'Roboto_700Bold',
       },
     },
   },

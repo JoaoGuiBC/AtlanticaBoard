@@ -23,10 +23,13 @@
       "warn",
       { "extensions": [".jsx", ".js", ".tsx", ".ts"] }
     ],
+    "camelcase": "off",
+    "linebreak-style": "off",
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "react/react-in-jsx-scope": "off",
     "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "react/no-unstable-nested-components": "off"
   }
 }
