@@ -1,15 +1,56 @@
-import { Box, NativeBaseProvider, Text } from 'native-base';
-import { StatusBar } from 'react-native';
+import { useCallback, useEffect } from 'react';
+import { StatusBar, View } from 'react-native';
+import { ApolloProvider } from '@apollo/client';
+import { NativeBaseProvider } from 'native-base';
+import * as SplashScreen from 'expo-splash-screen';
+import {
+  useFonts,
+  Roboto_300Light,
+  Roboto_400Regular,
+  Roboto_500Medium,
+  Roboto_700Bold,
+} from '@expo-google-fonts/roboto';
+
+import { apolloClient } from '@lib/apollo';
+
+import { ListEmployess } from '@screens/employees/ListEmployees';
 
 import { theme } from './src/styles/theme';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Roboto_300Light,
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Roboto_700Bold,
+  });
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <NativeBaseProvider theme={theme}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
-      <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
-        <Text color="gray.50">Open up App.js to start working on your app!</Text>
-      </Box>
-    </NativeBaseProvider>
+    <ApolloProvider client={apolloClient}>
+      <NativeBaseProvider theme={theme}>
+        <StatusBar barStyle="light-content" backgroundColor="#181B23" />
+        <View onLayout={onLayoutRootView} />
+
+        <ListEmployess />
+      </NativeBaseProvider>
+    </ApolloProvider>
   );
 }
