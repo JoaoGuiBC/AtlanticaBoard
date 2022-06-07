@@ -43,7 +43,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn(email: string, password: string) {
     if (!email || !password) {
-      return toast.show({ title: 'Erro ao fazer login' });
+      return toast.show({ title: 'Por favor informe as credenciais' });
     }
 
     try {
@@ -51,18 +51,25 @@ function AuthProvider({ children }: AuthProviderProps) {
         variables: { email, password },
       });
 
-      setUser({
-        ...loadedData?.signIn.user!,
-        token: loadedData?.signIn.token!,
-      });
-
-      await AsyncStorage.setItem(
-        USER_COLLECTION,
-        JSON.stringify({
+      if (loadedData) {
+        setUser({
           ...loadedData?.signIn.user!,
           token: loadedData?.signIn.token!,
-        }),
-      );
+        });
+
+        await AsyncStorage.setItem(
+          USER_COLLECTION,
+          JSON.stringify({
+            ...loadedData?.signIn.user!,
+            token: loadedData?.signIn.token!,
+          }),
+        );
+      } else {
+        toast.show({
+          title: 'Erro ao fazer login',
+          description: 'Credenciais incorretas',
+        });
+      }
     } catch (signInError: any) {
       toast.show({
         title: 'Erro ao fazer login',

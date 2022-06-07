@@ -1,11 +1,21 @@
-import { Heading, HStack, Icon } from 'native-base';
+import {
+  Heading, HStack, Icon, Pressable,
+} from 'native-base';
 import { Feather } from '@expo/vector-icons';
+
+import { UseAuth } from '@hooks/auth';
 
 interface HeaderProps {
   title: string;
 }
 
 export function Header({ title }: HeaderProps) {
+  const { signOut } = UseAuth();
+
+  function handleSignOut() {
+    signOut();
+  }
+
   return (
     <HStack
       bg="gray.900"
@@ -14,7 +24,9 @@ export function Header({ title }: HeaderProps) {
       justifyContent="space-around"
       alignItems="center"
     >
-      <Icon as={Feather} name="menu" color="gray.50" size="6" />
+      <Pressable>
+        <Icon as={Feather} name="menu" color="gray.50" size="6" />
+      </Pressable>
 
       <Heading
         alignSelf="center"
@@ -26,7 +38,9 @@ export function Header({ title }: HeaderProps) {
         {title}
       </Heading>
 
-      <Icon as={Feather} name="log-out" color="gray.50" size="6" />
+      <Pressable onPress={handleSignOut}>
+        <Icon as={Feather} name="log-out" color="gray.50" size="6" />
+      </Pressable>
     </HStack>
   );
 }
