@@ -1,3 +1,5 @@
+import { useToast } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {
   createContext,
   ReactNode,
@@ -5,10 +7,9 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { Toast } from '@components/Toast';
 import { useRevalidateJwtLazyQuery, useSignInLazyQuery } from '@graphql/generated/graphql';
-import { useToast } from 'native-base';
 
 type User = {
   id: string;
@@ -43,7 +44,15 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn(email: string, password: string) {
     if (!email || !password) {
-      return toast.show({ title: 'Por favor informe as credenciais' });
+      return toast.show({
+        render: () => (
+          <Toast
+            title="Login"
+            description="Por favor informe as credenciais"
+          />
+        ),
+        placement: 'top-right',
+      });
     }
 
     try {
@@ -66,14 +75,26 @@ function AuthProvider({ children }: AuthProviderProps) {
         );
       } else {
         toast.show({
-          title: 'Erro ao fazer login',
-          description: 'Credenciais incorretas',
+          render: () => (
+            <Toast
+              title="Erro ao fazer login"
+              description="Credenciais incorretas"
+              type="error"
+            />
+          ),
+          placement: 'top-right',
         });
       }
     } catch (signInError: any) {
       toast.show({
-        title: 'Erro ao fazer login',
-        description: signInError.message,
+        render: () => (
+          <Toast
+            title="Erro ao fazer login"
+            description={signInError.message}
+            type="error"
+          />
+        ),
+        placement: 'top-right',
       });
     }
   }
@@ -117,8 +138,14 @@ function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (error) {
       toast.show({
-        title: 'Login',
-        description: error?.message,
+        render: () => (
+          <Toast
+            title="Login"
+            description={error?.message}
+            type="error"
+          />
+        ),
+        placement: 'top-right',
       });
       if (error?.message === 'Autenticação inválida, por favor refaça login') {
         signOut();

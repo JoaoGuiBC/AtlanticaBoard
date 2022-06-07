@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import {
   Box, Heading, Text, FlatList, VStack, Button, HStack, Icon, Divider, Spinner, useToast,
@@ -7,7 +8,7 @@ import { UseAuth } from '@hooks/auth';
 import { useDeleteEmployeeMutation, useListEmployeesQuery } from '@graphql/generated/graphql';
 
 import { Header } from '@components/Header';
-import { useEffect } from 'react';
+import { Toast } from '@components/Toast';
 
 export function ListEmployess() {
   const toast = useToast();
@@ -47,8 +48,14 @@ export function ListEmployess() {
       revalidate(user!);
 
       toast.show({
-        title: 'Erro',
-        description: error ? error.message : listError?.message,
+        render: () => (
+          <Toast
+            title="Teste"
+            description={error ? error.message : listError?.message}
+            type="error"
+          />
+        ),
+        placement: 'top-right',
       });
     }
   }, [error, listLoading]);
