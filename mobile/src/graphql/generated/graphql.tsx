@@ -330,6 +330,21 @@ export type ListEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ListEmployeesQuery = { __typename?: 'Query', listEmployees: Array<{ __typename?: 'Employee', email: string, id: string, isAdmin: boolean, name: string }> };
 
+export type RevalidateJwtQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type RevalidateJwtQuery = { __typename?: 'Query', revalidateJWT: string };
+
+export type SignInQueryVariables = Exact<{
+  password: Scalars['String'];
+  email: Scalars['String'];
+}>;
+
+
+export type SignInQuery = { __typename?: 'Query', signIn: { __typename?: 'SignInResponse', token: string, user: { __typename?: 'Employee', name: string, email: string, isAdmin: boolean, id: string } } };
+
 
 export const CreateEmployeeDocument = gql`
     mutation CreateEmployee($data: CreateEmployeeInput!) {
@@ -430,3 +445,78 @@ export function useListEmployeesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type ListEmployeesQueryHookResult = ReturnType<typeof useListEmployeesQuery>;
 export type ListEmployeesLazyQueryHookResult = ReturnType<typeof useListEmployeesLazyQuery>;
 export type ListEmployeesQueryResult = Apollo.QueryResult<ListEmployeesQuery, ListEmployeesQueryVariables>;
+export const RevalidateJwtDocument = gql`
+    query RevalidateJWT($userId: String!) {
+  revalidateJWT(userId: $userId)
+}
+    `;
+
+/**
+ * __useRevalidateJwtQuery__
+ *
+ * To run a query within a React component, call `useRevalidateJwtQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRevalidateJwtQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRevalidateJwtQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useRevalidateJwtQuery(baseOptions: Apollo.QueryHookOptions<RevalidateJwtQuery, RevalidateJwtQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RevalidateJwtQuery, RevalidateJwtQueryVariables>(RevalidateJwtDocument, options);
+      }
+export function useRevalidateJwtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RevalidateJwtQuery, RevalidateJwtQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RevalidateJwtQuery, RevalidateJwtQueryVariables>(RevalidateJwtDocument, options);
+        }
+export type RevalidateJwtQueryHookResult = ReturnType<typeof useRevalidateJwtQuery>;
+export type RevalidateJwtLazyQueryHookResult = ReturnType<typeof useRevalidateJwtLazyQuery>;
+export type RevalidateJwtQueryResult = Apollo.QueryResult<RevalidateJwtQuery, RevalidateJwtQueryVariables>;
+export const SignInDocument = gql`
+    query SignIn($password: String!, $email: String!) {
+  signIn(password: $password, email: $email) {
+    token
+    user {
+      name
+      email
+      isAdmin
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useSignInQuery__
+ *
+ * To run a query within a React component, call `useSignInQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSignInQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSignInQuery({
+ *   variables: {
+ *      password: // value for 'password'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useSignInQuery(baseOptions: Apollo.QueryHookOptions<SignInQuery, SignInQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SignInQuery, SignInQueryVariables>(SignInDocument, options);
+      }
+export function useSignInLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SignInQuery, SignInQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SignInQuery, SignInQueryVariables>(SignInDocument, options);
+        }
+export type SignInQueryHookResult = ReturnType<typeof useSignInQuery>;
+export type SignInLazyQueryHookResult = ReturnType<typeof useSignInLazyQuery>;
+export type SignInQueryResult = Apollo.QueryResult<SignInQuery, SignInQueryVariables>;

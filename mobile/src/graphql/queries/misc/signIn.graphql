@@ -1,0 +1,11 @@
+query SignIn($password: String!, $email: String!) {
+  signIn(password: $password, email: $email) {
+    token
+    user {
+      name
+      email
+      isAdmin
+      id
+    }
+  }
+}

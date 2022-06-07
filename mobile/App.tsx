@@ -12,6 +12,7 @@ import {
 } from '@expo-google-fonts/roboto';
 
 import { apolloClient } from '@lib/apollo';
+import { AuthProvider } from '@hooks/auth';
 
 import { SignIn } from '@screens/SignIn';
 import { theme } from './src/styles/theme';
@@ -46,10 +47,12 @@ export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <NativeBaseProvider theme={theme}>
-        <StatusBar barStyle="light-content" backgroundColor="#181B23" />
-        <View onLayout={onLayoutRootView} />
+        <AuthProvider>
+          <StatusBar barStyle="light-content" backgroundColor="#181B23" />
+          <View onLayout={onLayoutRootView} />
 
-        <SignIn />
+          <SignIn />
+        </AuthProvider>
       </NativeBaseProvider>
     </ApolloProvider>
   );
