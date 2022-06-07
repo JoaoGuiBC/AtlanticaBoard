@@ -1,24 +1,57 @@
 import { Feather } from '@expo/vector-icons';
 import {
-  Box, Heading, Text, FlatList, VStack, Button, HStack, Icon, Divider, Spinner,
+  Box, Heading, Text, FlatList, VStack, Button, HStack, Icon, Divider, Spinner, useToast,
 } from 'native-base';
 
+import { UseAuth } from '@hooks/auth';
+import { useDeleteEmployeeMutation, useListEmployeesQuery } from '@graphql/generated/graphql';
+
 import { Header } from '@components/Header';
-import { useListEmployeesQuery } from '@graphql/generated/graphql';
+import { useEffect } from 'react';
 
 export function ListEmployess() {
+  const toast = useToast();
+  const { user, revalidate } = UseAuth();
+
   const {
     data,
+    refetch,
     loading: listLoading,
     error: listError,
   } = useListEmployeesQuery({
     context: {
       headers: {
-        Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTQ1NDYwNTksImV4cCI6MTY1NDU4OTI1OSwic3ViIjoiMGY2ZjM1NzMtMzhhMS00MjQyLTgxMzctNzNkYWIyZjZjMjM1In0.gBITWyKiDRgES_McC2lh_MBz_d_yyJp2q3n8G7-vLqY',
+        Authorization: user?.token,
       },
     },
     initialFetchPolicy: 'network-only',
   });
+  const [loadDelete, { error, loading }] = useDeleteEmployeeMutation({
+    context: {
+      headers: {
+        Authorization: user?.token,
+      },
+    },
+  });
+
+  async function handleDeleteEmployee(id: string) {
+    await loadDelete({ variables: { deleteEmployeeId: id } });
+
+    if (!error) {
+      refetch();
+    }
+  }
+
+  useEffect(() => {
+    if (error || listError) {
+      revalidate(user!);
+
+      toast.show({
+        title: 'Erro',
+        description: error ? error.message : listError?.message,
+      });
+    }
+  }, [error, listLoading]);
 
   return (
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
@@ -71,8 +104,8 @@ export function ListEmployess() {
                 </Text>
               </VStack>
 
-              {!item.isAdmin && (
-                <Button colorScheme="error">
+              {(!item.isAdmin && user?.isAdmin) && (
+                <Button isLoading={loading} onPress={() => handleDeleteEmployee(item.id)} colorScheme="error">
                   <Icon as={Feather} name="trash-2" color="gray.50" size="5" />
                 </Button>
               )}
