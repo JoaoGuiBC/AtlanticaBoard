@@ -20,6 +20,7 @@ export function CreateEmployee() {
   const toast = useToast();
 
   const {
+    reset,
     control,
     handleSubmit,
     formState: { errors },
@@ -33,7 +34,10 @@ export function CreateEmployee() {
         Authorization: user?.token,
       },
     },
-    onCompleted: () => goBack(),
+    onCompleted: () => {
+      reset();
+      goBack();
+    },
   });
 
   async function handleCreateEmployee({ name, email, password }: CreateEmployeeFormData) {
