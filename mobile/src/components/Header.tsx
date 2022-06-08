@@ -21,7 +21,7 @@ export function Header({ title }: HeaderProps) {
       bg="gray.900"
       width="100%"
       py={6}
-      justifyContent="space-around"
+      justifyContent="space-evenly"
       alignItems="center"
     >
       <Pressable>
