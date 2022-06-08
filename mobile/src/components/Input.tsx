@@ -10,6 +10,7 @@ interface InputProps extends TextInputProps {
   isSecret?: boolean;
   name: string;
   title: string;
+  info?: string;
   control: Control<FieldValues, any>; // eslint-disable-line
   errors: {
     [x: string]: any; // eslint-disable-line
@@ -17,7 +18,7 @@ interface InputProps extends TextInputProps {
 }
 
 export function Input({
-  control, errors, name, title, isSecret = false, ...rest
+  control, errors, name, title, info, isSecret = false, autoCapitalize = 'none', ...rest
 }: InputProps) {
   const [isTextHidden, setIsTextHidden] = useState(isSecret);
 
@@ -36,6 +37,18 @@ export function Input({
         >
           {title}
         </Text>
+        {info && (
+          <Text
+            color="gray.500"
+            fontFamily="heading"
+            fontWeight={400}
+            fontSize="xs"
+            lineHeight="3xl"
+            ml="1"
+          >
+            {info}
+          </Text>
+        )}
       </FormControl.Label>
 
       <Controller
@@ -50,6 +63,7 @@ export function Input({
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              autoCapitalize={autoCapitalize}
               secureTextEntry={isTextHidden}
               {...rest}
             />

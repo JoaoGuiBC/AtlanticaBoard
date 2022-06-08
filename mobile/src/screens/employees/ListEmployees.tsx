@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import {
   Box, Heading, Text, FlatList, VStack, Button, HStack, Icon, Divider, Spinner, useToast,
@@ -7,8 +7,9 @@ import {
 import { UseAuth } from '@hooks/auth';
 import { useDeleteEmployeeMutation, useListEmployeesQuery } from '@graphql/generated/graphql';
 
-import { Header } from '@components/Header';
 import { Toast } from '@components/Toast';
+import { Header } from '@components/Header';
+import { useFocusEffect } from '@react-navigation/native';
 
 export function ListEmployess() {
   const toast = useToast();
@@ -50,7 +51,7 @@ export function ListEmployess() {
       toast.show({
         render: () => (
           <Toast
-            title="Teste"
+            title="Erro"
             description={error ? error.message : listError?.message}
             type="error"
           />
@@ -59,6 +60,12 @@ export function ListEmployess() {
       });
     }
   }, [error, listLoading]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
 
   return (
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">

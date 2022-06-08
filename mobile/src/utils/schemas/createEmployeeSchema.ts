@@ -19,5 +19,6 @@ export const schema = yup.object({
     .required('Campo obrigatório'),
   confirm_password: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'Senhas devem ser iguais'),
+    .oneOf([yup.ref('password'), null], 'Senhas devem ser iguais')
+    .required('Campo obrigatório'),
 });
