@@ -38,6 +38,14 @@ export class BudgetResolver {
   private budgetsService = new BudgetsService();
   private clientsService = new ClientsService();
 
+  @Query(() => Budget)
+  @Authorized()
+  async getBudget(@Arg('id') id: string) {
+    const budget = await this.budgetsService.listSingleBudget(id);
+
+    return budget;
+  }
+
   @Query(() => ListBudgetsValue)
   @Authorized()
   async listBudgets(@Args() { skip, take }: PaginationArgs) {

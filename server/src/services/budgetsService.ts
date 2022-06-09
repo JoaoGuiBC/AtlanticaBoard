@@ -36,6 +36,18 @@ interface UpdateBudgetProductsParams {
 }
 
 export class BudgetsService {
+  async listSingleBudget(budgetId: string) {
+    const budget = await prisma.budget.findUnique({
+      where: { id: budgetId },
+    });
+
+    if (!budget) {
+      throw new Error('Orçamento não encontrado');
+    }
+
+    return budget;
+  }
+
   async listBudgets({ skip, take }: Pagination) {
     const budgets = await prisma.budget.findMany({
       orderBy: { created_at: 'desc' },
