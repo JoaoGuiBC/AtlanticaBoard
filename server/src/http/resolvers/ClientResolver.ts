@@ -17,6 +17,7 @@ import { UpdateClientInput } from '@inputs/update-client-input';
 import { ClientsService } from '@services/clientsService';
 import { AddressService } from '@services/addressService';
 import { Client } from '@models/Client';
+
 import { PaginationArgs } from '../args/pagination-args';
 
 @ObjectType()

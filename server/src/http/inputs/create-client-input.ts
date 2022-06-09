@@ -14,8 +14,8 @@ export class CreateClientInput {
   @Field({ nullable: true })
   phoneNumber?: string;
 
-  @Field()
-  document: string;
+  @Field({ nullable: true })
+  document?: string;
 
   @Field({ nullable: true })
   stateRegistration?: string;

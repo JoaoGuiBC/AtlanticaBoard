@@ -48,7 +48,7 @@ export type Client = {
   contact?: string | undefined | null;
   email: string;
   phoneNumber?: string | undefined | null;
-  document: string;
+  document?: string | undefined | null;
   stateRegistration?: string | undefined | null;
   address: Address[];
 };

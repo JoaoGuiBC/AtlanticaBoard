@@ -5,7 +5,7 @@ export type CreateClientFormData = {
   email: string;
   contact?: string;
   phoneNumber?: string;
-  document: string;
+  document?: string;
   stateRegistration?: string;
   street: string;
   number?: number;
@@ -29,7 +29,7 @@ export const schema = yup.object({
     .string()
     .transform((v, o) => (o === '' ? null : v))
     .nullable(),
-  document: yup.string().required('Campo obrigatório'),
+  document: yup.string().nullable(),
   stateRegistration: yup
     .string()
     .transform((v, o) => (o === '' ? null : v))

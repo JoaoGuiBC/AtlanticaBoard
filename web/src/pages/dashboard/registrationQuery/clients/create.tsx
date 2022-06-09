@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,13 +18,14 @@ import { Header } from '@components/Header';
 import { Input } from '@components/Form/Input';
 import { Sidebar } from '@components/Sidebar';
 import { FieldMarker } from '@components/Form/FieldMarker';
+
 import {
   schema,
   CreateClientFormData,
 } from '@utils/schemas/client/createClientSchema';
 import { useCreateClientMutation } from '@graphql/generated/graphql';
+
 import { useAuth } from '@contexts/AuthContext';
-import { useEffect } from 'react';
 
 export function CreateClient() {
   const navigate = useNavigate();
@@ -132,7 +134,6 @@ export function CreateClient() {
             <SimpleGrid minChildWidth="240px" spacing={['6', '8']} w="100%">
               <Input
                 label="CPF / CNPJ"
-                info="obrigatório"
                 error={errors.document}
                 {...register('document')}
               />

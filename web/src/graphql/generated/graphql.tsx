@@ -48,7 +48,7 @@ export type Client = {
   __typename?: 'Client';
   address: Array<Address>;
   contact?: Maybe<Scalars['String']>;
-  document: Scalars['String'];
+  document?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -69,7 +69,7 @@ export type CreateClientInput = {
   city?: InputMaybe<Scalars['String']>;
   contact?: InputMaybe<Scalars['String']>;
   district?: InputMaybe<Scalars['String']>;
-  document: Scalars['String'];
+  document?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   name: Scalars['String'];
   number?: InputMaybe<Scalars['Float']>;
@@ -367,7 +367,7 @@ export type ListClientsQueryVariables = Exact<{
 }>;
 
 
-export type ListClientsQuery = { __typename?: 'Query', listClients: { __typename?: 'ListClientsValue', totalClients: number, clients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document: string, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> } };
+export type ListClientsQuery = { __typename?: 'Query', listClients: { __typename?: 'ListClientsValue', totalClients: number, clients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document?: string | null, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> } };
 
 export type UpdateClientMutationVariables = Exact<{
   data: UpdateClientInput;

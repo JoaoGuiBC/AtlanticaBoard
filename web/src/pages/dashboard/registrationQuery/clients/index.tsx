@@ -177,13 +177,18 @@ export function ClientList() {
                           </Box>
                         </Td>
 
+                        {/* {(client.document || client.stateRegistration) && ( */}
                         <Td>
-                          <Text fontSize="sm" color="gray.100">
-                            CPF / CNPJ
-                          </Text>
-                          <Text fontSize="sm" color="gray.400">
-                            {client.document}
-                          </Text>
+                          {client.document && (
+                            <>
+                              <Text fontSize="sm" color="gray.100">
+                                CPF / CNPJ
+                              </Text>
+                              <Text fontSize="sm" color="gray.400">
+                                {client.document}
+                              </Text>
+                            </>
+                          )}
                           {client.stateRegistration && (
                             <>
                               <Text fontSize="sm" color="gray.100" mt={2}>
@@ -195,6 +200,7 @@ export function ClientList() {
                             </>
                           )}
                         </Td>
+                        {/* )} */}
 
                         <Td>
                           <Text fontSize="sm" color="gray.200">

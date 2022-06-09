@@ -32,7 +32,7 @@ model Client {
   contact     String?
   phoneNumber String?
 
-  document          String  @unique
+  document          String? @unique
   stateRegistration String?
 
   address Address[]

@@ -41,11 +41,11 @@
   },
   "_moduleAliases": {
     "@root"      : ".",
-    "@services": "./dist/services",
-    "@database": "./dist/database",
-    "@config": "./dist/config",
-    "@inputs": "./dist/http/inputs",
-    "@models": "./dist/http/models",
-    "@resolvers": "./dist/http/resolvers"
+    "@services": "./src/services",
+    "@database": "./src/database",
+    "@config": "./src/config",
+    "@inputs": "./src/http/inputs",
+    "@models": "./src/http/models",
+    "@resolvers": "./src/http/resolvers"
   }
 }

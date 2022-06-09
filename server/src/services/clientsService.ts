@@ -6,7 +6,7 @@ interface CreateClientParams {
   email: string;
   contact?: string;
   phoneNumber?: string;
-  document: string;
+  document?: string;
   stateRegistration?: string;
   street: string;
   number?: number;
@@ -67,13 +67,13 @@ export class ClientsService {
       where: { document },
     });
 
-    if (documentUsed) {
+    if (documentUsed && documentUsed.document) {
       throw new Error('CPF/CNPJ já cadastrado');
     }
 
     const newClient = await prisma.client.create({
       data: {
-        document,
+        document: document === '' ? undefined : document,
         email,
         name,
         contact,
