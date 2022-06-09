@@ -1,24 +1,17 @@
 import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import {
-  RiAddLine,
-  RiCheckLine,
-  RiDeleteBinLine,
-  RiPencilLine,
-} from 'react-icons/ri';
-import { Link as RouterLink } from 'react-router-dom';
+import { RiAddLine, RiCheckLine, RiDeleteBinLine } from 'react-icons/ri';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
   Flex,
   Heading,
-  HStack,
   Icon,
   Spinner,
   StackDivider,
   Text,
   useBreakpointValue,
-  useDisclosure,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -32,17 +25,12 @@ import {
   useListBudgetsQuery,
 } from '@graphql/generated/graphql';
 import { currencyFormatter } from '@utils/formatter/currencyFormatter';
-import {
-  Budget,
-  EditBudgetInfoModal,
-} from '@components/Modals/EditBudgetInfoModal';
 
 export function BudgetList() {
   const [page, setPage] = useState(1);
-  const [selectedBudget, setSelectedBudget] = useState<Budget>();
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logOut } = useAuth();
+  const navigate = useNavigate();
   const toast = useToast();
 
   const {
@@ -56,7 +44,7 @@ export function BudgetList() {
         Authorization: user.token,
       },
     },
-    variables: { take: 5, skip: (page - 1) * 5 },
+    variables: { take: 10, skip: (page - 1) * 10 },
     initialFetchPolicy: 'network-only',
     fetchPolicy: 'network-only',
   });
@@ -77,22 +65,14 @@ export function BudgetList() {
     }
   }
 
+  function handleSelectBudget(id: string) {
+    navigate(`/orcamentos/orcamento?id=${id}`);
+  }
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
-
-  function handleOpenModal(budget: Budget) {
-    setSelectedBudget(budget);
-
-    onOpen();
-  }
-
-  function handleCloseModal() {
-    setSelectedBudget(undefined);
-
-    onClose();
-  }
 
   useEffect(() => {
     if (listError || error) {
@@ -114,13 +94,6 @@ export function BudgetList() {
   return (
     <>
       <Header />
-
-      <EditBudgetInfoModal
-        isOpen={isOpen}
-        onClose={handleCloseModal}
-        refetch={refetch}
-        budget={selectedBudget}
-      />
 
       <Box>
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -157,85 +130,98 @@ export function BudgetList() {
               <>
                 <VStack divider={<StackDivider borderColor="gray.600" />}>
                   {data?.listBudgets.budgets.map(budget => (
-                    <Flex
-                      w="100%"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      py="5"
-                      key={budget.id}
-                    >
-                      <VStack
-                        spacing="0"
-                        flex={1}
-                        align="flex-start"
-                        alignSelf="flex-start"
+                    <Flex w="100%" alignItems="center" gap="10" key={budget.id}>
+                      <Flex
+                        as="button"
+                        flex="1"
+                        py="5"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        onClick={() => handleSelectBudget(budget.id)}
                       >
-                        <Text fontSize="xx-large">
-                          Orçamento {budget.serialNumber}
-                        </Text>
-                        <Text fontWeight="light" fontSize="md">
-                          Gerado em:{' '}
-                          {format(parseISO(budget.created_at), 'dd/MM/yyyy')}
-                        </Text>
-                        {budget.deadline && (
-                          <Text fontWeight="light" fontSize="md">
-                            Prazo de entrega:{' '}
-                            {format(parseISO(budget.deadline), 'dd/MM/yyyy')}
-                          </Text>
-                        )}
-                        <HStack
-                          justify="space-between"
-                          w="100%"
-                          pr="10"
-                          paddingTop="20"
-                        >
-                          <VStack spacing="0" align="flex-start">
-                            <Heading fontSize="2xl">Cliente</Heading>
-                            <Text fontSize="lg">{budget.client.name}</Text>
+                        <VStack alignItems="flex-start" spacing="5">
+                          <VStack spacing="0" alignItems="flex-start">
+                            <Text fontSize="2xl">
+                              Orçamento {budget.serialNumber}
+                            </Text>
                             <Text
                               fontWeight="light"
+                              fontSize="md"
                               color="gray.200"
-                              fontSize="md"
                             >
-                              {budget.client.email}
+                              Gerado em:{' '}
+                              {format(
+                                parseISO(budget.created_at),
+                                'dd/MM/yyyy',
+                              )}
                             </Text>
-                            <Text
-                              fontWeight="light"
-                              color="gray.300"
-                              fontSize="md"
-                            >
-                              {budget.client.contact}
-                            </Text>
-                            <Text
-                              fontWeight="light"
-                              color="gray.300"
-                              fontSize="md"
-                            >
-                              {budget.client.phoneNumber}
-                            </Text>
+                            {budget.deadline && (
+                              <Text
+                                fontWeight="light"
+                                fontSize="md"
+                                color="gray.200"
+                              >
+                                Prazo de entrega:{' '}
+                                {format(
+                                  parseISO(budget.deadline),
+                                  'dd/MM/yyyy',
+                                )}
+                              </Text>
+                            )}
                           </VStack>
 
-                          {isWideVersion && (
-                            <VStack spacing="0" align="flex-start">
-                              <Heading fontSize="2xl">Info. produtos</Heading>
-                              <Text fontSize="md">
-                                Quantidade: {budget.products.length}
-                              </Text>
+                          <VStack spacing="0" alignItems="flex-start">
+                            <Heading fontWeight="normal" fontSize="xl">
+                              Cliente
+                            </Heading>
+                            <Text
+                              fontSize="md"
+                              fontWeight="light"
+                              color="gray.200"
+                            >
+                              {budget.client.name}
+                            </Text>
+                          </VStack>
+                        </VStack>
 
-                              {budget.color && (
+                        {isWideVersion && (
+                          <VStack spacing="0" align="flex-start">
+                            <Heading fontWeight="normal" fontSize="xl">
+                              Info. produtos
+                            </Heading>
+                            <Text
+                              fontSize="md"
+                              fontWeight="light"
+                              color="gray.200"
+                            >
+                              Quantidade: {budget.products.length}
+                            </Text>
+                            {budget.color && (
+                              <Box>
                                 <Text
                                   fontWeight="light"
                                   color="gray.200"
                                   fontSize="md"
-                                  maxW="64"
+                                  maxW="56"
+                                  textAlign="left"
                                 >
-                                  info: {budget.color}
+                                  info:
                                 </Text>
-                              )}
-                            </VStack>
-                          )}
-                        </HStack>
-                        <VStack spacing="1" align="flex-start" paddingTop="20">
+                                <Text
+                                  fontWeight="light"
+                                  color="gray.400"
+                                  fontSize="md"
+                                  maxW="56"
+                                  textAlign="left"
+                                >
+                                  {budget.color}
+                                </Text>
+                              </Box>
+                            )}
+                          </VStack>
+                        )}
+
+                        <VStack spacing="1" align="flex-start">
                           <Text fontSize="md">
                             Subtotal: {currencyFormatter(budget.price)}
                           </Text>
@@ -251,100 +237,32 @@ export function BudgetList() {
                               : currencyFormatter(budget.price)}
                           </Text>
                         </VStack>
+                      </Flex>
 
-                        <Flex
-                          paddingTop="14"
-                          wrap="wrap"
-                          maxWidth="32"
-                          gap="0.5rem"
+                      <Flex wrap="wrap" maxWidth="32" gap="0.5rem">
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          borderRadius={4}
+                          colorScheme="red"
+                          isLoading={loading}
+                          onClick={() => handleDeleteBudget(budget.id)}
+                          leftIcon={<Icon as={RiDeleteBinLine} fontSize="16" />}
                         >
-                          <Button
-                            size="sm"
-                            w="100%"
-                            fontSize="sm"
-                            borderRadius={4}
-                            colorScheme="blue"
-                            onClick={() => handleOpenModal(budget)}
-                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                          >
-                            Editar
-                          </Button>
-                          <Button
-                            size="sm"
-                            w="100%"
-                            fontSize="sm"
-                            borderRadius={4}
-                            colorScheme="red"
-                            isLoading={loading}
-                            onClick={() => handleDeleteBudget(budget.id)}
-                            leftIcon={
-                              <Icon as={RiDeleteBinLine} fontSize="16" />
-                            }
-                          >
-                            Excluir
-                          </Button>
-                          <Button
-                            size="sm"
-                            w="100%"
-                            fontSize="sm"
-                            borderRadius={4}
-                            colorScheme="green"
-                            leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
-                          >
-                            Aprovar
-                          </Button>
-                        </Flex>
-                      </VStack>
-
-                      <Box>
-                        <Heading fontSize="2xl" mb="4">
-                          {budget.products.length === 1
-                            ? 'Produto'
-                            : 'Produtos'}
-                        </Heading>
-                        <VStack
-                          w="96"
-                          maxH="xl"
-                          overflow="auto"
-                          alignSelf="center"
-                          spacing="8"
-                          divider={<StackDivider borderColor="gray.600" />}
+                          Excluir
+                        </Button>
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          borderRadius={4}
+                          colorScheme="green"
+                          leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
                         >
-                          {budget.products.map((product, index) => (
-                            <VStack key={product.id}>
-                              <Text color="blue.300">
-                                {index + 1} - {product.product.name}
-                              </Text>
-
-                              <HStack spacing="4">
-                                <Flex flexDir="column" alignItems="center">
-                                  <Text fontSize="10" color="gray.500">
-                                    BASE
-                                  </Text>
-                                  <Text>{product.base}</Text>
-                                </Flex>
-
-                                <Text>X</Text>
-
-                                <Flex flexDir="column" alignItems="center">
-                                  <Text fontSize="10" color="gray.500">
-                                    ALTURA
-                                  </Text>
-                                  <Text>{product.height}</Text>
-                                </Flex>
-
-                                <Text>=</Text>
-
-                                <Text>{product.height * product.base}</Text>
-                              </HStack>
-
-                              <Text>
-                                Preço: {currencyFormatter(product.price)}
-                              </Text>
-                            </VStack>
-                          ))}
-                        </VStack>
-                      </Box>
+                          Aprovar
+                        </Button>
+                      </Flex>
                     </Flex>
                   ))}
                 </VStack>

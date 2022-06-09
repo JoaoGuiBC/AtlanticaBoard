@@ -234,12 +234,18 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
+  getBudget: Budget;
   listBudgets: ListBudgetsValue;
   listClients: ListClientsValue;
   listEmployees: Array<Employee>;
   listProducts: ListProductsValue;
   revalidateJWT: Scalars['String'];
   signIn: SignInResponse;
+};
+
+
+export type QueryGetBudgetArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -324,6 +330,13 @@ export type DeleteBudgetMutationVariables = Exact<{
 
 
 export type DeleteBudgetMutation = { __typename?: 'Mutation', deleteBudget: string };
+
+export type GetBudgetQueryVariables = Exact<{
+  getBudgetId: Scalars['String'];
+}>;
+
+
+export type GetBudgetQuery = { __typename?: 'Query', getBudget: { __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } } };
 
 export type ListBudgetsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
@@ -502,6 +515,63 @@ export function useDeleteBudgetMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteBudgetMutationHookResult = ReturnType<typeof useDeleteBudgetMutation>;
 export type DeleteBudgetMutationResult = Apollo.MutationResult<DeleteBudgetMutation>;
 export type DeleteBudgetMutationOptions = Apollo.BaseMutationOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
+export const GetBudgetDocument = gql`
+    query GetBudget($getBudgetId: String!) {
+  getBudget(id: $getBudgetId) {
+    id
+    serialNumber
+    price
+    color
+    deadline
+    discount
+    created_at
+    products {
+      id
+      base
+      height
+      price
+      product {
+        id
+        name
+      }
+    }
+    client {
+      name
+      email
+      contact
+      phoneNumber
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBudgetQuery__
+ *
+ * To run a query within a React component, call `useGetBudgetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBudgetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBudgetQuery({
+ *   variables: {
+ *      getBudgetId: // value for 'getBudgetId'
+ *   },
+ * });
+ */
+export function useGetBudgetQuery(baseOptions: Apollo.QueryHookOptions<GetBudgetQuery, GetBudgetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBudgetQuery, GetBudgetQueryVariables>(GetBudgetDocument, options);
+      }
+export function useGetBudgetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetQuery, GetBudgetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBudgetQuery, GetBudgetQueryVariables>(GetBudgetDocument, options);
+        }
+export type GetBudgetQueryHookResult = ReturnType<typeof useGetBudgetQuery>;
+export type GetBudgetLazyQueryHookResult = ReturnType<typeof useGetBudgetLazyQuery>;
+export type GetBudgetQueryResult = Apollo.QueryResult<GetBudgetQuery, GetBudgetQueryVariables>;
 export const ListBudgetsDocument = gql`
     query ListBudgets($skip: Int, $take: Int) {
   listBudgets(skip: $skip, take: $take) {

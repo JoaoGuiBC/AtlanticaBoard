@@ -177,7 +177,6 @@ export function ClientList() {
                           </Box>
                         </Td>
 
-                        {/* {(client.document || client.stateRegistration) && ( */}
                         <Td>
                           {client.document && (
                             <>
@@ -200,7 +199,6 @@ export function ClientList() {
                             </>
                           )}
                         </Td>
-                        {/* )} */}
 
                         <Td>
                           <Text fontSize="sm" color="gray.200">

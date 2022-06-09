@@ -25,7 +25,7 @@ import {
 } from '@chakra-ui/react';
 
 import {
-  ListBudgetsQuery,
+  GetBudgetQuery,
   UpdateBudgetInfoInput,
   useUpdateBudgetInfoMutation,
   useUpdateBudgetProductsMutation,
@@ -78,7 +78,7 @@ type SelectedProduct = {
 };
 
 interface EditBudgetInfoModalProps {
-  refetch: (variables?: any) => Promise<ApolloQueryResult<ListBudgetsQuery>>; // eslint-disable-line
+  refetch: (variables?: any) => Promise<ApolloQueryResult<GetBudgetQuery>>; // eslint-disable-line
   onClose: () => void;
   isOpen: boolean;
   budget?: Budget;

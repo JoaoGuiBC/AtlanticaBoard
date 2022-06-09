@@ -18,6 +18,7 @@ import { CreateProduct } from '@pages/dashboard/registrationQuery/products/creat
 
 import { BudgetList } from '@pages/dashboard/functional/budgets';
 import { CreateBudget } from '@pages/dashboard/functional/budgets/create';
+import { BudgetDetail } from '@pages/dashboard/functional/budgets/budgetDetail';
 
 export function Router() {
   return (
@@ -103,6 +104,15 @@ export function Router() {
             element={
               <ProtectedRoute
                 component={<CreateBudget />}
+                redirectTo="/signIn"
+              />
+            }
+          />
+          <Route
+            path="/orcamentos/orcamento"
+            element={
+              <ProtectedRoute
+                component={<BudgetDetail />}
                 redirectTo="/signIn"
               />
             }
