@@ -34,6 +34,14 @@ export class ClientResolver {
   private clientsService = new ClientsService();
   private addressesService = new AddressService();
 
+  @Query(() => Client)
+  @Authorized()
+  async getClient(@Arg('id') id: string) {
+    const client = await this.clientsService.listClientById(id);
+
+    return client;
+  }
+
   @Query(() => ListClientsValue)
   @Authorized()
   async listClients(@Args() { skip, take }: PaginationArgs) {
