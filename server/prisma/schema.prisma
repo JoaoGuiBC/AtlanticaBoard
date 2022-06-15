@@ -80,7 +80,7 @@ model ProductBudget {
   id String @id @default(uuid())
 
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   base   Float
   height Float
@@ -99,7 +99,7 @@ model Budget {
   serialNumber Int    @default(autoincrement())
 
   clientId String
-  client   Client @relation(fields: [clientId], references: [id])
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   products ProductBudget[]
 
