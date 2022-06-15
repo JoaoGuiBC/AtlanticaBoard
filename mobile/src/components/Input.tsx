@@ -26,7 +26,7 @@ export function Input({
   }
 
   return (
-    <FormControl mb="8" isInvalid={errors[name]} flex={1}>
+    <FormControl mb="8" isInvalid={errors[name]}>
       <FormControl.Label>
         <Text
           color="gray.50"
