@@ -11,7 +11,7 @@ import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
 import { useFocusEffect } from '@react-navigation/native';
 
-export function ListEmployess() {
+export function ListEmployees() {
   const toast = useToast();
   const { user, revalidate } = UseAuth();
 
@@ -103,7 +103,7 @@ export function ListEmployess() {
                   color="darkBlue.400"
                   fontFamily="heading"
                   fontWeight={500}
-                  fontSize="lg"
+                  fontSize="md"
                 >
                   {item.name}
                 </Heading>
@@ -112,7 +112,7 @@ export function ListEmployess() {
                   color="gray.200"
                   fontFamily="heading"
                   fontWeight={300}
-                  fontSize="md"
+                  fontSize="sm"
                 >
                   {item.email}
                 </Text>

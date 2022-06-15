@@ -48,7 +48,7 @@ export type Client = {
   __typename?: 'Client';
   address: Array<Address>;
   contact?: Maybe<Scalars['String']>;
-  document: Scalars['String'];
+  document?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -69,7 +69,7 @@ export type CreateClientInput = {
   city?: InputMaybe<Scalars['String']>;
   contact?: InputMaybe<Scalars['String']>;
   district?: InputMaybe<Scalars['String']>;
-  document: Scalars['String'];
+  document?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   name: Scalars['String'];
   number?: InputMaybe<Scalars['Float']>;
@@ -234,12 +234,18 @@ export type ProductInput = {
 
 export type Query = {
   __typename?: 'Query';
+  getBudget: Budget;
   listBudgets: ListBudgetsValue;
   listClients: ListClientsValue;
   listEmployees: Array<Employee>;
   listProducts: ListProductsValue;
   revalidateJWT: Scalars['String'];
   signIn: SignInResponse;
+};
+
+
+export type QueryGetBudgetArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -311,6 +317,35 @@ export type UpdateProductInput = {
   price: Scalars['Float'];
 };
 
+export type CreateClientMutationVariables = Exact<{
+  data: CreateClientInput;
+}>;
+
+
+export type CreateClientMutation = { __typename?: 'Mutation', createClient: string };
+
+export type DeleteClientMutationVariables = Exact<{
+  deleteClientId: Scalars['String'];
+}>;
+
+
+export type DeleteClientMutation = { __typename?: 'Mutation', deleteClient: string };
+
+export type ListClientsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ListClientsQuery = { __typename?: 'Query', listClients: { __typename?: 'ListClientsValue', totalClients: number, clients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document?: string | null, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> } };
+
+export type UpdateClientMutationVariables = Exact<{
+  data: UpdateClientInput;
+}>;
+
+
+export type UpdateClientMutation = { __typename?: 'Mutation', updateClient: string };
+
 export type CreateEmployeeMutationVariables = Exact<{
   data: CreateEmployeeInput;
 }>;
@@ -346,6 +381,153 @@ export type SignInQueryVariables = Exact<{
 export type SignInQuery = { __typename?: 'Query', signIn: { __typename?: 'SignInResponse', token: string, user: { __typename?: 'Employee', name: string, email: string, isAdmin: boolean, id: string } } };
 
 
+export const CreateClientDocument = gql`
+    mutation CreateClient($data: CreateClientInput!) {
+  createClient(data: $data)
+}
+    `;
+export type CreateClientMutationFn = Apollo.MutationFunction<CreateClientMutation, CreateClientMutationVariables>;
+
+/**
+ * __useCreateClientMutation__
+ *
+ * To run a mutation, you first call `useCreateClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createClientMutation, { data, loading, error }] = useCreateClientMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateClientMutation(baseOptions?: Apollo.MutationHookOptions<CreateClientMutation, CreateClientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateClientMutation, CreateClientMutationVariables>(CreateClientDocument, options);
+      }
+export type CreateClientMutationHookResult = ReturnType<typeof useCreateClientMutation>;
+export type CreateClientMutationResult = Apollo.MutationResult<CreateClientMutation>;
+export type CreateClientMutationOptions = Apollo.BaseMutationOptions<CreateClientMutation, CreateClientMutationVariables>;
+export const DeleteClientDocument = gql`
+    mutation DeleteClient($deleteClientId: String!) {
+  deleteClient(id: $deleteClientId)
+}
+    `;
+export type DeleteClientMutationFn = Apollo.MutationFunction<DeleteClientMutation, DeleteClientMutationVariables>;
+
+/**
+ * __useDeleteClientMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientMutation, { data, loading, error }] = useDeleteClientMutation({
+ *   variables: {
+ *      deleteClientId: // value for 'deleteClientId'
+ *   },
+ * });
+ */
+export function useDeleteClientMutation(baseOptions?: Apollo.MutationHookOptions<DeleteClientMutation, DeleteClientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteClientMutation, DeleteClientMutationVariables>(DeleteClientDocument, options);
+      }
+export type DeleteClientMutationHookResult = ReturnType<typeof useDeleteClientMutation>;
+export type DeleteClientMutationResult = Apollo.MutationResult<DeleteClientMutation>;
+export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<DeleteClientMutation, DeleteClientMutationVariables>;
+export const ListClientsDocument = gql`
+    query ListClients($skip: Int, $take: Int) {
+  listClients(skip: $skip, take: $take) {
+    totalClients
+    clients {
+      id
+      name
+      contact
+      address {
+        id
+        street
+        number
+        state
+        city
+        district
+        cep
+      }
+      email
+      phoneNumber
+      document
+      stateRegistration
+    }
+  }
+}
+    `;
+
+/**
+ * __useListClientsQuery__
+ *
+ * To run a query within a React component, call `useListClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListClientsQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useListClientsQuery(baseOptions?: Apollo.QueryHookOptions<ListClientsQuery, ListClientsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListClientsQuery, ListClientsQueryVariables>(ListClientsDocument, options);
+      }
+export function useListClientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListClientsQuery, ListClientsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListClientsQuery, ListClientsQueryVariables>(ListClientsDocument, options);
+        }
+export type ListClientsQueryHookResult = ReturnType<typeof useListClientsQuery>;
+export type ListClientsLazyQueryHookResult = ReturnType<typeof useListClientsLazyQuery>;
+export type ListClientsQueryResult = Apollo.QueryResult<ListClientsQuery, ListClientsQueryVariables>;
+export const UpdateClientDocument = gql`
+    mutation UpdateClient($data: UpdateClientInput!) {
+  updateClient(data: $data)
+}
+    `;
+export type UpdateClientMutationFn = Apollo.MutationFunction<UpdateClientMutation, UpdateClientMutationVariables>;
+
+/**
+ * __useUpdateClientMutation__
+ *
+ * To run a mutation, you first call `useUpdateClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClientMutation, { data, loading, error }] = useUpdateClientMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateClientMutation(baseOptions?: Apollo.MutationHookOptions<UpdateClientMutation, UpdateClientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateClientMutation, UpdateClientMutationVariables>(UpdateClientDocument, options);
+      }
+export type UpdateClientMutationHookResult = ReturnType<typeof useUpdateClientMutation>;
+export type UpdateClientMutationResult = Apollo.MutationResult<UpdateClientMutation>;
+export type UpdateClientMutationOptions = Apollo.BaseMutationOptions<UpdateClientMutation, UpdateClientMutationVariables>;
 export const CreateEmployeeDocument = gql`
     mutation CreateEmployee($data: CreateEmployeeInput!) {
   createEmployee(data: $data)

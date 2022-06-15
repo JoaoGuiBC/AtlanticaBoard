@@ -3,14 +3,14 @@ import { useTheme } from 'native-base';
 import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { ListEmployees } from '@screens/employees/ListEmployees';
-import { CreateEmployee } from '@screens/employees/CreateEmployee';
+import { ListClients } from '@screens/clients/ListClients';
+import { CreateClient } from '@screens/clients/CreateClient';
 
 import { BottomMenu } from '@components/BottomMenu';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
-export function EmployeeTabRoutes() {
+export function ClientTabRoutes() {
   const { colors } = useTheme();
 
   return (
@@ -28,8 +28,8 @@ export function EmployeeTabRoutes() {
       }}
     >
       <Screen
-        name="listEmployees"
-        component={ListEmployees}
+        name="listClients"
+        component={ListClients}
         options={{
           tabBarIcon: ({ color }) => (
             <BottomMenu color={color} title="Listar" icon="list" />
@@ -38,8 +38,8 @@ export function EmployeeTabRoutes() {
       />
 
       <Screen
-        name="createEmployee"
-        component={CreateEmployee}
+        name="createClient"
+        component={CreateClient}
         options={{
           tabBarIcon: ({ color }) => (
             <BottomMenu color={color} title="Criar" icon="user-plus" />

@@ -1,0 +1,23 @@
+query ListClients($skip: Int, $take: Int) {
+  listClients(skip: $skip, take: $take) {
+    totalClients
+    clients {
+      id
+      name
+      contact
+      address {
+        id
+        street
+        number
+        state
+        city
+        district
+        cep
+      }
+      email
+      phoneNumber
+      document
+      stateRegistration
+    }
+  }
+}

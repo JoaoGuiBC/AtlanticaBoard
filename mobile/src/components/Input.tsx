@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
-import { TextInputProps } from 'react-native';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import {
-  FormControl, Text, Input as InputBase, Button, Box, Icon,
+  FormControl, Text, IInputProps, Input as InputBase, Button, Box, Icon,
 } from 'native-base';
 
-interface InputProps extends TextInputProps {
+interface InputProps extends IInputProps {
   isSecret?: boolean;
   name: string;
   title: string;
@@ -27,7 +26,7 @@ export function Input({
   }
 
   return (
-    <FormControl mb="8" isInvalid={errors[name]}>
+    <FormControl mb="8" isInvalid={errors[name]} flex={1}>
       <FormControl.Label>
         <Text
           color="gray.50"
@@ -43,8 +42,8 @@ export function Input({
             fontFamily="heading"
             fontWeight={400}
             fontSize="xs"
-            lineHeight="3xl"
             ml="1"
+            alignSelf="center"
           >
             {info}
           </Text>
