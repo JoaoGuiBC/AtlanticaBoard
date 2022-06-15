@@ -41,14 +41,14 @@ export function CreateClient() {
     },
   });
 
-  async function handleCreateEmployee(data: CreateClientFormData) {
+  async function handleCreateClient(data: CreateClientFormData) {
     await revalidate(user!);
     await loadCreation({
       variables: { data },
     });
   }
 
-  const onSubmit = (data: any) => handleCreateEmployee(data);
+  const onSubmit = (data: any) => handleCreateClient(data);
 
   useEffect(() => {
     if (error) {

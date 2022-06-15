@@ -63,12 +63,14 @@ export class ClientsService {
       throw new Error('Email já cadastrado');
     }
 
-    const documentUsed = await prisma.client.findUnique({
-      where: { document },
-    });
+    if (document) {
+      const documentUsed = await prisma.client.findUnique({
+        where: { document },
+      });
 
-    if (documentUsed && documentUsed.document) {
-      throw new Error('CPF/CNPJ já cadastrado');
+      if (documentUsed && documentUsed.document) {
+        throw new Error('CPF/CNPJ já cadastrado');
+      }
     }
 
     const newClient = await prisma.client.create({

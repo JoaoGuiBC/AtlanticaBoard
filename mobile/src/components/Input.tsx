@@ -64,6 +64,7 @@ export function Input({
               value={value}
               autoCapitalize={autoCapitalize}
               secureTextEntry={isTextHidden}
+              _focus={{ backgroundColor: 'gray.700' }}
               {...rest}
             />
             {isSecret && (
