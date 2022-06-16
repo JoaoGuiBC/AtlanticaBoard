@@ -5,7 +5,7 @@ import {
 } from 'native-base';
 
 import { UseAuth } from '@hooks/auth';
-import { useGetClientQuery } from '@graphql/generated/graphql';
+import { useGetClientQuery, useUpdateClientMutation } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
@@ -42,10 +42,28 @@ export function UpdateClient() {
     variables: { getClientId: 'af4b4053-5a7c-4217-b4a3-091e34e276d4' },
     initialFetchPolicy: 'network-only',
   });
+  const [loadUpdate, { error, loading }] = useUpdateClientMutation({
+    context: {
+      headers: {
+        Authorization: user?.token,
+      },
+    },
+    onCompleted: async () => {
+      reset();
+    },
+  });
 
   async function handleOnSubmit(updateData: UpdateClientFormData) {
     await revalidate(user!);
-    console.log(updateData);
+    await loadUpdate({
+      variables: {
+        data: {
+          id: data?.getClient.id!,
+          idAddress: data?.getClient.address[0].id!,
+          ...updateData,
+        },
+      },
+    });
   }
 
   const onSubmit = (updateData: any) => handleOnSubmit(updateData);
@@ -63,21 +81,21 @@ export function UpdateClient() {
   }
 
   useEffect(() => {
-    if (listError) {
+    if (error || listError) {
       revalidate(user!);
 
       toast.show({
         render: () => (
           <Toast
             title="Erro"
-            description={listError.message}
+            description={error ? error.message : listError?.message}
             type="error"
           />
         ),
         placement: 'top-right',
       });
     }
-  }, [listError, listLoading]);
+  }, [listError, error, listLoading]);
 
   return (
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
@@ -202,6 +220,7 @@ export function UpdateClient() {
             width="100%"
             h="12"
             colorScheme="darkBlue"
+            isLoading={loading}
             onPress={handleSubmit(onSubmit)}
           >
             <Text
