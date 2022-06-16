@@ -1,0 +1,19 @@
+query GetClient($getClientId: String!) {
+  getClient(id: $getClientId) {
+    id
+    name
+    email
+    contact
+    phoneNumber
+    stateRegistration
+    address {
+      id
+      street
+      number
+      state
+      city
+      district
+      cep
+    }
+  }
+}

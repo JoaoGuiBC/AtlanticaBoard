@@ -14,6 +14,7 @@ import {
 import { apolloClient } from '@lib/apollo';
 import { AuthProvider } from '@hooks/auth';
 
+import { UpdateClient } from '@screens/clients/UpdateClient';
 import { theme } from './src/styles/theme';
 import { Routes } from './src/routes';
 
@@ -50,7 +51,7 @@ export default function App() {
           <StatusBar barStyle="light-content" backgroundColor="#181B23" />
           <View onLayout={onLayoutRootView} />
 
-          <Routes />
+          <UpdateClient />
         </AuthProvider>
       </NativeBaseProvider>
     </ApolloProvider>

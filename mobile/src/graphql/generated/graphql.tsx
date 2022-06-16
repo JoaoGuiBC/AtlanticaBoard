@@ -235,6 +235,7 @@ export type ProductInput = {
 export type Query = {
   __typename?: 'Query';
   getBudget: Budget;
+  getClient: Client;
   listBudgets: ListBudgetsValue;
   listClients: ListClientsValue;
   listEmployees: Array<Employee>;
@@ -245,6 +246,11 @@ export type Query = {
 
 
 export type QueryGetBudgetArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetClientArgs = {
   id: Scalars['String'];
 };
 
@@ -330,6 +336,13 @@ export type DeleteClientMutationVariables = Exact<{
 
 
 export type DeleteClientMutation = { __typename?: 'Mutation', deleteClient: string };
+
+export type GetClientQueryVariables = Exact<{
+  getClientId: Scalars['String'];
+}>;
+
+
+export type GetClientQuery = { __typename?: 'Query', getClient: { __typename?: 'Client', id: string, name: string, email: string, contact?: string | null, phoneNumber?: string | null, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> } };
 
 export type ListClientsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
@@ -443,6 +456,55 @@ export function useDeleteClientMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteClientMutationHookResult = ReturnType<typeof useDeleteClientMutation>;
 export type DeleteClientMutationResult = Apollo.MutationResult<DeleteClientMutation>;
 export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<DeleteClientMutation, DeleteClientMutationVariables>;
+export const GetClientDocument = gql`
+    query GetClient($getClientId: String!) {
+  getClient(id: $getClientId) {
+    id
+    name
+    email
+    contact
+    phoneNumber
+    stateRegistration
+    address {
+      id
+      street
+      number
+      state
+      city
+      district
+      cep
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetClientQuery__
+ *
+ * To run a query within a React component, call `useGetClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientQuery({
+ *   variables: {
+ *      getClientId: // value for 'getClientId'
+ *   },
+ * });
+ */
+export function useGetClientQuery(baseOptions: Apollo.QueryHookOptions<GetClientQuery, GetClientQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClientQuery, GetClientQueryVariables>(GetClientDocument, options);
+      }
+export function useGetClientLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClientQuery, GetClientQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClientQuery, GetClientQueryVariables>(GetClientDocument, options);
+        }
+export type GetClientQueryHookResult = ReturnType<typeof useGetClientQuery>;
+export type GetClientLazyQueryHookResult = ReturnType<typeof useGetClientLazyQuery>;
+export type GetClientQueryResult = Apollo.QueryResult<GetClientQuery, GetClientQueryVariables>;
 export const ListClientsDocument = gql`
     query ListClients($skip: Int, $take: Int) {
   listClients(skip: $skip, take: $take) {

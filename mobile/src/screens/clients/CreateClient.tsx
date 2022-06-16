@@ -71,7 +71,7 @@ export function CreateClient() {
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
       <Header title="Clientes" />
 
-      <ScrollView flex={1} px="10" w="100%" contentContainerStyle={{ paddingVertical: 32 }}>
+      <ScrollView flex={1} px="6" w="100%" contentContainerStyle={{ paddingVertical: 32 }}>
 
         <Input
           title="E-mail"
