@@ -5,8 +5,7 @@ import { UseAuth } from '@hooks/auth';
 
 import { SignIn } from '@screens/SignIn';
 
-import { ClientTabRoutes } from './tabRoutes/client.tab.routes';
-// import { EmployeeTabRoutes } from './tabRoutes/employee.tab.routes';
+import { StackRoutes } from './stack.routes';
 
 export function Routes() {
   const { user } = UseAuth();
@@ -14,7 +13,7 @@ export function Routes() {
   return (
     <NavigationContainer>
       {user ? (
-        <ClientTabRoutes />
+        <StackRoutes />
       ) : (
         <SignIn />
       )}

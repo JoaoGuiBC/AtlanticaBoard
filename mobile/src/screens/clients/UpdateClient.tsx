@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { Feather } from '@expo/vector-icons';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   Box, Button, Heading, HStack, Icon, ScrollView, Spinner, Text, useToast,
 } from 'native-base';
@@ -8,16 +11,20 @@ import { UseAuth } from '@hooks/auth';
 import { useGetClientQuery, useUpdateClientMutation } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
-import { Header } from '@components/Header';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { schema, UpdateClientFormData } from '@utils/schemas/client/updateClientSchema';
 import { Input } from '@components/Input';
+import { Header } from '@components/Header';
 import { FieldMarker } from '@components/FieldMarker';
+import { schema, UpdateClientFormData } from '@utils/schemas/client/updateClientSchema';
+
+import { UpdateClientNavigationProps } from '../../@types/navigation';
 
 export function UpdateClient() {
+  const route = useRoute();
   const toast = useToast();
   const { user, revalidate } = UseAuth();
+
+  const { goBack } = useNavigation();
+  const { id } = route.params as UpdateClientNavigationProps;
 
   const {
     reset,
@@ -39,7 +46,7 @@ export function UpdateClient() {
         Authorization: user?.token,
       },
     },
-    variables: { getClientId: 'af4b4053-5a7c-4217-b4a3-091e34e276d4' },
+    variables: { getClientId: id },
     initialFetchPolicy: 'network-only',
   });
   const [loadUpdate, { error, loading }] = useUpdateClientMutation({
@@ -50,6 +57,7 @@ export function UpdateClient() {
     },
     onCompleted: async () => {
       reset();
+      goBack();
     },
   });
 

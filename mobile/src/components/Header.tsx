@@ -4,6 +4,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 
 import { UseAuth } from '@hooks/auth';
+import { HeaderMenu } from './HeaderMenu';
 
 interface HeaderProps {
   title: string;
@@ -24,9 +25,7 @@ export function Header({ title }: HeaderProps) {
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Pressable>
-        <Icon as={Feather} name="menu" color="gray.50" size="6" />
-      </Pressable>
+      <HeaderMenu />
 
       <Heading
         alignSelf="center"

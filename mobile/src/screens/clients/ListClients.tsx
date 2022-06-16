@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   Box, Heading, Text, FlatList, VStack, Button, HStack, Icon, Divider, Spinner, useToast,
 } from 'native-base';
@@ -9,10 +10,10 @@ import { useDeleteClientMutation, useListClientsQuery } from '@graphql/generated
 
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
-import { useFocusEffect } from '@react-navigation/native';
 
 export function ListClients() {
   const toast = useToast();
+  const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
   const {
@@ -42,6 +43,10 @@ export function ListClients() {
     if (!error) {
       refetch();
     }
+  }
+
+  function handleGoToUpdate(clientId: string) {
+    navigate('clientUpdate', { id: clientId });
   }
 
   useEffect(() => {
@@ -263,7 +268,7 @@ export function ListClients() {
               </HStack>
 
               <HStack mt="5" space="2" alignSelf="flex-end">
-                <Button isLoading={loading} onPress={() => handleDeleteClient(item.id)} colorScheme="darkBlue">
+                <Button isLoading={loading} onPress={() => handleGoToUpdate(item.id)} colorScheme="darkBlue">
                   <Icon as={Feather} name="edit-2" color="gray.50" size="4" />
                 </Button>
 

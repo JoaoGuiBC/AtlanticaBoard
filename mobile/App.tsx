@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler';
+
 import { useCallback, useEffect } from 'react';
 import { StatusBar, View } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
@@ -14,7 +16,6 @@ import {
 import { apolloClient } from '@lib/apollo';
 import { AuthProvider } from '@hooks/auth';
 
-import { UpdateClient } from '@screens/clients/UpdateClient';
 import { theme } from './src/styles/theme';
 import { Routes } from './src/routes';
 
@@ -51,7 +52,7 @@ export default function App() {
           <StatusBar barStyle="light-content" backgroundColor="#181B23" />
           <View onLayout={onLayoutRootView} />
 
-          <UpdateClient />
+          <Routes />
         </AuthProvider>
       </NativeBaseProvider>
     </ApolloProvider>
