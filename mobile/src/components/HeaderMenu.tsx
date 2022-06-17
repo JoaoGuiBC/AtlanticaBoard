@@ -25,14 +25,13 @@ export function HeaderMenu() {
           </Pressable>
         )}
       >
-        <Menu.Group title="GERAL" _title={{ fontSize: 15 }}>
+        <Menu.Group title="GERAL" _title={{ fontSize: 16 }}>
           <Menu.Item
-            _text={{ color: 'gray.50', fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="trello" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="trello" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Infográficos
               </Text>
             </HStack>
@@ -41,41 +40,38 @@ export function HeaderMenu() {
 
         <Divider mt="3" w="90%" bg="gray.400" alignSelf="center" />
 
-        <Menu.Group title="CADASTRO / CONSULTA" _title={{ fontSize: 15 }}>
+        <Menu.Group title="CADASTRO / CONSULTA" _title={{ fontSize: 16 }}>
           <Menu.Item
-            _text={{ fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
             onPress={() => handleNavigate('client')}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="user" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="user" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Clientes
               </Text>
             </HStack>
           </Menu.Item>
 
           <Menu.Item
-            _text={{ color: 'gray.50', fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
             onPress={() => handleNavigate('product')}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="tool" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="tool" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Produtos
               </Text>
             </HStack>
           </Menu.Item>
 
           <Menu.Item
-            _text={{ fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
             onPress={() => handleNavigate('employee')}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="users" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="users" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Funcionários
               </Text>
             </HStack>
@@ -84,26 +80,24 @@ export function HeaderMenu() {
 
         <Divider mt="3" w="90%" bg="gray.400" alignSelf="center" />
 
-        <Menu.Group title="FUNCIONAL" _title={{ fontSize: 15 }}>
+        <Menu.Group title="FUNCIONAL" _title={{ fontSize: 16 }}>
           <Menu.Item
-            _text={{ color: 'gray.50', fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="clipboard" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="clipboard" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Orçamentos
               </Text>
             </HStack>
           </Menu.Item>
 
           <Menu.Item
-            _text={{ color: 'gray.50', fontWeight: 500 }}
             _pressed={{ bg: 'gray.700' }}
           >
-            <HStack alignItems="center" space="1">
-              <Icon as={Feather} name="book-open" color="gray.50" size="4" />
-              <Text color="gray.50" fontWeight="500">
+            <HStack alignItems="center" space="2.5">
+              <Icon as={Feather} name="book-open" color="gray.50" size="5" />
+              <Text color="gray.50" fontSize="16" fontWeight="400">
                 Pedidos de compra
               </Text>
             </HStack>
