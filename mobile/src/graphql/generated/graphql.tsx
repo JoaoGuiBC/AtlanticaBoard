@@ -329,6 +329,49 @@ export type UpdateProductInput = {
   price: Scalars['Float'];
 };
 
+export type CreateBudgetMutationVariables = Exact<{
+  data: CreateBudgetInput;
+}>;
+
+
+export type CreateBudgetMutation = { __typename?: 'Mutation', createBudget: string };
+
+export type DeleteBudgetMutationVariables = Exact<{
+  deleteBudgetId: Scalars['String'];
+}>;
+
+
+export type DeleteBudgetMutation = { __typename?: 'Mutation', deleteBudget: string };
+
+export type GetBudgetQueryVariables = Exact<{
+  getBudgetId: Scalars['String'];
+}>;
+
+
+export type GetBudgetQuery = { __typename?: 'Query', getBudget: { __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } } };
+
+export type ListBudgetsQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type ListBudgetsQuery = { __typename?: 'Query', listBudgets: { __typename?: 'ListBudgetsValue', totalBudgets: number, budgets: Array<{ __typename?: 'Budget', id: string, serialNumber: number, price: number, color?: string | null, deadline?: any | null, discount?: number | null, created_at: any, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, price: number, product: { __typename?: 'Product', id: string, name: string } }>, client: { __typename?: 'Client', name: string, email: string, contact?: string | null, phoneNumber?: string | null } }> } };
+
+export type UpdateBudgetInfoMutationVariables = Exact<{
+  data: UpdateBudgetInfoInput;
+}>;
+
+
+export type UpdateBudgetInfoMutation = { __typename?: 'Mutation', updateBudgetInfo: string };
+
+export type UpdateBudgetProductsMutationVariables = Exact<{
+  data: UpdateBudgetProductsInput;
+}>;
+
+
+export type UpdateBudgetProductsMutation = { __typename?: 'Mutation', updateBudgetProducts: string };
+
 export type CreateClientMutationVariables = Exact<{
   data: CreateClientInput;
 }>;
@@ -436,6 +479,248 @@ export type UpdateProductMutationVariables = Exact<{
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: string };
 
 
+export const CreateBudgetDocument = gql`
+    mutation CreateBudget($data: CreateBudgetInput!) {
+  createBudget(data: $data)
+}
+    `;
+export type CreateBudgetMutationFn = Apollo.MutationFunction<CreateBudgetMutation, CreateBudgetMutationVariables>;
+
+/**
+ * __useCreateBudgetMutation__
+ *
+ * To run a mutation, you first call `useCreateBudgetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBudgetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBudgetMutation, { data, loading, error }] = useCreateBudgetMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateBudgetMutation(baseOptions?: Apollo.MutationHookOptions<CreateBudgetMutation, CreateBudgetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateBudgetMutation, CreateBudgetMutationVariables>(CreateBudgetDocument, options);
+      }
+export type CreateBudgetMutationHookResult = ReturnType<typeof useCreateBudgetMutation>;
+export type CreateBudgetMutationResult = Apollo.MutationResult<CreateBudgetMutation>;
+export type CreateBudgetMutationOptions = Apollo.BaseMutationOptions<CreateBudgetMutation, CreateBudgetMutationVariables>;
+export const DeleteBudgetDocument = gql`
+    mutation DeleteBudget($deleteBudgetId: String!) {
+  deleteBudget(id: $deleteBudgetId)
+}
+    `;
+export type DeleteBudgetMutationFn = Apollo.MutationFunction<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
+
+/**
+ * __useDeleteBudgetMutation__
+ *
+ * To run a mutation, you first call `useDeleteBudgetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBudgetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBudgetMutation, { data, loading, error }] = useDeleteBudgetMutation({
+ *   variables: {
+ *      deleteBudgetId: // value for 'deleteBudgetId'
+ *   },
+ * });
+ */
+export function useDeleteBudgetMutation(baseOptions?: Apollo.MutationHookOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteBudgetMutation, DeleteBudgetMutationVariables>(DeleteBudgetDocument, options);
+      }
+export type DeleteBudgetMutationHookResult = ReturnType<typeof useDeleteBudgetMutation>;
+export type DeleteBudgetMutationResult = Apollo.MutationResult<DeleteBudgetMutation>;
+export type DeleteBudgetMutationOptions = Apollo.BaseMutationOptions<DeleteBudgetMutation, DeleteBudgetMutationVariables>;
+export const GetBudgetDocument = gql`
+    query GetBudget($getBudgetId: String!) {
+  getBudget(id: $getBudgetId) {
+    id
+    serialNumber
+    price
+    color
+    deadline
+    discount
+    created_at
+    products {
+      id
+      base
+      height
+      price
+      product {
+        id
+        name
+      }
+    }
+    client {
+      name
+      email
+      contact
+      phoneNumber
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetBudgetQuery__
+ *
+ * To run a query within a React component, call `useGetBudgetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBudgetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBudgetQuery({
+ *   variables: {
+ *      getBudgetId: // value for 'getBudgetId'
+ *   },
+ * });
+ */
+export function useGetBudgetQuery(baseOptions: Apollo.QueryHookOptions<GetBudgetQuery, GetBudgetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetBudgetQuery, GetBudgetQueryVariables>(GetBudgetDocument, options);
+      }
+export function useGetBudgetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBudgetQuery, GetBudgetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetBudgetQuery, GetBudgetQueryVariables>(GetBudgetDocument, options);
+        }
+export type GetBudgetQueryHookResult = ReturnType<typeof useGetBudgetQuery>;
+export type GetBudgetLazyQueryHookResult = ReturnType<typeof useGetBudgetLazyQuery>;
+export type GetBudgetQueryResult = Apollo.QueryResult<GetBudgetQuery, GetBudgetQueryVariables>;
+export const ListBudgetsDocument = gql`
+    query ListBudgets($skip: Int, $take: Int) {
+  listBudgets(skip: $skip, take: $take) {
+    totalBudgets
+    budgets {
+      id
+      serialNumber
+      price
+      color
+      deadline
+      discount
+      created_at
+      products {
+        id
+        base
+        height
+        price
+        product {
+          id
+          name
+        }
+      }
+      client {
+        name
+        email
+        contact
+        phoneNumber
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useListBudgetsQuery__
+ *
+ * To run a query within a React component, call `useListBudgetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListBudgetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListBudgetsQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *   },
+ * });
+ */
+export function useListBudgetsQuery(baseOptions?: Apollo.QueryHookOptions<ListBudgetsQuery, ListBudgetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListBudgetsQuery, ListBudgetsQueryVariables>(ListBudgetsDocument, options);
+      }
+export function useListBudgetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListBudgetsQuery, ListBudgetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListBudgetsQuery, ListBudgetsQueryVariables>(ListBudgetsDocument, options);
+        }
+export type ListBudgetsQueryHookResult = ReturnType<typeof useListBudgetsQuery>;
+export type ListBudgetsLazyQueryHookResult = ReturnType<typeof useListBudgetsLazyQuery>;
+export type ListBudgetsQueryResult = Apollo.QueryResult<ListBudgetsQuery, ListBudgetsQueryVariables>;
+export const UpdateBudgetInfoDocument = gql`
+    mutation UpdateBudgetInfo($data: UpdateBudgetInfoInput!) {
+  updateBudgetInfo(data: $data)
+}
+    `;
+export type UpdateBudgetInfoMutationFn = Apollo.MutationFunction<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>;
+
+/**
+ * __useUpdateBudgetInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateBudgetInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBudgetInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBudgetInfoMutation, { data, loading, error }] = useUpdateBudgetInfoMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBudgetInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>(UpdateBudgetInfoDocument, options);
+      }
+export type UpdateBudgetInfoMutationHookResult = ReturnType<typeof useUpdateBudgetInfoMutation>;
+export type UpdateBudgetInfoMutationResult = Apollo.MutationResult<UpdateBudgetInfoMutation>;
+export type UpdateBudgetInfoMutationOptions = Apollo.BaseMutationOptions<UpdateBudgetInfoMutation, UpdateBudgetInfoMutationVariables>;
+export const UpdateBudgetProductsDocument = gql`
+    mutation UpdateBudgetProducts($data: UpdateBudgetProductsInput!) {
+  updateBudgetProducts(data: $data)
+}
+    `;
+export type UpdateBudgetProductsMutationFn = Apollo.MutationFunction<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>;
+
+/**
+ * __useUpdateBudgetProductsMutation__
+ *
+ * To run a mutation, you first call `useUpdateBudgetProductsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBudgetProductsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBudgetProductsMutation, { data, loading, error }] = useUpdateBudgetProductsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBudgetProductsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>(UpdateBudgetProductsDocument, options);
+      }
+export type UpdateBudgetProductsMutationHookResult = ReturnType<typeof useUpdateBudgetProductsMutation>;
+export type UpdateBudgetProductsMutationResult = Apollo.MutationResult<UpdateBudgetProductsMutation>;
+export type UpdateBudgetProductsMutationOptions = Apollo.BaseMutationOptions<UpdateBudgetProductsMutation, UpdateBudgetProductsMutationVariables>;
 export const CreateClientDocument = gql`
     mutation CreateClient($data: CreateClientInput!) {
   createClient(data: $data)

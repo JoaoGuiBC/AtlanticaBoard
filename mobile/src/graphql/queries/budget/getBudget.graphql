@@ -1,0 +1,27 @@
+query GetBudget($getBudgetId: String!) {
+  getBudget(id: $getBudgetId) {
+    id
+    serialNumber
+    price
+    color
+    deadline
+    discount
+    created_at
+    products {
+      id
+      base
+      height
+      price
+      product {
+        id
+        name
+      }
+    }
+    client {
+      name
+      email
+      contact
+      phoneNumber
+    }
+  }
+}
