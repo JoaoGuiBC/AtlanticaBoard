@@ -92,20 +92,24 @@ export function CreateClient() {
         />
 
         <HStack space="2.5">
-          <Input
-            title="Contato"
-            control={control}
-            name="contact"
-            errors={errors}
-            autoCapitalize="words"
-          />
-          <Input
-            title="Telefone"
-            control={control}
-            name="phoneNumber"
-            errors={errors}
-            keyboardType="number-pad"
-          />
+          <Box flex={1}>
+            <Input
+              title="Contato"
+              control={control}
+              name="contact"
+              errors={errors}
+              autoCapitalize="words"
+            />
+          </Box>
+          <Box flex={1}>
+            <Input
+              title="Telefone"
+              control={control}
+              name="phoneNumber"
+              errors={errors}
+              keyboardType="number-pad"
+            />
+          </Box>
         </HStack>
 
         <FieldMarker title="Fiscal" />

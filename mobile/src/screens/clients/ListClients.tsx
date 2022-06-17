@@ -268,7 +268,7 @@ export function ListClients() {
               </HStack>
 
               <HStack mt="5" space="2" alignSelf="flex-end">
-                <Button isLoading={loading} onPress={() => handleGoToUpdate(item.id)} colorScheme="darkBlue">
+                <Button onPress={() => handleGoToUpdate(item.id)} colorScheme="darkBlue">
                   <Icon as={Feather} name="edit-2" color="gray.50" size="4" />
                 </Button>
 
