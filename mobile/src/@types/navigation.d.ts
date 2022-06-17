@@ -1,4 +1,4 @@
-export type UpdateClientNavigationProps = {
+export type UpdateScreenNavigationProps = {
   id: string;
 };
 
@@ -6,8 +6,12 @@ export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       employee: undefined;
+
       client: undefined;
-      clientUpdate: UpdateClientNavigationProps;
+      clientUpdate: UpdateScreenNavigationProps;
+      
+      product: undefined;
+      productUpdate: UpdateScreenNavigationProps;
     }
   }
 }

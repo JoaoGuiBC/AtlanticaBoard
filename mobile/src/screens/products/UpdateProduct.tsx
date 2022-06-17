@@ -8,17 +8,18 @@ import {
 } from 'native-base';
 
 import { UseAuth } from '@hooks/auth';
-import { useGetClientQuery, useUpdateClientMutation } from '@graphql/generated/graphql';
+import { useGetProductQuery, useUpdateProductMutation } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
 import { Input } from '@components/Input';
 import { Header } from '@components/Header';
-import { FieldMarker } from '@components/FieldMarker';
-import { schema, UpdateClientFormData } from '@utils/schemas/client/updateClientSchema';
+
+import { currencyFormatter } from '@utils/formatter/currencyFormatter';
+import { schema, UpdateProductFormData } from '@utils/schemas/product/updateProductSchema';
 
 import { UpdateScreenNavigationProps } from '../../@types/navigation';
 
-export function UpdateClient() {
+export function UpdateProduct() {
   const route = useRoute();
   const toast = useToast();
   const { user, revalidate } = UseAuth();
@@ -40,16 +41,16 @@ export function UpdateClient() {
     data,
     loading: listLoading,
     error: listError,
-  } = useGetClientQuery({
+  } = useGetProductQuery({
     context: {
       headers: {
         Authorization: user?.token,
       },
     },
-    variables: { getClientId: id },
+    variables: { getProductId: id },
     initialFetchPolicy: 'network-only',
   });
-  const [loadUpdate, { error, loading }] = useUpdateClientMutation({
+  const [loadUpdate, { error, loading }] = useUpdateProductMutation({
     context: {
       headers: {
         Authorization: user?.token,
@@ -61,31 +62,21 @@ export function UpdateClient() {
     },
   });
 
-  async function handleOnSubmit(updateData: UpdateClientFormData) {
+  async function handleOnSubmit(updateData: UpdateProductFormData) {
     await revalidate(user!);
     await loadUpdate({
       variables: {
-        data: {
-          id: data?.getClient.id!,
-          idAddress: data?.getClient.address[0].id!,
-          ...updateData,
-        },
+        data: { id, ...updateData },
       },
     });
   }
 
   const onSubmit = (updateData: any) => handleOnSubmit(updateData);
 
-  if (data?.getClient) {
-    register('contact', { value: data.getClient.contact });
-    register('phoneNumber', { value: data.getClient.phoneNumber });
-    register('stateRegistration', { value: data.getClient.stateRegistration });
-    register('street', { value: data.getClient.address[0].street });
-    register('number', { value: String(data.getClient.address[0].number) });
-    register('city', { value: data.getClient.address[0].city });
-    register('state', { value: data.getClient.address[0].state });
-    register('district', { value: data.getClient.address[0].district });
-    register('cep', { value: data.getClient.address[0].cep });
+  if (data?.getProduct) {
+    register('price', { value: currencyFormatter(data.getProduct.price, true) });
+    register('cost', { value: currencyFormatter(data.getProduct.cost, true) });
+    register('description', { value: data.getProduct.description });
   }
 
   useEffect(() => {
@@ -107,7 +98,7 @@ export function UpdateClient() {
 
   return (
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
-      <Header title="Clientes" />
+      <Header title="Produtos" />
 
       {listLoading ? (
         <Box flex={1} alignItems="center" justifyContent="center">
@@ -123,104 +114,45 @@ export function UpdateClient() {
             px="12"
             textAlign="center"
           >
-            Erro ao carregar o cliente
+            Erro ao carregar o produto
           </Text>
           <Icon as={Feather} name="alert-circle" color="gray.100" size="9" />
         </Box>
       ) : (
         <ScrollView flex={1} px="6" w="100%" contentContainerStyle={{ paddingVertical: 32 }}>
-          <Heading color="gray.50" fontSize="3xl">{data?.getClient.name}</Heading>
-          <Text color="gray.400" fontSize="md" mb="12">{data?.getClient.email}</Text>
+          <Heading color="gray.50" fontSize="xl">{data?.getProduct.name}</Heading>
 
-          <HStack space="2.5">
+          <HStack space="2.5" mt="5">
             <Box flex={1}>
               <Input
-                title="Contato"
+                title="Preço"
                 control={control}
-                name="contact"
-                errors={errors}
-                autoCapitalize="words"
-              />
-            </Box>
-            <Box flex={1}>
-              <Input
-                title="Telefone"
-                control={control}
-                name="phoneNumber"
-                errors={errors}
-                keyboardType="number-pad"
-              />
-            </Box>
-
-          </HStack>
-
-          <Input
-            title="Inscrição estadual"
-            control={control}
-            name="stateRegistration"
-            errors={errors}
-          />
-
-          <FieldMarker title="Endereço" />
-
-          <HStack space="5">
-            <Box flex={4}>
-              <Input
-                title="Endereço"
-                control={control}
-                name="street"
+                name="price"
                 errors={errors}
                 info="obrigatório"
-                autoCapitalize="words"
+                keyboardType="number-pad"
+                leftContent="R$"
               />
             </Box>
             <Box flex={1}>
               <Input
-                title="Nº"
+                title="Custo"
                 control={control}
-                name="number"
+                name="cost"
                 errors={errors}
                 keyboardType="number-pad"
-              />
-            </Box>
-          </HStack>
-
-          <HStack space="5">
-            <Box flex={2}>
-              <Input
-                title="Cidade"
-                control={control}
-                name="city"
-                errors={errors}
-                autoCapitalize="words"
-              />
-            </Box>
-            <Box flex={1}>
-              <Input
-                title="Estado"
-                control={control}
-                name="state"
-                errors={errors}
-                autoCapitalize="characters"
-                maxLength={2}
+                leftContent="R$"
               />
             </Box>
           </HStack>
 
           <Input
-            title="Bairro"
+            title="Descrição"
             control={control}
-            name="district"
+            name="description"
             errors={errors}
-            autoCapitalize="words"
-          />
-
-          <Input
-            title="CEP"
-            control={control}
-            name="cep"
-            errors={errors}
-            keyboardType="number-pad"
+            multiline
+            autoCapitalize="sentences"
           />
 
           <Button

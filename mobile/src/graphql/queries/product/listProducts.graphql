@@ -1,0 +1,12 @@
+query ListProducts($skip: Int, $take: Int) {
+  listProducts(skip: $skip, take: $take) {
+    totalProducts
+    products {
+      id
+      name
+      price
+      cost
+      description
+    }
+  }
+}

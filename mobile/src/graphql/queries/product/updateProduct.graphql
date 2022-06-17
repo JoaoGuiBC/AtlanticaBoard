@@ -1,0 +1,10 @@
+input UpdateProductInput {
+  cost: Float
+  description: String
+  id: String!
+  price: Float!
+}
+
+mutation UpdateProduct($data: UpdateProductInput!) {
+  updateProduct(data: $data)
+}

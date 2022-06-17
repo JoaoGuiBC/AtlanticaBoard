@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import {
-  FormControl, Text, IInputProps, Input as InputBase, Button, Box, Icon,
+  FormControl, Text, IInputProps, Input as InputBase, Button, Box, Icon, InputLeftAddon,
 } from 'native-base';
 
 interface InputProps extends IInputProps {
@@ -10,6 +10,8 @@ interface InputProps extends IInputProps {
   name: string;
   title: string;
   info?: string;
+  leftContent?: string;
+  multiline?: boolean;
   control: Control<FieldValues, any>; // eslint-disable-line
   errors: {
     [x: string]: any; // eslint-disable-line
@@ -17,7 +19,16 @@ interface InputProps extends IInputProps {
 }
 
 export function Input({
-  control, errors, name, title, info, isSecret = false, autoCapitalize = 'none', ...rest
+  control,
+  errors,
+  name,
+  title,
+  info,
+  leftContent,
+  multiline = false,
+  isSecret = false,
+  autoCapitalize = 'none',
+  ...rest
 }: InputProps) {
   const [isTextHidden, setIsTextHidden] = useState(isSecret);
 
@@ -55,6 +66,15 @@ export function Input({
         name={name}
         render={({ field: { onBlur, onChange, value } }) => (
           <Box flexDir="row" borderColor="gray.100" borderWidth="1" borderRadius="sm">
+            {leftContent && (
+              <InputLeftAddon
+                bg="gray.900"
+                borderWidth={0}
+                px="3"
+              >
+                <Text color="gray.50">{leftContent}</Text>
+              </InputLeftAddon>
+            )}
             <InputBase
               flex={1}
               borderWidth={0}
@@ -62,6 +82,7 @@ export function Input({
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
+              multiline={multiline}
               autoCapitalize={autoCapitalize}
               secureTextEntry={isTextHidden}
               _focus={{ backgroundColor: 'gray.700' }}
