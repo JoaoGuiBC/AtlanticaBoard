@@ -156,6 +156,7 @@ input ProductInput {
 type Query {
   getBudget(id: String!): Budget!
   getClient(id: String!): Client!
+  getProduct(id: String!): Product!
   listBudgets(skip: Int, take: Int): ListBudgetsValue!
   listClients(skip: Int, take: Int): ListClientsValue!
   listEmployees: [Employee!]!

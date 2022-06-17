@@ -29,6 +29,14 @@ class ListProductsValue {
 export class ProductResolver {
   private productsService = new ProductsService();
 
+  @Query(() => Product)
+  @Authorized()
+  async getProduct(@Arg('id') id: string) {
+    const product = await this.productsService.listProductById(id);
+
+    return product;
+  }
+
   @Query(() => ListProductsValue)
   @Authorized()
   async listProducts(@Args() { skip, take }: PaginationArgs) {
