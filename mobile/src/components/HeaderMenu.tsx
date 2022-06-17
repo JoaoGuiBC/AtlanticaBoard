@@ -19,8 +19,10 @@ export function HeaderMenu() {
         closeOnSelect
         w="250"
         bg="gray.900"
+        mt="-2.5"
+        ml="2.5"
         trigger={(triggerProps) => (
-          <Pressable {...triggerProps}>
+          <Pressable {...triggerProps} py="3" px="5">
             <Icon as={Feather} name="menu" color="gray.50" size="6" />
           </Pressable>
         )}

@@ -37,7 +37,7 @@ export function Header({ title }: HeaderProps) {
         {title}
       </Heading>
 
-      <Pressable onPress={handleSignOut}>
+      <Pressable onPress={handleSignOut} py="3" px="5">
         <Icon as={Feather} name="log-out" color="gray.50" size="6" />
       </Pressable>
     </HStack>
