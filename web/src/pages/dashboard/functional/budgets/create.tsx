@@ -323,7 +323,8 @@ export function CreateBudget() {
                   </Text>
 
                   <Text fontSize={22} alignSelf="flex-start">
-                    Valor do orçamento: R${price - watchDiscount}
+                    Valor do orçamento: R$
+                    {watchDiscount ? price - watchDiscount : price}
                   </Text>
                 </VStack>
 

@@ -170,7 +170,8 @@ export function AddProductToBudgetModal({
                     />
                     <Heading userSelect="none">=</Heading>
                     <Text fontSize={25}>
-                      {watchBase * watchHeight}&nbsp;
+                      {watchBase || watchHeight ? watchBase * watchHeight : 0}
+                      &nbsp;
                       <Text as="span" fontSize={15}>
                         M²
                       </Text>
@@ -182,9 +183,13 @@ export function AddProductToBudgetModal({
                   </Text>
 
                   <Text fontSize={22} alignSelf="flex-start">
-                    Orçamento do produto: {selectedproduct.price} x{' '}
-                    {watchBase * watchHeight} = R$
-                    {selectedproduct.price * (watchBase * watchHeight)}
+                    Orçamento do produto:
+                    {selectedproduct.price} x{' '}
+                    {watchBase || watchHeight ? watchBase * watchHeight : 0} =
+                    R$
+                    {watchBase || watchHeight
+                      ? selectedproduct.price * (watchBase * watchHeight)
+                      : 0}
                   </Text>
                 </>
               )}
