@@ -1,15 +1,15 @@
-import { Button } from "@chakra-ui/react";
+import { Button } from '@chakra-ui/react';
 
 interface PaginationItemProps {
   pageNumber: number;
   isCurrent?: boolean;
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number) => void; // eslint-disable-line
 }
 
 export function PaginationItem({
   isCurrent = false,
   pageNumber,
-  onPageChange
+  onPageChange,
 }: PaginationItemProps) {
   if (isCurrent) {
     return (
@@ -38,7 +38,7 @@ export function PaginationItem({
       borderRadius={4}
       bg="gray.700"
       _hover={{
-        bg: 'gray.500'
+        bg: 'gray.500',
       }}
       onClick={() => onPageChange(pageNumber)}
     >

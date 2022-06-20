@@ -11,6 +11,29 @@ import { useDeleteClientMutation, useListClientsQuery } from '@graphql/generated
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
 
+type Address = {
+  __typename?: 'Address';
+  cep?: string | null;
+  city?: string | null;
+  district?: string | null;
+  id: string;
+  number?: number | null;
+  state?: string | null;
+  street: string | null;
+};
+
+export type Client = {
+  __typename?: 'Client';
+  address: Address[];
+  contact?: string | null;
+  document?: string | null;
+  email: string;
+  id: string;
+  name: string;
+  phoneNumber?: string | null;
+  stateRegistration?: string | null;
+};
+
 export function ListClients() {
   const toast = useToast();
   const { navigate } = useNavigation();
