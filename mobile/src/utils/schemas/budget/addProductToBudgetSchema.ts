@@ -10,12 +10,24 @@ export const schema = yup.object({
   productId: yup.string().required('Campo obrigatório'),
   base: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
+    .transform((_, value) => {
+      if (value.includes('.')) {
+        return +value;
+      }
+      return +value.replace(/,/, '.');
+    })
     .required('Campo obrigatório')
+    .positive('Campo obrigatório')
     .typeError('Informe um número válido'),
   height: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
+    .transform((_, value) => {
+      if (value.includes('.')) {
+        return +value;
+      }
+      return +value.replace(/,/, '.');
+    })
     .required('Campo obrigatório')
+    .positive('Campo obrigatório')
     .typeError('Informe um número válido'),
 });

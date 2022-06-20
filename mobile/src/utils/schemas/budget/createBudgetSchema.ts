@@ -13,7 +13,12 @@ export const schema = yup.object({
   deadline: yup.string(),
   discount: yup
     .number()
-    .transform((v, o) => (o === '' ? null : v))
+    .transform((_, value) => {
+      if (value.includes('.')) {
+        return +value;
+      }
+      return +value.replace(/,/, '.');
+    })
     .nullable()
     .typeError('Informe um número válido'),
 });

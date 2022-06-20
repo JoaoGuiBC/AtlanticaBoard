@@ -12,6 +12,8 @@ const httpLink = createHttpLink({
   fetch,
 });
 
+console.log(`${SERVER_URI}`);
+
 const cache = new InMemoryCache();
 
 export const apolloClient = new ApolloClient({ link: from([httpLink]), cache });

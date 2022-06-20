@@ -24,6 +24,7 @@ export function Header({ title }: HeaderProps) {
       py={6}
       justifyContent="space-evenly"
       alignItems="center"
+      shadow="9"
     >
       <HeaderMenu />
 
