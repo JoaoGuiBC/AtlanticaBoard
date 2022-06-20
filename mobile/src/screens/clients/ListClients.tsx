@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
@@ -35,12 +35,15 @@ export type Client = {
 };
 
 export function ListClients() {
+  const [page, setPage] = useState(1);
+  const [totalClients, setTotalClients] = useState(0);
+  const [clients, setClients] = useState<Client[]>([]);
+
   const toast = useToast();
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
   const {
-    data,
     refetch,
     loading: listLoading,
     error: listError,
@@ -50,7 +53,12 @@ export function ListClients() {
         Authorization: user?.token,
       },
     },
+    variables: { take: 10, skip: (page - 1) * 10 },
     initialFetchPolicy: 'network-only',
+    onCompleted(data) {
+      setClients([...clients, ...data.listClients.clients]);
+      setTotalClients(data.listClients.totalClients);
+    },
   });
   const [loadDelete, { error, loading }] = useDeleteClientMutation({
     context: {
@@ -66,6 +74,11 @@ export function ListClients() {
     if (!error) {
       refetch();
     }
+  }
+
+  function handleFetchMore() {
+    setPage(page + 1);
+    refetch();
   }
 
   function handleGoToUpdate(clientId: string) {
@@ -91,6 +104,9 @@ export function ListClients() {
 
   useFocusEffect(
     useCallback(() => {
+      setClients([]);
+      setTotalClients(0);
+      setPage(1);
       refetch();
     }, []),
   );
@@ -99,11 +115,7 @@ export function ListClients() {
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
       <Header title="Clientes" />
 
-      {listLoading ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          <Spinner color="darkBlue.500" size="lg" />
-        </Box>
-      ) : listError ? (
+      {listError ? (
         <Box flex={1} alignItems="center" justifyContent="center" mt={-200}>
           <Text
             color="gray.100"
@@ -120,10 +132,20 @@ export function ListClients() {
       ) : (
         <FlatList
           style={{ padding: 16, width: '100%' }}
-          contentContainerStyle={{ paddingBottom: 48 }}
-          data={data?.listClients.clients}
+          contentContainerStyle={{ paddingBottom: 48, minHeight: '100%' }}
+          data={clients}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <Divider bg="gray.600" />}
+          onEndReached={handleFetchMore}
+          ListEmptyComponent={() => (
+            <Box mb="24" flex={1} alignItems="center" justifyContent="center">
+              <Spinner color="darkBlue.500" size="lg" />
+            </Box>
+          )}
+          ListFooterComponentStyle={{ marginTop: 10 }}
+          ListFooterComponent={totalClients !== clients.length ? () => (
+            <Spinner color="darkBlue.500" size="lg" />
+          ) : undefined}
           renderItem={({ item }) => (
             <VStack py="5" justifyContent="space-between">
               <VStack>
@@ -215,7 +237,7 @@ export function ListClients() {
                 </VStack>
 
                 <VStack maxW="50%">
-                  <HStack>
+                  <HStack flexWrap="wrap">
                     <Text
                       color="gray.200"
                       fontFamily="heading"

@@ -41,7 +41,7 @@ type Budget = {
 
 export function ListBudgets() {
   const [page, setPage] = useState(1);
-  const [totalbudgets, setTotalBudgets] = useState(0);
+  const [totalBudgets, setTotalBudgets] = useState(0);
   const [budgets, setBudgets] = useState<Budget[]>([]);
 
   const toast = useToast();
@@ -146,7 +146,7 @@ export function ListBudgets() {
             </Box>
           )}
           ListFooterComponentStyle={{ marginTop: 10 }}
-          ListFooterComponent={totalbudgets !== budgets.length ? () => (
+          ListFooterComponent={totalBudgets !== budgets.length ? () => (
             <Spinner color="darkBlue.500" size="lg" />
           ) : undefined}
           renderItem={({ item }) => (

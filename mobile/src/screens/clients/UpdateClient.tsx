@@ -81,11 +81,13 @@ export function UpdateClient() {
     register('phoneNumber', { value: data.getClient.phoneNumber });
     register('stateRegistration', { value: data.getClient.stateRegistration });
     register('street', { value: data.getClient.address[0].street });
-    register('number', { value: String(data.getClient.address[0].number) });
     register('city', { value: data.getClient.address[0].city });
     register('state', { value: data.getClient.address[0].state });
     register('district', { value: data.getClient.address[0].district });
     register('cep', { value: data.getClient.address[0].cep });
+    register('number', {
+      value: data.getClient.address[0].number ? String(data.getClient.address[0].number) : '',
+    });
   }
 
   useEffect(() => {
