@@ -82,8 +82,10 @@ export function ListBudgets() {
   }
 
   function handleFetchMore() {
-    setPage(page + 1);
-    refetch();
+    if (totalBudgets !== budgets.length) {
+      setPage(page + 1);
+      refetch();
+    }
   }
 
   function handleGoToUpdate(budgetId: string) {

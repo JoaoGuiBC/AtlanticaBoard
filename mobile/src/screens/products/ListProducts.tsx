@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
@@ -7,18 +7,21 @@ import {
 
 import { UseAuth } from '@hooks/auth';
 import { currencyFormatter } from '@utils/formatter/currencyFormatter';
-import { useDeleteProductMutation, useListProductsQuery } from '@graphql/generated/graphql';
+import { Product, useDeleteProductMutation, useListProductsQuery } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
 
 export function ListProducts() {
+  const [page, setPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [products, setProducts] = useState<Omit<Product, 'productBudget'>[]>([]);
+
   const toast = useToast();
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
   const {
-    data,
     refetch,
     loading: listLoading,
     error: listError,
@@ -28,7 +31,12 @@ export function ListProducts() {
         Authorization: user?.token,
       },
     },
+    variables: { take: 10, skip: (page - 1) * 10 },
     initialFetchPolicy: 'network-only',
+    onCompleted(data) {
+      setProducts([...products, ...data.listProducts.products]);
+      setTotalProducts(data.listProducts.totalProducts);
+    },
   });
   const [loadDelete, { error, loading }] = useDeleteProductMutation({
     context: {
@@ -42,6 +50,13 @@ export function ListProducts() {
     await loadDelete({ variables: { deleteProductId: id } });
 
     if (!error) {
+      refetch();
+    }
+  }
+
+  function handleFetchMore() {
+    if (totalProducts !== products.length) {
+      setPage(page + 1);
       refetch();
     }
   }
@@ -69,6 +84,9 @@ export function ListProducts() {
 
   useFocusEffect(
     useCallback(() => {
+      setProducts([]);
+      setTotalProducts(0);
+      setPage(1);
       refetch();
     }, []),
   );
@@ -77,11 +95,7 @@ export function ListProducts() {
     <Box flex={1} bg="gray.800" alignItems="center" justifyContent="center">
       <Header title="Produtos" />
 
-      {listLoading ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          <Spinner color="darkBlue.500" size="lg" />
-        </Box>
-      ) : listError ? (
+      {listError ? (
         <Box flex={1} alignItems="center" justifyContent="center" mt={-200}>
           <Text
             color="gray.100"
@@ -98,10 +112,20 @@ export function ListProducts() {
       ) : (
         <FlatList
           style={{ padding: 16, width: '100%' }}
-          contentContainerStyle={{ paddingBottom: 48 }}
-          data={data?.listProducts.products}
+          contentContainerStyle={{ paddingBottom: 48, minHeight: '100%' }}
+          data={products}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <Divider bg="gray.600" />}
+          onEndReached={handleFetchMore}
+          ListEmptyComponent={() => (
+            <Box mb="24" flex={1} alignItems="center" justifyContent="center">
+              <Spinner color="darkBlue.500" size="lg" />
+            </Box>
+          )}
+          ListFooterComponentStyle={{ marginTop: 10 }}
+          ListFooterComponent={totalProducts !== products.length ? () => (
+            <Spinner color="darkBlue.500" size="lg" />
+          ) : undefined}
           renderItem={({ item }) => (
             <VStack py="5" justifyContent="space-between">
               <Heading color="darkBlue.400" fontSize="16">{item.name}</Heading>

@@ -77,8 +77,10 @@ export function ListClients() {
   }
 
   function handleFetchMore() {
-    setPage(page + 1);
-    refetch();
+    if (totalClients !== clients.length) {
+      setPage(page + 1);
+      refetch();
+    }
   }
 
   function handleGoToUpdate(clientId: string) {
