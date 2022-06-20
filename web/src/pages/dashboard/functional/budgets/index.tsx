@@ -271,7 +271,7 @@ export function BudgetList() {
                   totalCountOfRegisters={data?.listBudgets.totalBudgets || 0}
                   currentPage={page}
                   onPageChange={setPage}
-                  registerPerPage={5}
+                  registerPerPage={10}
                 />
               </>
             )}

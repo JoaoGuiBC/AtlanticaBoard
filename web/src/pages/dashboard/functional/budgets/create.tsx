@@ -103,13 +103,23 @@ export function CreateBudget() {
       price: product.base * product.height * product.price,
     }));
 
+    let deadline: Date | undefined;
+
+    if (data.deadline) {
+      const dateInfo = data.deadline?.split('-')!;
+
+      deadline = new Date(
+        `${dateInfo[0]}-${dateInfo[1]}-${Number(dateInfo[2]) + 1}`,
+      );
+    }
+
     await revalidate(user);
     await loadCreate({
       variables: {
         data: {
           ...data,
           products: parsedProducts,
-          deadline: data.deadline ? new Date(data.deadline) : null,
+          deadline: deadline || null,
         },
       },
     });
