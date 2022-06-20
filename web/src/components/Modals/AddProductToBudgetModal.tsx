@@ -170,7 +170,7 @@ export function AddProductToBudgetModal({
                     />
                     <Heading userSelect="none">=</Heading>
                     <Text fontSize={25}>
-                      {watchBase || watchHeight ? watchBase * watchHeight : 0}
+                      {!watchBase || !watchHeight ? 0 : watchBase * watchHeight}
                       &nbsp;
                       <Text as="span" fontSize={15}>
                         M²
