@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { UpdateClient } from '@screens/clients/UpdateClient';
 import { UpdateProduct } from '@screens/products/UpdateProduct';
+import { UpdateBudget } from '@screens/budgets/UpdateBudget';
 
 import { EmployeeTabRoutes } from './tabRoutes/employee.tab.routes';
 import { ClientTabRoutes } from './tabRoutes/client.tab.routes';
@@ -25,7 +26,7 @@ export function StackRoutes() {
       <Screen name="productUpdate" component={UpdateProduct} options={{ detachPreviousScreen: false }} />
 
       <Screen name="budget" component={BudgetTabRoutes} />
-
+      <Screen name="budgetUpdate" component={UpdateBudget} options={{ detachPreviousScreen: false }} />
     </Navigator>
   );
 }

@@ -12,8 +12,9 @@ export declare global {
       
       product: undefined;
       productUpdate: UpdateScreenNavigationProps;
-
+      
       budget: undefined;
+      budgetUpdate: UpdateScreenNavigationProps;
     }
   }
 }

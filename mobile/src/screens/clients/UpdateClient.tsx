@@ -238,7 +238,7 @@ export function UpdateClient() {
               fontWeight={700}
               fontSize="lg"
             >
-              Adicionar
+              Salvar
             </Text>
           </Button>
         </ScrollView>

@@ -74,9 +74,11 @@ export function UpdateProduct() {
   const onSubmit = (updateData: any) => handleOnSubmit(updateData);
 
   if (data?.getProduct) {
-    register('price', { value: currencyFormatter(data.getProduct.price, true) });
-    register('cost', { value: currencyFormatter(data.getProduct.cost, true) });
     register('description', { value: data.getProduct.description });
+    register('price', { value: currencyFormatter(data.getProduct.price, true) });
+    register('cost', {
+      value: data.getProduct.cost ? currencyFormatter(data.getProduct.cost, true) : undefined,
+    });
   }
 
   useEffect(() => {
@@ -168,7 +170,7 @@ export function UpdateProduct() {
               fontWeight={700}
               fontSize="lg"
             >
-              Adicionar
+              Salvar
             </Text>
           </Button>
         </ScrollView>

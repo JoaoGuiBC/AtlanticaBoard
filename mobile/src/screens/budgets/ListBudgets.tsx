@@ -89,8 +89,7 @@ export function ListBudgets() {
   }
 
   function handleGoToUpdate(budgetId: string) {
-    // navigate('budgetUpdate', { id: budgetId });
-    console.log(`Orçamento: ${budgetId}`);
+    navigate('budgetUpdate', { id: budgetId });
   }
 
   useEffect(() => {
@@ -112,6 +111,9 @@ export function ListBudgets() {
 
   useFocusEffect(
     useCallback(() => {
+      setBudgets([]);
+      setTotalBudgets(0);
+      setPage(1);
       refetch();
     }, []),
   );
@@ -144,7 +146,7 @@ export function ListBudgets() {
           onEndReached={handleFetchMore}
           ListEmptyComponent={() => (
             <Box mb="24" flex={1} alignItems="center" justifyContent="center">
-              <Spinner color="darkBlue.500" size="lg" />
+              <Spinner color="darkBlue.400" size="lg" />
             </Box>
           )}
           ListFooterComponentStyle={{ marginTop: 10 }}
