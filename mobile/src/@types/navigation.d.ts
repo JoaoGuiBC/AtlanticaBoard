@@ -15,6 +15,7 @@ export declare global {
       
       budget: undefined;
       budgetUpdate: UpdateScreenNavigationProps;
+      budgetDetail: UpdateScreenNavigationProps;
     }
   }
 }

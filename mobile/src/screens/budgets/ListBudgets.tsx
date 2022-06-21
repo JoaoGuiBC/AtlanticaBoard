@@ -92,6 +92,10 @@ export function ListBudgets() {
     navigate('budgetUpdate', { id: budgetId });
   }
 
+  function handleGoToDetail(budgetId: string) {
+    navigate('budgetDetail', { id: budgetId });
+  }
+
   useEffect(() => {
     if (error || listError) {
       revalidate(user!);
@@ -159,7 +163,7 @@ export function ListBudgets() {
               flex={1}
               alignItems="center"
               alignSelf="flex-end"
-              onPress={() => console.log(item.id)}
+              onPress={() => handleGoToDetail(item.id)}
             >
               <BudgetCard
                 data={item}
