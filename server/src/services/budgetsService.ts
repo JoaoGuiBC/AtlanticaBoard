@@ -1,6 +1,8 @@
 import { prisma } from '@database/prismaClient';
 import { Pagination } from './pagination';
 
+import { BudgetProductsService } from './budgetProductsService';
+
 type Product = {
   productId: string;
   base: number;
@@ -36,6 +38,8 @@ interface UpdateBudgetProductsParams {
 }
 
 export class BudgetsService {
+  private budgetProductsService = new BudgetProductsService();
+
   async listSingleBudget(budgetId: string) {
     const budget = await prisma.budget.findUnique({
       where: { id: budgetId },
@@ -58,15 +62,6 @@ export class BudgetsService {
     const totalBudgets = await prisma.budget.count();
 
     return { budgets, totalBudgets };
-  }
-
-  async listBudgetProductsById(budgetId: string) {
-    const products = await prisma.productBudget.findMany({
-      where: { budgetId },
-      include: { product: {} },
-    });
-
-    return products;
   }
 
   async createBudget({
@@ -95,15 +90,17 @@ export class BudgetsService {
   }
 
   async deleteBudget(id: string) {
-    const BudgetExist = await prisma.budget.findUnique({
+    const budgetExist = await prisma.budget.findUnique({
       where: { id },
     });
 
-    if (!BudgetExist) {
+    if (!budgetExist) {
       throw new Error('Orçamento não cadastrado');
     }
 
     await prisma.budget.delete({ where: { id } });
+
+    await this.budgetProductsService.deleteBudgetProducts({ id });
   }
 
   async updateBudgetInfo({

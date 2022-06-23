@@ -109,7 +109,7 @@ export function CreateBudget() {
       const dateInfo = data.deadline?.split('-')!;
 
       deadline = new Date(
-        `${dateInfo[0]}-${dateInfo[1]}-${Number(dateInfo[2]) + 1}`,
+        `${dateInfo[0]}/${dateInfo[1]}/${Number(dateInfo[2])}`,
       );
     }
 

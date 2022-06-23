@@ -1,0 +1,97 @@
+import {
+  Arg,
+  Authorized,
+  Mutation,
+  Query,
+  Resolver,
+  FieldResolver,
+  Root,
+  Args,
+  Int,
+  ObjectType,
+  Field,
+} from 'type-graphql';
+
+import { OrdersService } from '@services/ordersService';
+import { ClientsService } from '@services/clientsService';
+import { BudgetProductsService } from '@services/budgetProductsService';
+
+import { Order } from '@models/Order';
+import { Client } from '@models/Client';
+import { ProductBudget } from '@models/ProductBudget';
+
+import { PaginationArgs } from '../args/pagination-args';
+
+@ObjectType()
+class ListOrdersValue {
+  @Field(_type => Int)
+  totalOrders: number;
+
+  @Field(_type => [Order])
+  orders: Order[];
+}
+
+@Resolver(() => Order)
+export class OrderResolver {
+  private ordersService = new OrdersService();
+  private clientsService = new ClientsService();
+  private budgetProductsService = new BudgetProductsService();
+
+  @Query(() => Order)
+  @Authorized()
+  async getOrder(@Arg('id') id: string) {
+    const order = await this.ordersService.getOrderById(id);
+
+    return order;
+  }
+
+  @Query(() => ListOrdersValue)
+  @Authorized()
+  async listOrders(@Args() { skip, take }: PaginationArgs) {
+    const orders = await this.ordersService.listOrders({ skip, take });
+
+    return orders;
+  }
+
+  @FieldResolver(() => Client)
+  client(@Root() order: Order) {
+    return this.clientsService.listClientById(order.clientId);
+  }
+
+  @FieldResolver(() => [ProductBudget])
+  async products(@Root() order: Order) {
+    return this.budgetProductsService.getBudgetProducts({ orderId: order.id });
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async createOrder(@Arg('budgetId') budgetId: string) {
+    await this.ordersService.createOrder({ budgetId });
+
+    return 'Pedido criado com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async deleteOrder(@Arg('id') id: string) {
+    await this.ordersService.deleteOrder(id);
+
+    return 'Pedido deletado com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async signOrder(@Arg('id') id: string) {
+    await this.ordersService.signOrder(id);
+
+    return 'Pedido assinado com sucesso';
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async finishOrder(@Arg('id') id: string) {
+    await this.ordersService.finishOrder(id);
+
+    return 'Pedido concluído com sucesso';
+  }
+}

@@ -14,14 +14,16 @@ import {
 
 import { BudgetsService } from '@services/budgetsService';
 import { ClientsService } from '@services/clientsService';
+import { BudgetProductsService } from '@services/budgetProductsService';
 
-import { ProductBudget } from '@models/ProductBudget';
 import { Budget } from '@models/Budget';
+import { Client } from '@models/Client';
+import { ProductBudget } from '@models/ProductBudget';
 
 import { CreateBudgetInput } from '@inputs/create-budget-input';
-import { Client } from '@models/Client';
 import { UpdateBudgetInfoInput } from '@inputs/update-budget-info-input';
 import { UpdateBudgetProductsInput } from '@inputs/update-budget-products-input';
+
 import { PaginationArgs } from '../args/pagination-args';
 
 @ObjectType()
@@ -37,6 +39,7 @@ class ListBudgetsValue {
 export class BudgetResolver {
   private budgetsService = new BudgetsService();
   private clientsService = new ClientsService();
+  private budgetProductsService = new BudgetProductsService();
 
   @Query(() => Budget)
   @Authorized()
@@ -61,7 +64,9 @@ export class BudgetResolver {
 
   @FieldResolver(() => [ProductBudget])
   async products(@Root() budget: Budget) {
-    return this.budgetsService.listBudgetProductsById(budget.id);
+    return this.budgetProductsService.getBudgetProducts({
+      id: budget.id,
+    });
   }
 
   @Mutation(() => String)

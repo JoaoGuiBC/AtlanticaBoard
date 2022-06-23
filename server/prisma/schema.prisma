@@ -37,6 +37,7 @@ model Client {
 
   address Address[]
   Budget  Budget[]
+  Order   Order[]
 
   created_at DateTime @default(now())
 
@@ -87,7 +88,10 @@ model ProductBudget {
   price  Float
 
   budgetId String
-  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: SetNull)
+
+  orderId String?
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
 
   created_at DateTime @default(now())
 
@@ -112,4 +116,28 @@ model Budget {
   created_at DateTime @default(now())
 
   @@map("budgets")
+}
+
+model Order {
+  id           String @id @default(uuid())
+  serialNumber Int    @default(autoincrement())
+
+  budgetSerialNumber Int
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  products ProductBudget[]
+
+  color    String?
+  deadline DateTime?
+  discount Float     @default(0)
+  signed   Boolean   @default(false)
+
+  price Float @default(0)
+
+  finished_at DateTime?
+  created_at  DateTime  @default(now())
+
+  @@map("orders")
 }

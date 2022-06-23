@@ -99,6 +99,11 @@ type ListClientsValue {
   totalClients: Int!
 }
 
+type ListOrdersValue {
+  orders: [Order!]!
+  totalOrders: Int!
+}
+
 type ListProductsValue {
   products: [Product!]!
   totalProducts: Int!
@@ -108,15 +113,35 @@ type Mutation {
   createBudget(data: CreateBudgetInput!): String!
   createClient(data: CreateClientInput!): String!
   createEmployee(data: CreateEmployeeInput!): String!
+  createOrder(budgetId: String!): String!
   createProduct(data: CreateProductInput!): String!
   deleteBudget(id: String!): String!
   deleteClient(id: String!): String!
   deleteEmployee(id: String!): String!
+  deleteOrder(id: String!): String!
   deleteProduct(id: String!): String!
+  finishOrder(id: String!): String!
+  signOrder(id: String!): String!
   updateBudgetInfo(data: UpdateBudgetInfoInput!): String!
   updateBudgetProducts(data: UpdateBudgetProductsInput!): String!
   updateClient(data: UpdateClientInput!): String!
   updateProduct(data: UpdateProductInput!): String!
+}
+
+"""The order model"""
+type Order {
+  budgetSerialNumber: Float!
+  client: Client!
+  color: String
+  created_at: DateTime!
+  deadline: DateTime
+  discount: Float!
+  finished_at: DateTime
+  id: ID!
+  price: Float!
+  products: [ProductBudget!]!
+  serialNumber: Float!
+  signed: Boolean!
 }
 
 """The product model"""
@@ -156,10 +181,12 @@ input ProductInput {
 type Query {
   getBudget(id: String!): Budget!
   getClient(id: String!): Client!
+  getOrder(id: String!): Order!
   getProduct(id: String!): Product!
   listBudgets(skip: Int, take: Int): ListBudgetsValue!
   listClients(skip: Int, take: Int): ListClientsValue!
   listEmployees: [Employee!]!
+  listOrders(skip: Int, take: Int): ListOrdersValue!
   listProducts(skip: Int, take: Int): ListProductsValue!
   revalidateJWT(userId: String!): String!
   signIn(email: String!, password: String!): SignInResponse!
