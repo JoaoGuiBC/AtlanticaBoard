@@ -119,4 +119,104 @@ export class OrdersService {
       data: { finished_at: new Date(), deadline: null },
     });
   }
+
+  async listOrdersCreatedInWeek() {
+    const today = new Date();
+
+    const pastWeek = new Date();
+    pastWeek.setDate(pastWeek.getDate() - 7);
+
+    const orders = await prisma.order.findMany({
+      where: {
+        created_at: {
+          gte: pastWeek,
+          lt: today,
+        },
+        finished_at: null,
+      },
+      select: { created_at: true },
+    });
+
+    const todayOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate(),
+    );
+    const OneDayBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 1,
+    );
+    const TwoDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 2,
+    );
+    const ThreeDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 3,
+    );
+    const ForDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 4,
+    );
+    const FiveDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 5,
+    );
+    const SixDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 6,
+    );
+
+    return [
+      todayOrders,
+      OneDayBeforeOrders,
+      TwoDaysBeforeOrders,
+      ThreeDaysBeforeOrders,
+      ForDaysBeforeOrders,
+      FiveDaysBeforeOrders,
+      SixDaysBeforeOrders,
+    ];
+  }
+
+  async listOrdersFinishedInWeek() {
+    const today = new Date();
+
+    const pastWeek = new Date();
+    pastWeek.setDate(pastWeek.getDate() - 7);
+
+    const orders = await prisma.order.findMany({
+      where: {
+        created_at: {
+          gte: pastWeek,
+          lt: today,
+        },
+        finished_at: { not: null },
+      },
+      select: { created_at: true },
+    });
+
+    const todayOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate(),
+    );
+    const OneDayBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 1,
+    );
+    const TwoDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 2,
+    );
+    const ThreeDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 3,
+    );
+    const ForDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 4,
+    );
+    const FiveDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 5,
+    );
+    const SixDaysBeforeOrders = orders.filter(
+      order => order.created_at.getDate() + 1 === today.getDate() - 6,
+    );
+
+    return [
+      todayOrders,
+      OneDayBeforeOrders,
+      TwoDaysBeforeOrders,
+      ThreeDaysBeforeOrders,
+      ForDaysBeforeOrders,
+      FiveDaysBeforeOrders,
+      SixDaysBeforeOrders,
+    ];
+  }
 }

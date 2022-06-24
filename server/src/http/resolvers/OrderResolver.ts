@@ -23,6 +23,12 @@ import { ProductBudget } from '@models/ProductBudget';
 import { PaginationArgs } from '../args/pagination-args';
 
 @ObjectType()
+class DayValue {
+  @Field(_type => Date)
+  created_at: Date;
+}
+
+@ObjectType()
 class ListOrdersValue {
   @Field(_type => Int)
   totalOrders: number;
@@ -93,5 +99,21 @@ export class OrderResolver {
     await this.ordersService.finishOrder(id);
 
     return 'Pedido concluído com sucesso';
+  }
+
+  @Query(() => [[DayValue]])
+  @Authorized()
+  async listLastOrdersCreated() {
+    const days = await this.ordersService.listOrdersCreatedInWeek();
+
+    return days;
+  }
+
+  @Query(() => [[DayValue]])
+  @Authorized()
+  async listLastOrdersFinished() {
+    const days = await this.ordersService.listOrdersFinishedInWeek();
+
+    return days;
   }
 }
