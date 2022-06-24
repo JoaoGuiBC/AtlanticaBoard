@@ -1,0 +1,5 @@
+query ListLastOrdersFinished {
+  listLastOrdersFinished {
+    created_at
+  }
+}

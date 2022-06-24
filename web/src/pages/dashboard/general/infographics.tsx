@@ -1,9 +1,18 @@
-import { Box, Flex, Text, theme } from '@chakra-ui/react';
-import { format, parseISO } from 'date-fns';
+import { Box, Flex, Spinner, Text, theme, useToast } from '@chakra-ui/react';
 import Chart from 'react-apexcharts';
+import { format } from 'date-fns';
+
+import { useAuth } from '@contexts/AuthContext';
+import { createChartSeries } from '@utils/createChartSeries';
+import {
+  useListLastOrdersCreatedQuery,
+  useListLastOrdersFinishedQuery,
+} from '@graphql/generated/graphql';
 
 import { Header } from '../../../components/Header';
 import { Sidebar } from '../../../components/Sidebar';
+
+const today = new Date();
 
 const options = {
   chart: {
@@ -14,10 +23,18 @@ const options = {
   },
   colors: ['#2B6CB0'],
   grid: {
-    show: false,
+    show: true,
+    borderColor: theme.colors.gray[600],
+    strokeDashArray: 1,
   },
   dataLabels: {
-    enabled: false,
+    enabled: true,
+    style: {
+      fontSize: '14px',
+      fontFamily: theme.fonts.body,
+      fontWeight: 500,
+      colors: [theme.colors.gray[300]],
+    },
   },
   tooltip: {
     enabled: false,
@@ -30,29 +47,79 @@ const options = {
       color: theme.colors.gray[600],
     },
     categories: [
-      format(parseISO('2021-04-01T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-02T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-03T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-04T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-05T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-06T10:00:00.000Z'), 'dd MMM'),
-      format(parseISO('2021-04-07T10:00:00.000Z'), 'dd MMM'),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6),
+        'dd MMM',
+      ),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 5),
+        'dd MMM',
+      ),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 4),
+        'dd MMM',
+      ),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 3),
+        'dd MMM',
+      ),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2),
+        'dd MMM',
+      ),
+      format(
+        new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1),
+        'dd MMM',
+      ),
+      format(today, 'dd MMM'),
     ],
-  },
-  fill: {
-    opacity: 0.3,
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      opacityFrom: 0.7,
-      opacityTo: 0.3,
-    },
   },
 };
 
-const series = [{ name: 'series1', data: [3, 5, 5, 8, 5, 10, 2] }];
-
 export function Infographics() {
+  const { user, logOut } = useAuth();
+  const toast = useToast();
+
+  const { data: lastOrdersCreated } = useListLastOrdersCreatedQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onError(error) {
+      toast({
+        title: 'Erro',
+        description: error.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (error.message === 'Autenticação inválida, por favor refaça login') {
+        logOut();
+      }
+    },
+  });
+
+  const { data: lastOrdersFinished } = useListLastOrdersFinishedQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onError(error) {
+      toast({
+        title: 'Erro',
+        description: error.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (error.message === 'Autenticação inválida, por favor refaça login') {
+        logOut();
+      }
+    },
+  });
+
   return (
     <>
       <Header />
@@ -66,6 +133,7 @@ export function Infographics() {
               bg="gray.800"
               borderRadius={4}
               flex="1"
+              h="80"
               flexDir="column"
               alignItems="center"
               justifyContent="center"
@@ -78,13 +146,22 @@ export function Infographics() {
               >
                 Projetos aceitos por dia
               </Text>
-              <Chart
-                options={options}
-                series={series}
-                type="area"
-                height={190}
-                width={450}
-              />
+
+              {!lastOrdersCreated ? (
+                <Flex justify="center" align="center" height={190}>
+                  <Spinner />
+                </Flex>
+              ) : (
+                <Chart
+                  options={options}
+                  series={createChartSeries(
+                    lastOrdersCreated.listLastOrdersCreated,
+                  )}
+                  type="bar"
+                  height={190}
+                  width={450}
+                />
+              )}
             </Box>
 
             <Box
@@ -92,6 +169,7 @@ export function Infographics() {
               bg="gray.800"
               borderRadius={4}
               flex="1"
+              h="80"
               flexDir="column"
               alignItems="center"
               justifyContent="center"
@@ -104,13 +182,22 @@ export function Infographics() {
               >
                 Projetos concluídos por dia
               </Text>
-              <Chart
-                options={options}
-                series={series}
-                type="area"
-                height={190}
-                width={450}
-              />
+
+              {!lastOrdersFinished ? (
+                <Flex justify="center" align="center" height={190}>
+                  <Spinner />
+                </Flex>
+              ) : (
+                <Chart
+                  options={options}
+                  series={createChartSeries(
+                    lastOrdersFinished.listLastOrdersFinished,
+                  )}
+                  type="bar"
+                  height={190}
+                  width={450}
+                />
+              )}
             </Box>
           </Flex>
         </Flex>

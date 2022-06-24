@@ -92,6 +92,11 @@ export type CreateProductInput = {
   price: Scalars['Float'];
 };
 
+export type DayValue = {
+  __typename?: 'DayValue';
+  created_at: Scalars['DateTime'];
+};
+
 /** The employee model */
 export type Employee = {
   __typename?: 'Employee';
@@ -288,6 +293,8 @@ export type Query = {
   listBudgets: ListBudgetsValue;
   listClients: ListClientsValue;
   listEmployees: Array<Employee>;
+  listLastOrdersCreated: Array<Array<DayValue>>;
+  listLastOrdersFinished: Array<Array<DayValue>>;
   listOrders: ListOrdersValue;
   listProducts: ListProductsValue;
   revalidateJWT: Scalars['String'];
@@ -522,6 +529,16 @@ export type GetOrderQueryVariables = Exact<{
 
 
 export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'Order', id: string, serialNumber: number, budgetSerialNumber: number, price: number, color?: string | null, deadline?: any | null, discount: number, signed: boolean, finished_at?: any | null, client: { __typename?: 'Client', id: string, name: string, email: string, contact?: string | null, phoneNumber?: string | null }, products: Array<{ __typename?: 'ProductBudget', id: string, base: number, height: number, product: { __typename?: 'Product', name: string } }> } };
+
+export type ListLastOrdersCreatedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListLastOrdersCreatedQuery = { __typename?: 'Query', listLastOrdersCreated: Array<Array<{ __typename?: 'DayValue', created_at: any }>> };
+
+export type ListLastOrdersFinishedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListLastOrdersFinishedQuery = { __typename?: 'Query', listLastOrdersFinished: Array<Array<{ __typename?: 'DayValue', created_at: any }>> };
 
 export type ListOrdersQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
@@ -1282,6 +1299,74 @@ export function useGetOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
 export type GetOrderLazyQueryHookResult = ReturnType<typeof useGetOrderLazyQuery>;
 export type GetOrderQueryResult = Apollo.QueryResult<GetOrderQuery, GetOrderQueryVariables>;
+export const ListLastOrdersCreatedDocument = gql`
+    query ListLastOrdersCreated {
+  listLastOrdersCreated {
+    created_at
+  }
+}
+    `;
+
+/**
+ * __useListLastOrdersCreatedQuery__
+ *
+ * To run a query within a React component, call `useListLastOrdersCreatedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListLastOrdersCreatedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListLastOrdersCreatedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListLastOrdersCreatedQuery(baseOptions?: Apollo.QueryHookOptions<ListLastOrdersCreatedQuery, ListLastOrdersCreatedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListLastOrdersCreatedQuery, ListLastOrdersCreatedQueryVariables>(ListLastOrdersCreatedDocument, options);
+      }
+export function useListLastOrdersCreatedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListLastOrdersCreatedQuery, ListLastOrdersCreatedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListLastOrdersCreatedQuery, ListLastOrdersCreatedQueryVariables>(ListLastOrdersCreatedDocument, options);
+        }
+export type ListLastOrdersCreatedQueryHookResult = ReturnType<typeof useListLastOrdersCreatedQuery>;
+export type ListLastOrdersCreatedLazyQueryHookResult = ReturnType<typeof useListLastOrdersCreatedLazyQuery>;
+export type ListLastOrdersCreatedQueryResult = Apollo.QueryResult<ListLastOrdersCreatedQuery, ListLastOrdersCreatedQueryVariables>;
+export const ListLastOrdersFinishedDocument = gql`
+    query ListLastOrdersFinished {
+  listLastOrdersFinished {
+    created_at
+  }
+}
+    `;
+
+/**
+ * __useListLastOrdersFinishedQuery__
+ *
+ * To run a query within a React component, call `useListLastOrdersFinishedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListLastOrdersFinishedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListLastOrdersFinishedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListLastOrdersFinishedQuery(baseOptions?: Apollo.QueryHookOptions<ListLastOrdersFinishedQuery, ListLastOrdersFinishedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListLastOrdersFinishedQuery, ListLastOrdersFinishedQueryVariables>(ListLastOrdersFinishedDocument, options);
+      }
+export function useListLastOrdersFinishedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListLastOrdersFinishedQuery, ListLastOrdersFinishedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListLastOrdersFinishedQuery, ListLastOrdersFinishedQueryVariables>(ListLastOrdersFinishedDocument, options);
+        }
+export type ListLastOrdersFinishedQueryHookResult = ReturnType<typeof useListLastOrdersFinishedQuery>;
+export type ListLastOrdersFinishedLazyQueryHookResult = ReturnType<typeof useListLastOrdersFinishedLazyQuery>;
+export type ListLastOrdersFinishedQueryResult = Apollo.QueryResult<ListLastOrdersFinishedQuery, ListLastOrdersFinishedQueryVariables>;
 export const ListOrdersDocument = gql`
     query ListOrders($skip: Int, $take: Int) {
   listOrders(skip: $skip, take: $take) {
