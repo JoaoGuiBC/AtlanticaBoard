@@ -6,6 +6,7 @@ import {
   RiCheckFill,
   RiCloseFill,
   RiArticleLine,
+  RiEdit2Line,
 } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -329,6 +330,26 @@ export function OrderList() {
                           size="sm"
                           w="100%"
                           fontSize="sm"
+                          colorScheme="blue"
+                          borderRadius={4}
+                          leftIcon={<Icon as={RiArticleLine} fontSize="20" />}
+                        >
+                          Gerar PDF
+                        </Button>
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          colorScheme="teal"
+                          borderRadius={4}
+                          leftIcon={<Icon as={RiEdit2Line} fontSize="20" />}
+                        >
+                          Assinar
+                        </Button>
+                        <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
                           borderRadius={4}
                           colorScheme="red"
                           isLoading={loading}
@@ -336,16 +357,6 @@ export function OrderList() {
                           leftIcon={<Icon as={RiDeleteBinLine} fontSize="16" />}
                         >
                           Excluir
-                        </Button>
-                        <Button
-                          size="sm"
-                          w="100%"
-                          fontSize="sm"
-                          colorScheme="blue"
-                          borderRadius={4}
-                          leftIcon={<Icon as={RiArticleLine} fontSize="20" />}
-                        >
-                          Gerar PDF
                         </Button>
                         <Button
                           size="sm"

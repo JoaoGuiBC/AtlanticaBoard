@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import {
   RiArrowLeftLine,
+  RiArticleLine,
+  RiCheckFill,
   RiCheckLine,
+  RiCloseFill,
   RiDeleteBinLine,
-  RiPencilLine,
+  RiEdit2Line,
 } from 'react-icons/ri';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import {
@@ -18,7 +21,6 @@ import {
   StackDivider,
   Text,
   useBreakpointValue,
-  useDisclosure,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -27,46 +29,40 @@ import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import { useAuth } from '@contexts/AuthContext';
 import {
-  useCreateOrderMutation,
-  useDeleteBudgetMutation,
-  useGetBudgetQuery,
+  useDeleteOrderMutation,
+  useFinishOrderMutation,
+  useGetOrderQuery,
 } from '@graphql/generated/graphql';
 import { currencyFormatter } from '@utils/formatter/currencyFormatter';
-import {
-  Budget,
-  EditBudgetInfoModal,
-} from '@components/Modals/EditBudgetInfoModal';
+import { checkIsDeadlineClose } from '@utils/checkIsDeadlineClose';
 
-export function BudgetDetail() {
-  const [selectedBudget, setSelectedBudget] = useState<Budget>();
-
+export function OrderDetail() {
   const [searchParams] = useSearchParams();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logOut } = useAuth();
   const toast = useToast();
 
   const {
     data,
     refetch,
-    loading: listLoading,
     error: listError,
-  } = useGetBudgetQuery({
+  } = useGetOrderQuery({
     context: {
       headers: {
         Authorization: user.token,
       },
     },
-    variables: { getBudgetId: searchParams.get('id') || '' },
+    variables: { getOrderId: searchParams.get('id') || '' },
   });
 
-  const [loadDelete, { error, loading }] = useDeleteBudgetMutation({
+  const [loadDelete, { error, loading }] = useDeleteOrderMutation({
     context: {
       headers: {
         Authorization: user.token,
       },
     },
   });
-  const [loadCreateOrder] = useCreateOrderMutation({
+
+  const [loadFinish] = useFinishOrderMutation({
     context: {
       headers: {
         Authorization: user.token,
@@ -82,34 +78,26 @@ export function BudgetDetail() {
       }),
   });
 
-  async function handleDeleteBudget(id: string) {
-    await loadDelete({ variables: { deleteBudgetId: id } });
+  async function handleDeleteOrder(id: string) {
+    await loadDelete({ variables: { deleteOrderId: id } });
 
     if (!error) {
       refetch();
     }
   }
 
-  async function handleCreateOrder(id: string) {
-    await loadCreateOrder({ variables: { budgetId: id } });
+  async function handleFinishOrder(id: string) {
+    await loadFinish({ variables: { finishOrderId: id } });
+
+    if (!error) {
+      refetch();
+    }
   }
 
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
-
-  function handleOpenModal(budget: Budget) {
-    setSelectedBudget(budget);
-
-    onOpen();
-  }
-
-  function handleCloseModal() {
-    setSelectedBudget(undefined);
-
-    onClose();
-  }
 
   useEffect(() => {
     if (listError || error) {
@@ -132,20 +120,13 @@ export function BudgetDetail() {
     <>
       <Header />
 
-      <EditBudgetInfoModal
-        isOpen={isOpen}
-        onClose={handleCloseModal}
-        refetch={refetch}
-        budget={selectedBudget}
-      />
-
       <Box>
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
           <Box flex="1" borderRadius={4} bg="gray.800" p="8">
             <Flex mb="8" justify="flex-start" align="center">
-              <RouterLink to="/orcamentos">
+              <RouterLink to="/pedidos">
                 <Button
                   size="sm"
                   fontSize="sm"
@@ -158,13 +139,13 @@ export function BudgetDetail() {
               </RouterLink>
             </Flex>
 
-            {listLoading ? (
-              <Flex justify="center">
-                <Spinner />
-              </Flex>
-            ) : listError ? (
+            {listError ? (
               <Flex justify="center">
                 <Text>Falha ao obter dados do orçamento.</Text>
+              </Flex>
+            ) : !data ? (
+              <Flex justify="center">
+                <Spinner />
               </Flex>
             ) : (
               <Flex
@@ -179,19 +160,30 @@ export function BudgetDetail() {
                   align="flex-start"
                   alignSelf="flex-start"
                 >
-                  <Text fontSize="xx-large">
-                    Orçamento {data?.getBudget.serialNumber}
-                  </Text>
-                  <Text fontWeight="light" fontSize="md">
-                    Gerado em:{' '}
-                    {format(parseISO(data?.getBudget.created_at), 'dd/MM/yyyy')}
-                  </Text>
-                  {data?.getBudget.deadline && (
-                    <Text fontWeight="light" fontSize="md">
+                  <HStack>
+                    <Text fontSize="xx-large">
+                      Pedido {data.getOrder.serialNumber}
+                    </Text>
+                    <Text fontSize="xl" fontWeight="light" color="gray.100">
+                      - orçamento {data.getOrder.budgetSerialNumber}
+                    </Text>
+                  </HStack>
+
+                  {data.getOrder.deadline && (
+                    <Text
+                      fontWeight="light"
+                      fontSize="md"
+                      color={
+                        checkIsDeadlineClose(data.getOrder.deadline)
+                          ? 'red.500'
+                          : 'gray.200'
+                      }
+                    >
                       Prazo de entrega:{' '}
-                      {format(parseISO(data?.getBudget.deadline), 'dd/MM/yyyy')}
+                      {format(parseISO(data.getOrder.deadline), 'dd/MM/yyyy')}
                     </Text>
                   )}
+
                   <HStack
                     justify="space-between"
                     w="100%"
@@ -200,15 +192,15 @@ export function BudgetDetail() {
                   >
                     <VStack spacing="0" align="flex-start">
                       <Heading fontSize="2xl">Cliente</Heading>
-                      <Text fontSize="lg">{data?.getBudget.client.name}</Text>
+                      <Text fontSize="lg">{data.getOrder.client.name}</Text>
                       <Text fontWeight="light" color="gray.200" fontSize="md">
-                        {data?.getBudget.client.email}
+                        {data.getOrder.client.email}
                       </Text>
                       <Text fontWeight="light" color="gray.300" fontSize="md">
-                        {data?.getBudget.client.contact}
+                        {data.getOrder.client.contact}
                       </Text>
                       <Text fontWeight="light" color="gray.300" fontSize="md">
-                        {data?.getBudget.client.phoneNumber}
+                        {data.getOrder.client.phoneNumber}
                       </Text>
                     </VStack>
 
@@ -216,84 +208,122 @@ export function BudgetDetail() {
                       <VStack spacing="0" align="flex-start">
                         <Heading fontSize="2xl">Info. produtos</Heading>
                         <Text fontSize="md">
-                          Quantidade: {data?.getBudget.products.length}
+                          Quantidade: {data.getOrder.products.length}
                         </Text>
 
-                        {data?.getBudget.color && (
+                        {data.getOrder.color && (
                           <Text
                             fontWeight="light"
                             color="gray.200"
                             fontSize="md"
                             maxW="64"
                           >
-                            info: {data?.getBudget.color}
+                            info adicional: {data.getOrder.color}
                           </Text>
                         )}
                       </VStack>
                     )}
                   </HStack>
-                  <VStack spacing="1" align="flex-start" paddingTop="20">
-                    <Text fontSize="md">
-                      Subtotal: {currencyFormatter(data?.getBudget.price)}
-                    </Text>
-                    <Text fontSize="md">
-                      Desconto: {currencyFormatter(data?.getBudget.discount)}
-                    </Text>
-                    <Text fontWeight="bold" fontSize="lg">
-                      Preço final:{' '}
-                      {data?.getBudget.discount
-                        ? currencyFormatter(
-                            (data?.getBudget.price || 0) -
-                              (data?.getBudget.discount || 0),
-                          )
-                        : currencyFormatter(data?.getBudget.price)}
-                    </Text>
+
+                  <VStack alignItems="flex-start" pt="6">
+                    <HStack alignItems="center" gap="0">
+                      <Text fontSize="md" fontWeight="normal" color="gray.100">
+                        Assinado:
+                      </Text>
+
+                      {data.getOrder.signed ? (
+                        <Icon
+                          as={RiCheckFill}
+                          fontSize="24"
+                          color="green.500"
+                        />
+                      ) : (
+                        <Icon as={RiCloseFill} fontSize="24" color="red.500" />
+                      )}
+                    </HStack>
+
+                    <HStack alignItems="center" gap="0">
+                      <Text fontSize="2xl" fontWeight="normal" color="gray.50">
+                        Concluído:
+                      </Text>
+
+                      {data.getOrder.finished_at ? (
+                        <Icon
+                          as={RiCheckFill}
+                          fontSize="32"
+                          color="green.500"
+                        />
+                      ) : (
+                        <Icon as={RiCloseFill} fontSize="32" color="red.500" />
+                      )}
+                    </HStack>
                   </VStack>
 
-                  <Flex paddingTop="14" wrap="wrap" maxWidth="32" gap="0.5rem">
+                  <Text fontWeight="medium" fontSize="xl" pt="10">
+                    Preço:{' '}
+                    {data.getOrder.discount
+                      ? currencyFormatter(
+                          (data.getOrder.price || 0) -
+                            (data.getOrder.discount || 0),
+                        )
+                      : currencyFormatter(data.getOrder.price)}
+                  </Text>
+
+                  <Flex paddingTop="14" wrap="wrap" maxWidth="72" gap="0.5rem">
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
                       fontSize="sm"
                       lineHeight="16"
                       borderRadius={4}
                       colorScheme="blue"
-                      onClick={() => handleOpenModal(data?.getBudget!)}
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                      leftIcon={<Icon as={RiArticleLine} fontSize="16" />}
                     >
-                      Editar
+                      Gerar PDF
                     </Button>
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
+                      fontSize="sm"
+                      lineHeight="16"
+                      borderRadius={4}
+                      colorScheme="teal"
+                      leftIcon={<Icon as={RiEdit2Line} fontSize="16" />}
+                    >
+                      Assinar
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      w="32"
                       fontSize="sm"
                       lineHeight="16"
                       borderRadius={4}
                       colorScheme="red"
                       isLoading={loading}
-                      onClick={() => handleDeleteBudget(data?.getBudget.id!)}
+                      onClick={() => handleDeleteOrder(data.getOrder.id)}
                       leftIcon={<Icon as={RiDeleteBinLine} fontSize="16" />}
                     >
                       Excluir
                     </Button>
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
                       fontSize="sm"
                       lineHeight="16"
                       borderRadius={4}
                       colorScheme="green"
-                      onClick={() => handleCreateOrder(data?.getBudget.id!)}
+                      onClick={() => handleFinishOrder(data.getOrder.id)}
                       leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
                     >
-                      Aprovar
+                      Concluir
                     </Button>
                   </Flex>
                 </VStack>
 
                 <Box>
                   <Heading fontSize="2xl" mb="4">
-                    {data?.getBudget.products.length === 1
+                    {data.getOrder.products.length === 1
                       ? 'Produto'
                       : 'Produtos'}
                   </Heading>
@@ -305,7 +335,7 @@ export function BudgetDetail() {
                     spacing="8"
                     divider={<StackDivider borderColor="gray.600" />}
                   >
-                    {data?.getBudget.products.map((product, index) => (
+                    {data.getOrder.products.map((product, index) => (
                       <VStack key={product.id}>
                         <Text color="blue.300">
                           {index + 1} - {product.product.name}
@@ -313,7 +343,7 @@ export function BudgetDetail() {
 
                         <HStack spacing="4">
                           <Flex flexDir="column" alignItems="center">
-                            <Text fontSize="10" color="gray.500">
+                            <Text fontSize="16" color="gray.500">
                               BASE
                             </Text>
                             <Text>{product.base}</Text>
@@ -322,7 +352,7 @@ export function BudgetDetail() {
                           <Text>X</Text>
 
                           <Flex flexDir="column" alignItems="center">
-                            <Text fontSize="10" color="gray.500">
+                            <Text fontSize="16" color="gray.500">
                               ALTURA
                             </Text>
                             <Text>{product.height}</Text>
@@ -332,8 +362,6 @@ export function BudgetDetail() {
 
                           <Text>{product.height * product.base}</Text>
                         </HStack>
-
-                        <Text>Preço: {currencyFormatter(product.price)}</Text>
                       </VStack>
                     ))}
                   </VStack>

@@ -12,6 +12,7 @@ query ListOrders($skip: Int, $take: Int) {
       signed
       finished_at
       client {
+        id
         name
       }
       products {
