@@ -31,7 +31,6 @@ export class OrdersService {
       ],
       skip,
       take,
-      include: { products: true },
     });
 
     const totalOrders = await prisma.order.count();
@@ -47,6 +46,14 @@ export class OrdersService {
 
     if (!budget) {
       throw new Error('Orçamento não encontrado');
+    }
+
+    const checkOrderAlreadyExist = await prisma.order.findUnique({
+      where: { budgetSerialNumber: budget.serialNumber },
+    });
+
+    if (checkOrderAlreadyExist) {
+      throw new Error('Já existe um pedido criado com esse orçamento');
     }
 
     const order = await prisma.order.create({

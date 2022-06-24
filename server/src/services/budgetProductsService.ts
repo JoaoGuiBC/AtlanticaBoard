@@ -11,7 +11,8 @@ export class BudgetProductsService {
       include: { product: {} },
     });
 
-    if (productsByBudget) {
+    if (productsByBudget.length > 0) {
+      console.log(productsByBudget);
       return productsByBudget;
     }
 

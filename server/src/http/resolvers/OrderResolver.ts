@@ -60,7 +60,7 @@ export class OrderResolver {
 
   @FieldResolver(() => [ProductBudget])
   async products(@Root() order: Order) {
-    return this.budgetProductsService.getBudgetProducts({ orderId: order.id });
+    return this.budgetProductsService.getBudgetProducts({ id: order.id });
   }
 
   @Mutation(() => String)

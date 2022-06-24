@@ -20,6 +20,9 @@ import { BudgetList } from '@pages/dashboard/functional/budgets';
 import { CreateBudget } from '@pages/dashboard/functional/budgets/create';
 import { BudgetDetail } from '@pages/dashboard/functional/budgets/budgetDetail';
 
+import { OrderList } from '@pages/dashboard/functional/orders';
+import { OrderDetail } from '@pages/dashboard/functional/orders/orderDetail';
+
 export function Router() {
   return (
     <BrowserRouter>
@@ -113,6 +116,22 @@ export function Router() {
             element={
               <ProtectedRoute
                 component={<BudgetDetail />}
+                redirectTo="/signIn"
+              />
+            }
+          />
+
+          <Route
+            path="/pedidos"
+            element={
+              <ProtectedRoute component={<OrderList />} redirectTo="/signIn" />
+            }
+          />
+          <Route
+            path="/pedidos/pedido"
+            element={
+              <ProtectedRoute
+                component={<OrderDetail />}
                 redirectTo="/signIn"
               />
             }

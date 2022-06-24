@@ -1,0 +1,3 @@
+mutation FinishOrder($finishOrderId: String!) {
+  finishOrder(id: $finishOrderId)
+}

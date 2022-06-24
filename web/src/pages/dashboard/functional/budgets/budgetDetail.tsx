@@ -27,6 +27,7 @@ import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import { useAuth } from '@contexts/AuthContext';
 import {
+  useCreateOrderMutation,
   useDeleteBudgetMutation,
   useGetBudgetQuery,
 } from '@graphql/generated/graphql';
@@ -65,6 +66,21 @@ export function BudgetDetail() {
       },
     },
   });
+  const [loadCreateOrder] = useCreateOrderMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onError: err =>
+      toast({
+        title: 'Erro',
+        description: err.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      }),
+  });
 
   async function handleDeleteBudget(id: string) {
     await loadDelete({ variables: { deleteBudgetId: id } });
@@ -72,6 +88,10 @@ export function BudgetDetail() {
     if (!error) {
       refetch();
     }
+  }
+
+  async function handleCreateOrder(id: string) {
+    await loadCreateOrder({ variables: { budgetId: id } });
   }
 
   const isWideVersion = useBreakpointValue({
@@ -260,6 +280,7 @@ export function BudgetDetail() {
                       fontSize="sm"
                       borderRadius={4}
                       colorScheme="green"
+                      onClick={() => handleCreateOrder(data?.getBudget.id!)}
                       leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
                     >
                       Aprovar

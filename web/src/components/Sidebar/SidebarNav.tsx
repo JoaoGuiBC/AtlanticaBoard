@@ -36,8 +36,8 @@ export function SidebarNav() {
         <NavLink icon={RiPencilRuler2Line} href="/orcamentos">
           Orçamentos
         </NavLink>
-        <NavLink icon={RiFileList3Line} href="/automation">
-          Pedidos de compra
+        <NavLink icon={RiFileList3Line} href="/pedidos">
+          Pedidos
         </NavLink>
       </NavSection>
     </Stack>

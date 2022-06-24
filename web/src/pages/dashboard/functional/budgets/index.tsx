@@ -21,6 +21,7 @@ import { Sidebar } from '@components/Sidebar';
 import { Pagination } from '@components/Pagination';
 import { useAuth } from '@contexts/AuthContext';
 import {
+  useCreateOrderMutation,
   useDeleteBudgetMutation,
   useListBudgetsQuery,
 } from '@graphql/generated/graphql';
@@ -56,6 +57,21 @@ export function BudgetList() {
       },
     },
   });
+  const [loadCreateOrder] = useCreateOrderMutation({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onError: err =>
+      toast({
+        title: 'Erro',
+        description: err.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      }),
+  });
 
   async function handleDeleteBudget(id: string) {
     await loadDelete({ variables: { deleteBudgetId: id } });
@@ -63,6 +79,10 @@ export function BudgetList() {
     if (!error) {
       refetch();
     }
+  }
+
+  async function handleCreateOrder(id: string) {
+    await loadCreateOrder({ variables: { budgetId: id } });
   }
 
   function handleSelectBudget(id: string) {
@@ -124,7 +144,7 @@ export function BudgetList() {
               </Flex>
             ) : listError ? (
               <Flex justify="center">
-                <Text>Falha ao obter dados dos produtos.</Text>
+                <Text>Falha ao obter dados dos orçamentos.</Text>
               </Flex>
             ) : (
               <>
@@ -205,7 +225,7 @@ export function BudgetList() {
                                   maxW="56"
                                   textAlign="left"
                                 >
-                                  info:
+                                  info adicional:
                                 </Text>
                                 <Text
                                   fontWeight="light"
@@ -258,6 +278,7 @@ export function BudgetList() {
                           fontSize="sm"
                           borderRadius={4}
                           colorScheme="green"
+                          onClick={() => handleCreateOrder(budget.id)}
                           leftIcon={<Icon as={RiCheckLine} fontSize="16" />}
                         >
                           Aprovar
