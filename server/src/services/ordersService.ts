@@ -219,4 +219,31 @@ export class OrdersService {
       SixDaysBeforeOrders,
     ];
   }
+
+  async getMonthlyProfit() {
+    const today = new Date();
+
+    const monthFirstDay = new Date(today.getFullYear(), today.getMonth(), 0);
+    const monthLastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    const orders = await prisma.order.findMany({
+      where: {
+        created_at: {
+          gte: monthFirstDay,
+          lt: monthLastDay,
+        },
+        finished_at: { not: null },
+      },
+      select: { price: true, discount: true, serialNumber: true },
+    });
+
+    const values = orders.map(order => order.price - order.discount);
+
+    const profit = values.reduce(
+      (acumulador, valorAtual) => acumulador + valorAtual,
+      0,
+    );
+
+    return profit;
+  }
 }

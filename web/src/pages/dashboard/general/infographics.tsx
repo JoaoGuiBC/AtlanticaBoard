@@ -1,10 +1,22 @@
-import { Box, Flex, Spinner, Text, theme, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Spinner,
+  Text,
+  theme,
+  useToast,
+  VStack,
+} from '@chakra-ui/react';
 import Chart from 'react-apexcharts';
 import { format } from 'date-fns';
 
 import { useAuth } from '@contexts/AuthContext';
 import { createChartSeries } from '@utils/createChartSeries';
+import { currencyFormatter } from '@utils/formatter/currencyFormatter';
 import {
+  useGetMonthlyProfitQuery,
   useListLastOrdersCreatedQuery,
   useListLastOrdersFinishedQuery,
 } from '@graphql/generated/graphql';
@@ -120,6 +132,26 @@ export function Infographics() {
     },
   });
 
+  const { data: monthProfit } = useGetMonthlyProfitQuery({
+    context: {
+      headers: {
+        Authorization: user.token,
+      },
+    },
+    onError(error) {
+      toast({
+        title: 'Erro',
+        description: error.message,
+        status: 'error',
+        position: 'top-right',
+        isClosable: true,
+      });
+      if (error.message === 'Autenticação inválida, por favor refaça login') {
+        logOut();
+      }
+    },
+  });
+
   return (
     <>
       <Header />
@@ -127,7 +159,7 @@ export function Infographics() {
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
-          <Flex flex="1" gap={1} wrap="wrap">
+          <Flex flex="1" gap={1} wrap="wrap-reverse">
             <Box
               display="flex"
               bg="gray.800"
@@ -199,6 +231,19 @@ export function Infographics() {
                 />
               )}
             </Box>
+
+            {!monthProfit ? (
+              <Flex justify="center" align="center" width={290}>
+                <Spinner />
+              </Flex>
+            ) : (
+              <VStack justifyContent="center" alignItems="flex-start">
+                <Heading fontSize="xl">Lucro desse mês:</Heading>
+                <Text textAlign="left" fontSize="lg">
+                  {currencyFormatter(monthProfit.getMonthlyProfit)}
+                </Text>
+              </VStack>
+            )}
           </Flex>
         </Flex>
       </Flex>

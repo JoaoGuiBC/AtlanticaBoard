@@ -116,4 +116,12 @@ export class OrderResolver {
 
     return days;
   }
+
+  @Query(() => Number)
+  @Authorized()
+  async getMonthlyProfit() {
+    const profit = await this.ordersService.getMonthlyProfit();
+
+    return profit;
+  }
 }

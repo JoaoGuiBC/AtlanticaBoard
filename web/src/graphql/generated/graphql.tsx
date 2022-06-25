@@ -288,6 +288,7 @@ export type Query = {
   __typename?: 'Query';
   getBudget: Budget;
   getClient: Client;
+  getMonthlyProfit: Scalars['Float'];
   getOrder: Order;
   getProduct: Product;
   listBudgets: ListBudgetsValue;
@@ -522,6 +523,11 @@ export type FinishOrderMutationVariables = Exact<{
 
 
 export type FinishOrderMutation = { __typename?: 'Mutation', finishOrder: string };
+
+export type GetMonthlyProfitQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMonthlyProfitQuery = { __typename?: 'Query', getMonthlyProfit: number };
 
 export type GetOrderQueryVariables = Exact<{
   getOrderId: Scalars['String'];
@@ -1241,6 +1247,38 @@ export function useFinishOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type FinishOrderMutationHookResult = ReturnType<typeof useFinishOrderMutation>;
 export type FinishOrderMutationResult = Apollo.MutationResult<FinishOrderMutation>;
 export type FinishOrderMutationOptions = Apollo.BaseMutationOptions<FinishOrderMutation, FinishOrderMutationVariables>;
+export const GetMonthlyProfitDocument = gql`
+    query GetMonthlyProfit {
+  getMonthlyProfit
+}
+    `;
+
+/**
+ * __useGetMonthlyProfitQuery__
+ *
+ * To run a query within a React component, call `useGetMonthlyProfitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMonthlyProfitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMonthlyProfitQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMonthlyProfitQuery(baseOptions?: Apollo.QueryHookOptions<GetMonthlyProfitQuery, GetMonthlyProfitQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMonthlyProfitQuery, GetMonthlyProfitQueryVariables>(GetMonthlyProfitDocument, options);
+      }
+export function useGetMonthlyProfitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMonthlyProfitQuery, GetMonthlyProfitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMonthlyProfitQuery, GetMonthlyProfitQueryVariables>(GetMonthlyProfitDocument, options);
+        }
+export type GetMonthlyProfitQueryHookResult = ReturnType<typeof useGetMonthlyProfitQuery>;
+export type GetMonthlyProfitLazyQueryHookResult = ReturnType<typeof useGetMonthlyProfitLazyQuery>;
+export type GetMonthlyProfitQueryResult = Apollo.QueryResult<GetMonthlyProfitQuery, GetMonthlyProfitQueryVariables>;
 export const GetOrderDocument = gql`
     query GetOrder($getOrderId: String!) {
   getOrder(id: $getOrderId) {
