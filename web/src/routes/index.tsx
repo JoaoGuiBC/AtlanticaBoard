@@ -4,6 +4,7 @@ import { SidebarDrawerProvider } from '@contexts/SidebarDrawerContext';
 import { ProtectedRoute } from '@components/ProtectedRoute';
 
 import { SignIn } from '@pages/signIn';
+import { SignOrder } from '@pages/signOrder';
 
 import { Infographics } from '@pages/dashboard/general/infographics';
 
@@ -29,8 +30,8 @@ export function Router() {
       <SidebarDrawerProvider>
         <Routes>
           <Route path="/" element={<Navigate to="/signIn" />} />
-
           <Route path="/signIn" element={<SignIn />} />
+          <Route path="/assinarPedido" element={<SignOrder />} />
 
           <Route
             path="/dashboard"
