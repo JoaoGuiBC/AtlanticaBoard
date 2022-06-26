@@ -44,7 +44,7 @@ export function SignIn() {
         p="8"
         borderRadius={4}
         flexDir="column"
-        onSubmit={() => navigate('/assinarPedido')}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <Stack spacing="8">
           <Input label="E-mail" error={errors.email} {...register('email')} />
