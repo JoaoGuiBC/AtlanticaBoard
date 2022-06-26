@@ -22,6 +22,11 @@ interface UpdateClientParams
   idAddress: string;
 }
 
+interface SetClientSignature {
+  id: string;
+  signature: string;
+}
+
 export class ClientsService {
   async listClients({ skip, take }: Pagination) {
     const clients = await prisma.client.findMany({
@@ -152,5 +157,29 @@ export class ClientsService {
         },
       });
     }
+  }
+
+  async getClientSignature(id: string) {
+    const client = await prisma.client.findUnique({
+      where: { id },
+    });
+
+    if (!client) {
+      throw new Error('Cliente não cadastrado');
+    }
+
+    return client.signature;
+  }
+
+  async setClientSignature({ id, signature }: SetClientSignature) {
+    const clientExist = await prisma.client.findUnique({
+      where: { id },
+    });
+
+    if (!clientExist) {
+      throw new Error('Cliente não cadastrado');
+    }
+
+    await prisma.client.update({ where: { id }, data: { signature } });
   }
 }

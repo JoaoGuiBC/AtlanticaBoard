@@ -14,8 +14,11 @@ import {
 
 import { CreateClientInput } from '@inputs/create-client-input';
 import { UpdateClientInput } from '@inputs/update-client-input';
+import { SetClientSignatureInput } from '@inputs/set-client-signature-input';
+
 import { ClientsService } from '@services/clientsService';
 import { AddressService } from '@services/addressService';
+
 import { Client } from '@models/Client';
 
 import { PaginationArgs } from '../args/pagination-args';
@@ -33,6 +36,13 @@ class ListClientsValue {
 export class ClientResolver {
   private clientsService = new ClientsService();
   private addressesService = new AddressService();
+
+  @Query(() => String, { nullable: true })
+  async getClientSignature(@Arg('id') id: string) {
+    const signature = await this.clientsService.getClientSignature(id);
+
+    return signature;
+  }
 
   @Query(() => Client)
   @Authorized()
@@ -77,5 +87,12 @@ export class ClientResolver {
     await this.clientsService.updateClient(data);
 
     return 'Informações atualizadas com sucesso';
+  }
+
+  @Mutation(() => String)
+  async setClientSignature(@Arg('data') data: SetClientSignatureInput) {
+    await this.clientsService.setClientSignature(data);
+
+    return 'Assinatura atualizada com sucesso';
   }
 }
