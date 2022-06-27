@@ -158,79 +158,7 @@ export function Infographics() {
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
-          <Flex flex="1" gap={1} wrap="wrap-reverse">
-            <Box
-              display="flex"
-              bg="gray.800"
-              borderRadius={4}
-              flex="1"
-              h="80"
-              flexDir="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text
-                pl={['4', '10']}
-                fontSize="lg"
-                mb="4"
-                alignSelf="flex-start"
-              >
-                Projetos aceitos por dia
-              </Text>
-
-              {!lastOrdersCreated ? (
-                <Flex justify="center" align="center" height={190}>
-                  <Spinner />
-                </Flex>
-              ) : (
-                <Chart
-                  options={options}
-                  series={createChartSeries(
-                    lastOrdersCreated.listLastOrdersCreated,
-                  )}
-                  type="bar"
-                  height={190}
-                  width={450}
-                />
-              )}
-            </Box>
-
-            <Box
-              display="flex"
-              bg="gray.800"
-              borderRadius={4}
-              flex="1"
-              h="80"
-              flexDir="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text
-                pl={['4', '10']}
-                fontSize="lg"
-                mb="4"
-                alignSelf="flex-start"
-              >
-                Projetos concluídos por dia
-              </Text>
-
-              {!lastOrdersFinished ? (
-                <Flex justify="center" align="center" height={190}>
-                  <Spinner />
-                </Flex>
-              ) : (
-                <Chart
-                  options={options}
-                  series={createChartSeries(
-                    lastOrdersFinished.listLastOrdersFinished,
-                  )}
-                  type="bar"
-                  height={190}
-                  width={450}
-                />
-              )}
-            </Box>
-
+          <Flex flex="1" gap={6} direction="column">
             {!monthProfit ? (
               <Flex justify="center" align="center" width={290}>
                 <Spinner />
@@ -243,6 +171,80 @@ export function Infographics() {
                 </Text>
               </VStack>
             )}
+
+            <Flex flex="1" gap={1} wrap="wrap">
+              <Box
+                display="flex"
+                bg="gray.800"
+                borderRadius={4}
+                flex="1"
+                h="80"
+                flexDir="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text
+                  pl={['4', '10']}
+                  fontSize="lg"
+                  mb="4"
+                  alignSelf="flex-start"
+                >
+                  Projetos aceitos por dia
+                </Text>
+
+                {!lastOrdersCreated ? (
+                  <Flex justify="center" align="center" height={190}>
+                    <Spinner />
+                  </Flex>
+                ) : (
+                  <Chart
+                    options={options}
+                    series={createChartSeries(
+                      lastOrdersCreated.listLastOrdersCreated,
+                    )}
+                    type="bar"
+                    height={190}
+                    width={450}
+                  />
+                )}
+              </Box>
+
+              <Box
+                display="flex"
+                bg="gray.800"
+                borderRadius={4}
+                flex="1"
+                h="80"
+                flexDir="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text
+                  pl={['4', '10']}
+                  fontSize="lg"
+                  mb="4"
+                  alignSelf="flex-start"
+                >
+                  Projetos concluídos por dia
+                </Text>
+
+                {!lastOrdersFinished ? (
+                  <Flex justify="center" align="center" height={190}>
+                    <Spinner />
+                  </Flex>
+                ) : (
+                  <Chart
+                    options={options}
+                    series={createChartSeries(
+                      lastOrdersFinished.listLastOrdersFinished,
+                    )}
+                    type="bar"
+                    height={190}
+                    width={450}
+                  />
+                )}
+              </Box>
+            </Flex>
           </Flex>
         </Flex>
       </Flex>
