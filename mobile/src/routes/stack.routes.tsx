@@ -1,5 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { Infographics } from '@screens/Infographics';
+
 import { UpdateClient } from '@screens/clients/UpdateClient';
 import { UpdateProduct } from '@screens/products/UpdateProduct';
 import { UpdateBudget } from '@screens/budgets/UpdateBudget';
@@ -16,8 +18,10 @@ export function StackRoutes() {
   return (
     <Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="employees"
+      initialRouteName="infographics"
     >
+      <Screen name="infographics" component={Infographics} />
+
       <Screen name="employee" component={EmployeeTabRoutes} />
 
       <Screen name="client" component={ClientTabRoutes} />

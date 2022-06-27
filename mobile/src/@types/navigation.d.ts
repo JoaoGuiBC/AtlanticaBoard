@@ -5,6 +5,8 @@ export type UpdateScreenNavigationProps = {
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
+      infographics: undefined;
+
       employee: undefined;
 
       client: undefined;

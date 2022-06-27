@@ -4,7 +4,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-type Screens = 'client' | 'product' | 'employee' | 'budget'
+type Screens = 'infographics' | 'client' | 'product' | 'employee' | 'budget'
 
 export function HeaderMenu() {
   const { navigate } = useNavigation();
@@ -30,6 +30,7 @@ export function HeaderMenu() {
         <Menu.Group title="GERAL" _title={{ fontSize: 16 }}>
           <Menu.Item
             _pressed={{ bg: 'gray.700' }}
+            onPress={() => handleNavigate('infographics')}
           >
             <HStack alignItems="center" space="2.5">
               <Icon as={Feather} name="trello" color="gray.50" size="5" />
