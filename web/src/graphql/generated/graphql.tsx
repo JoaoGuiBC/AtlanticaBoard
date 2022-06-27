@@ -92,9 +92,14 @@ export type CreateProductInput = {
   price: Scalars['Float'];
 };
 
-export type DayValue = {
-  __typename?: 'DayValue';
+export type DayCreatedValue = {
+  __typename?: 'DayCreatedValue';
   created_at: Scalars['DateTime'];
+};
+
+export type DayFinishedValue = {
+  __typename?: 'DayFinishedValue';
+  finished_at: Scalars['DateTime'];
 };
 
 /** The employee model */
@@ -301,8 +306,8 @@ export type Query = {
   listBudgets: ListBudgetsValue;
   listClients: ListClientsValue;
   listEmployees: Array<Employee>;
-  listLastOrdersCreated: Array<Array<DayValue>>;
-  listLastOrdersFinished: Array<Array<DayValue>>;
+  listLastOrdersCreated: Array<Array<DayCreatedValue>>;
+  listLastOrdersFinished: Array<Array<DayFinishedValue>>;
   listOrders: ListOrdersValue;
   listProducts: ListProductsValue;
   revalidateJWT: Scalars['String'];
@@ -570,12 +575,12 @@ export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'Or
 export type ListLastOrdersCreatedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListLastOrdersCreatedQuery = { __typename?: 'Query', listLastOrdersCreated: Array<Array<{ __typename?: 'DayValue', created_at: any }>> };
+export type ListLastOrdersCreatedQuery = { __typename?: 'Query', listLastOrdersCreated: Array<Array<{ __typename?: 'DayCreatedValue', created_at: any }>> };
 
 export type ListLastOrdersFinishedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListLastOrdersFinishedQuery = { __typename?: 'Query', listLastOrdersFinished: Array<Array<{ __typename?: 'DayValue', created_at: any }>> };
+export type ListLastOrdersFinishedQuery = { __typename?: 'Query', listLastOrdersFinished: Array<Array<{ __typename?: 'DayFinishedValue', finished_at: any }>> };
 
 export type ListOrdersQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
@@ -1469,7 +1474,7 @@ export type ListLastOrdersCreatedQueryResult = Apollo.QueryResult<ListLastOrders
 export const ListLastOrdersFinishedDocument = gql`
     query ListLastOrdersFinished {
   listLastOrdersFinished {
-    created_at
+    finished_at
   }
 }
     `;

@@ -132,7 +132,6 @@ export class OrdersService {
           gte: pastWeek,
           lt: today,
         },
-        finished_at: null,
       },
       select: { created_at: true },
     });
@@ -184,29 +183,29 @@ export class OrdersService {
         },
         finished_at: { not: null },
       },
-      select: { created_at: true },
+      select: { finished_at: true },
     });
 
     const todayOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate(),
+      order => order.finished_at!.getDate() + 1 === today.getDate(),
     );
     const OneDayBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 1,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 1,
     );
     const TwoDaysBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 2,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 2,
     );
     const ThreeDaysBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 3,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 3,
     );
     const ForDaysBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 4,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 4,
     );
     const FiveDaysBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 5,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 5,
     );
     const SixDaysBeforeOrders = orders.filter(
-      order => order.created_at.getDate() + 1 === today.getDate() - 6,
+      order => order.finished_at!.getDate() + 1 === today.getDate() - 6,
     );
 
     return [
@@ -240,7 +239,7 @@ export class OrdersService {
     const values = orders.map(order => order.price - order.discount);
 
     const profit = values.reduce(
-      (acumulador, valorAtual) => acumulador + valorAtual,
+      (previousValue, currentValue) => previousValue + currentValue,
       0,
     );
 

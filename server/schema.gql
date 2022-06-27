@@ -80,8 +80,12 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
-type DayValue {
+type DayCreatedValue {
   created_at: DateTime!
+}
+
+type DayFinishedValue {
+  finished_at: DateTime!
 }
 
 """The employee model"""
@@ -193,8 +197,8 @@ type Query {
   listBudgets(skip: Int, take: Int): ListBudgetsValue!
   listClients(skip: Int, take: Int): ListClientsValue!
   listEmployees: [Employee!]!
-  listLastOrdersCreated: [[DayValue!]!]!
-  listLastOrdersFinished: [[DayValue!]!]!
+  listLastOrdersCreated: [[DayCreatedValue!]!]!
+  listLastOrdersFinished: [[DayFinishedValue!]!]!
   listOrders(skip: Int, take: Int): ListOrdersValue!
   listProducts(skip: Int, take: Int): ListProductsValue!
   revalidateJWT(userId: String!): String!

@@ -1,5 +1,5 @@
 query ListLastOrdersFinished {
   listLastOrdersFinished {
-    created_at
+    finished_at
   }
 }

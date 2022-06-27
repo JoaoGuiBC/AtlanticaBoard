@@ -1,6 +1,4 @@
-export function createChartSeries(
-  value: Array<Array<{ __typename?: 'DayValue'; created_at: any }>>,
-) {
+export function createChartSeries(value: Array<Array<any>>) {
   const data = value.map(item => item.length).reverse();
 
   return [{ data }];
