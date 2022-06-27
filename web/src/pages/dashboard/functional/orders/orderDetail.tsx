@@ -9,7 +9,11 @@ import {
   RiDeleteBinLine,
   RiEdit2Line,
 } from 'react-icons/ri';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import {
   Box,
   Button,
@@ -40,6 +44,7 @@ export function OrderDetail() {
   const [searchParams] = useSearchParams();
   const { user, logOut } = useAuth();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const {
     data,
@@ -92,6 +97,10 @@ export function OrderDetail() {
     if (!error) {
       refetch();
     }
+  }
+
+  function handleSignOrder(clientId: string, orderId: string) {
+    navigate(`/assinarPedido?cliente=${clientId}&pedido=${orderId}`);
   }
 
   const isWideVersion = useBreakpointValue({
@@ -274,7 +283,7 @@ export function OrderDetail() {
                       size="sm"
                       w="32"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="blue"
                       leftIcon={<Icon as={RiArticleLine} fontSize="16" />}
@@ -285,10 +294,16 @@ export function OrderDetail() {
                       size="sm"
                       w="32"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="teal"
                       leftIcon={<Icon as={RiEdit2Line} fontSize="16" />}
+                      onClick={() =>
+                        handleSignOrder(
+                          data.getOrder.client.id,
+                          data.getOrder.id,
+                        )
+                      }
                     >
                       Assinar
                     </Button>
@@ -297,7 +312,7 @@ export function OrderDetail() {
                       size="sm"
                       w="32"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="red"
                       isLoading={loading}
@@ -310,7 +325,7 @@ export function OrderDetail() {
                       size="sm"
                       w="32"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="green"
                       onClick={() => handleFinishOrder(data.getOrder.id)}

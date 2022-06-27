@@ -86,7 +86,6 @@ export class OrderResolver {
   }
 
   @Mutation(() => String)
-  @Authorized()
   async signOrder(@Arg('id') id: string) {
     await this.ordersService.signOrder(id);
 

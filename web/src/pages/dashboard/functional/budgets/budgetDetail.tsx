@@ -255,7 +255,7 @@ export function BudgetDetail() {
                       size="sm"
                       w="100%"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="blue"
                       onClick={() => handleOpenModal(data?.getBudget!)}
@@ -267,7 +267,7 @@ export function BudgetDetail() {
                       size="sm"
                       w="100%"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="red"
                       isLoading={loading}
@@ -280,7 +280,7 @@ export function BudgetDetail() {
                       size="sm"
                       w="100%"
                       fontSize="sm"
-                      lineHeight="16"
+                      lineHeight="sm"
                       borderRadius={4}
                       colorScheme="green"
                       onClick={() => handleCreateOrder(data?.getBudget.id!)}

@@ -1,0 +1,3 @@
+query GetClientSignature($getClientSignatureId: String!) {
+  getClientSignature(id: $getClientSignatureId)
+}

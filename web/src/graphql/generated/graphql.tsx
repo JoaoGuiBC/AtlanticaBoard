@@ -144,6 +144,7 @@ export type Mutation = {
   deleteOrder: Scalars['String'];
   deleteProduct: Scalars['String'];
   finishOrder: Scalars['String'];
+  setClientSignature: Scalars['String'];
   signOrder: Scalars['String'];
   updateBudgetInfo: Scalars['String'];
   updateBudgetProducts: Scalars['String'];
@@ -204,6 +205,11 @@ export type MutationDeleteProductArgs = {
 
 export type MutationFinishOrderArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationSetClientSignatureArgs = {
+  data: SetClientSignatureInput;
 };
 
 
@@ -288,6 +294,7 @@ export type Query = {
   __typename?: 'Query';
   getBudget: Budget;
   getClient: Client;
+  getClientSignature?: Maybe<Scalars['String']>;
   getMonthlyProfit: Scalars['Float'];
   getOrder: Order;
   getProduct: Product;
@@ -309,6 +316,11 @@ export type QueryGetBudgetArgs = {
 
 
 export type QueryGetClientArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryGetClientSignatureArgs = {
   id: Scalars['String'];
 };
 
@@ -355,6 +367,11 @@ export type QueryRevalidateJwtArgs = {
 export type QuerySignInArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type SetClientSignatureInput = {
+  id: Scalars['String'];
+  signature: Scalars['String'];
 };
 
 /** The logged user model */
@@ -454,6 +471,13 @@ export type DeleteClientMutationVariables = Exact<{
 
 export type DeleteClientMutation = { __typename?: 'Mutation', deleteClient: string };
 
+export type GetClientSignatureQueryVariables = Exact<{
+  getClientSignatureId: Scalars['String'];
+}>;
+
+
+export type GetClientSignatureQuery = { __typename?: 'Query', getClientSignature?: string | null };
+
 export type ListClientsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
@@ -461,6 +485,13 @@ export type ListClientsQueryVariables = Exact<{
 
 
 export type ListClientsQuery = { __typename?: 'Query', listClients: { __typename?: 'ListClientsValue', totalClients: number, clients: Array<{ __typename?: 'Client', id: string, name: string, contact?: string | null, email: string, phoneNumber?: string | null, document?: string | null, stateRegistration?: string | null, address: Array<{ __typename?: 'Address', id: string, street: string, number?: number | null, state?: string | null, city?: string | null, district?: string | null, cep?: string | null }> }> } };
+
+export type SetClientSignatureMutationVariables = Exact<{
+  data: SetClientSignatureInput;
+}>;
+
+
+export type SetClientSignatureMutation = { __typename?: 'Mutation', setClientSignature: string };
 
 export type UpdateClientMutationVariables = Exact<{
   data: UpdateClientInput;
@@ -895,6 +926,39 @@ export function useDeleteClientMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteClientMutationHookResult = ReturnType<typeof useDeleteClientMutation>;
 export type DeleteClientMutationResult = Apollo.MutationResult<DeleteClientMutation>;
 export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<DeleteClientMutation, DeleteClientMutationVariables>;
+export const GetClientSignatureDocument = gql`
+    query GetClientSignature($getClientSignatureId: String!) {
+  getClientSignature(id: $getClientSignatureId)
+}
+    `;
+
+/**
+ * __useGetClientSignatureQuery__
+ *
+ * To run a query within a React component, call `useGetClientSignatureQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientSignatureQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientSignatureQuery({
+ *   variables: {
+ *      getClientSignatureId: // value for 'getClientSignatureId'
+ *   },
+ * });
+ */
+export function useGetClientSignatureQuery(baseOptions: Apollo.QueryHookOptions<GetClientSignatureQuery, GetClientSignatureQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetClientSignatureQuery, GetClientSignatureQueryVariables>(GetClientSignatureDocument, options);
+      }
+export function useGetClientSignatureLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClientSignatureQuery, GetClientSignatureQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetClientSignatureQuery, GetClientSignatureQueryVariables>(GetClientSignatureDocument, options);
+        }
+export type GetClientSignatureQueryHookResult = ReturnType<typeof useGetClientSignatureQuery>;
+export type GetClientSignatureLazyQueryHookResult = ReturnType<typeof useGetClientSignatureLazyQuery>;
+export type GetClientSignatureQueryResult = Apollo.QueryResult<GetClientSignatureQuery, GetClientSignatureQueryVariables>;
 export const ListClientsDocument = gql`
     query ListClients($skip: Int, $take: Int) {
   listClients(skip: $skip, take: $take) {
@@ -949,6 +1013,37 @@ export function useListClientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ListClientsQueryHookResult = ReturnType<typeof useListClientsQuery>;
 export type ListClientsLazyQueryHookResult = ReturnType<typeof useListClientsLazyQuery>;
 export type ListClientsQueryResult = Apollo.QueryResult<ListClientsQuery, ListClientsQueryVariables>;
+export const SetClientSignatureDocument = gql`
+    mutation SetClientSignature($data: SetClientSignatureInput!) {
+  setClientSignature(data: $data)
+}
+    `;
+export type SetClientSignatureMutationFn = Apollo.MutationFunction<SetClientSignatureMutation, SetClientSignatureMutationVariables>;
+
+/**
+ * __useSetClientSignatureMutation__
+ *
+ * To run a mutation, you first call `useSetClientSignatureMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetClientSignatureMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setClientSignatureMutation, { data, loading, error }] = useSetClientSignatureMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSetClientSignatureMutation(baseOptions?: Apollo.MutationHookOptions<SetClientSignatureMutation, SetClientSignatureMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetClientSignatureMutation, SetClientSignatureMutationVariables>(SetClientSignatureDocument, options);
+      }
+export type SetClientSignatureMutationHookResult = ReturnType<typeof useSetClientSignatureMutation>;
+export type SetClientSignatureMutationResult = Apollo.MutationResult<SetClientSignatureMutation>;
+export type SetClientSignatureMutationOptions = Apollo.BaseMutationOptions<SetClientSignatureMutation, SetClientSignatureMutationVariables>;
 export const UpdateClientDocument = gql`
     mutation UpdateClient($data: UpdateClientInput!) {
   updateClient(data: $data)

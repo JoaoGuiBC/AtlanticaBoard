@@ -125,6 +125,7 @@ type Mutation {
   deleteOrder(id: String!): String!
   deleteProduct(id: String!): String!
   finishOrder(id: String!): String!
+  setClientSignature(data: SetClientSignatureInput!): String!
   signOrder(id: String!): String!
   updateBudgetInfo(data: UpdateBudgetInfoInput!): String!
   updateBudgetProducts(data: UpdateBudgetProductsInput!): String!
@@ -185,6 +186,7 @@ input ProductInput {
 type Query {
   getBudget(id: String!): Budget!
   getClient(id: String!): Client!
+  getClientSignature(id: String!): String
   getMonthlyProfit: Float!
   getOrder(id: String!): Order!
   getProduct(id: String!): Product!
@@ -197,6 +199,11 @@ type Query {
   listProducts(skip: Int, take: Int): ListProductsValue!
   revalidateJWT(userId: String!): String!
   signIn(email: String!, password: String!): SignInResponse!
+}
+
+input SetClientSignatureInput {
+  id: String!
+  signature: String!
 }
 
 """The logged user model"""

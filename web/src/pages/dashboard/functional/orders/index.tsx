@@ -103,6 +103,10 @@ export function OrderList() {
     navigate(`/pedidos/pedido?id=${id}`);
   }
 
+  function handleSignOrder(clientId: string, orderId: string) {
+    navigate(`/assinarPedido?cliente=${clientId}&pedido=${orderId}`);
+  }
+
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
@@ -343,6 +347,9 @@ export function OrderList() {
                           colorScheme="teal"
                           borderRadius={4}
                           leftIcon={<Icon as={RiEdit2Line} fontSize="20" />}
+                          onClick={() =>
+                            handleSignOrder(order.client.id, order.id)
+                          }
                         >
                           Assinar
                         </Button>

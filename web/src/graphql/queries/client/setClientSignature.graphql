@@ -1,0 +1,8 @@
+input SetClientSignatureInput {
+  id: String
+  signature: String
+}
+
+mutation SetClientSignature($data: SetClientSignatureInput!) {
+  setClientSignature(data: $data)
+}
