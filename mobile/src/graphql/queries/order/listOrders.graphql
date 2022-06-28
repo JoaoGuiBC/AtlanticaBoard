@@ -1,0 +1,25 @@
+query ListOrders($skip: Int, $take: Int) {
+  listOrders(skip: $skip, take: $take) {
+    totalOrders
+    orders {
+      id
+      serialNumber
+      budgetSerialNumber
+      price
+      color
+      discount
+      deadline
+      signed
+      finished_at
+      client {
+        id
+        name
+      }
+      products {
+        product {
+          name
+        }
+      }
+    }
+  }
+}

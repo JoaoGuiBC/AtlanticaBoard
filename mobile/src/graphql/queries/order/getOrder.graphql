@@ -1,0 +1,28 @@
+query GetOrder($getOrderId: String!) {
+  getOrder(id: $getOrderId) {
+    id
+    serialNumber
+    budgetSerialNumber
+    price
+    color
+    deadline
+    discount
+    signed
+    finished_at
+    client {
+      id
+      name
+      email
+      contact
+      phoneNumber
+    }
+    products {
+      id
+      base
+      height
+      product {
+        name
+      }
+    }
+  }
+}

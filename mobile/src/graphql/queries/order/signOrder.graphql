@@ -1,0 +1,3 @@
+mutation SignOrder($signOrderId: String!) {
+  signOrder(id: $signOrderId)
+}
