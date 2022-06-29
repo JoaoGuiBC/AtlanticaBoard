@@ -34,7 +34,7 @@ interface OrderCardProps {
   data: Order;
   isLoading: boolean;
   onDeleteOrder: (id: string) => Promise<void>; // eslint-disable-line
-  onSignOrder: (orderId: string, clientId: string) => void; // eslint-disable-line
+  onSignOrder: (orderId: string, clientId: string) => Promise<void>; // eslint-disable-line
 }
 
 export function OrderCard({
@@ -127,7 +127,7 @@ export function OrderCard({
             <Icon as={Feather} name="file-text" color="gray.50" size="4" />
           </Button>
 
-          <Button isLoading={isLoading} onPress={() => onDeleteOrder(id)} colorScheme="teal">
+          <Button isLoading={isLoading} onPress={() => onSignOrder(id, client.id)} colorScheme="teal">
             <Icon as={Feather} name="edit-3" color="gray.50" size="4" />
           </Button>
         </HStack>
@@ -139,7 +139,7 @@ export function OrderCard({
             <Icon as={Feather} name="trash-2" color="gray.50" size="4" />
           </Button>
 
-          <Button isLoading={isLoading} onPress={() => onSignOrder(id, client.id)} colorScheme="emerald">
+          <Button isLoading={isLoading} colorScheme="emerald">
             <Icon as={Feather} name="check" color="gray.50" size="4" />
           </Button>
         </HStack>

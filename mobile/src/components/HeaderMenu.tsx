@@ -4,7 +4,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-type Screens = 'infographics' | 'client' | 'product' | 'employee' | 'budget'
+type Screens = 'infographics' | 'client' | 'product' | 'employee' | 'budget' | 'order'
 
 export function HeaderMenu() {
   const { navigate } = useNavigation();
@@ -98,6 +98,7 @@ export function HeaderMenu() {
 
           <Menu.Item
             _pressed={{ bg: 'gray.700' }}
+            onPress={() => handleNavigate('order')}
           >
             <HStack alignItems="center" space="2.5">
               <Icon as={Feather} name="book-open" color="gray.50" size="5" />

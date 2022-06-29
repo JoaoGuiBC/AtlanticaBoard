@@ -18,6 +18,10 @@ export declare global {
       budget: undefined;
       budgetUpdate: UpdateScreenNavigationProps;
       budgetDetail: UpdateScreenNavigationProps;
+      
+      order: undefined;
+      orderUpdate: UpdateScreenNavigationProps;
+      orderDetail: UpdateScreenNavigationProps;
     }
   }
 }

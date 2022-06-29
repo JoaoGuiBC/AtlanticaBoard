@@ -10,7 +10,8 @@ import { DetailedBudget } from '@screens/budgets/DetailedBudget';
 import { EmployeeTabRoutes } from './tabRoutes/employee.tab.routes';
 import { ClientTabRoutes } from './tabRoutes/client.tab.routes';
 import { ProductTabRoutes } from './tabRoutes/product.tab.routes';
-import { BudgetTabRoutes } from './tabRoutes/budget.tab.routes copy';
+import { BudgetTabRoutes } from './tabRoutes/budget.tab.routes';
+import { OrderTabRoutes } from './tabRoutes/order.tab.routes';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -33,6 +34,8 @@ export function StackRoutes() {
       <Screen name="budget" component={BudgetTabRoutes} />
       <Screen name="budgetUpdate" component={UpdateBudget} options={{ detachPreviousScreen: false }} />
       <Screen name="budgetDetail" component={DetailedBudget} options={{ detachPreviousScreen: false }} />
+
+      <Screen name="order" component={OrderTabRoutes} />
     </Navigator>
   );
 }
