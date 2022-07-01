@@ -156,27 +156,24 @@ export function DetailedBudget() {
             )}
           />
 
-          {data.getBudget.color && (
+          <Text
+            color="gray.300"
+            fontFamily="body"
+            fontWeight={500}
+            fontSize="md"
+            mb="6"
+          >
+            Info:
+            {' '}
             <Text
-              color="gray.300"
+              color="gray.400"
               fontFamily="body"
-              fontWeight={500}
+              fontWeight="300"
               fontSize="md"
-              mb="6"
             >
-              Info:
-              {' '}
-              <Text
-                color="gray.400"
-                fontFamily="body"
-                fontWeight="300"
-                fontSize="md"
-              >
-                {data.getBudget.color}
-
-              </Text>
+              {data.getBudget.color}
             </Text>
-          )}
+          </Text>
 
           <VStack mb="6">
             <Text

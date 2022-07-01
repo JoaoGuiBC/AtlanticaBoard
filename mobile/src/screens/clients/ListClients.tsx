@@ -43,6 +43,21 @@ export function ListClients() {
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
+  function handleError(message: string) {
+    revalidate(user!);
+
+    toast.show({
+      render: () => (
+        <Toast
+          title="Erro"
+          description={message}
+          type="error"
+        />
+      ),
+      placement: 'top-right',
+    });
+  }
+
   const {
     refetch,
     loading: listLoading,
@@ -60,7 +75,7 @@ export function ListClients() {
       setTotalClients(data.listClients.totalClients);
     },
   });
-  const [loadDelete, { error, loading }] = useDeleteClientMutation({
+  const [loadDelete, deleteClientParams] = useDeleteClientMutation({
     context: {
       headers: {
         Authorization: user?.token,
@@ -69,11 +84,14 @@ export function ListClients() {
   });
 
   async function handleDeleteClient(id: string) {
-    await loadDelete({ variables: { deleteClientId: id } });
-
-    if (!error) {
-      refetch();
-    }
+    await loadDelete({
+      variables: { deleteClientId: id },
+      onCompleted: () => {
+        const filteredClient = clients.filter((client) => id !== client.id);
+        setClients(filteredClient);
+      },
+      onError: (error) => handleError(error.message),
+    });
   }
 
   function handleFetchMore() {
@@ -88,21 +106,10 @@ export function ListClients() {
   }
 
   useEffect(() => {
-    if (error || listError) {
-      revalidate(user!);
-
-      toast.show({
-        render: () => (
-          <Toast
-            title="Erro"
-            description={error ? error.message : listError?.message}
-            type="error"
-          />
-        ),
-        placement: 'top-right',
-      });
+    if (listError) {
+      handleError(listError.message);
     }
-  }, [error, listLoading]);
+  }, [listLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -319,7 +326,11 @@ export function ListClients() {
                   <Icon as={Feather} name="edit-2" color="gray.50" size="4" />
                 </Button>
 
-                <Button isLoading={loading} onPress={() => handleDeleteClient(item.id)} colorScheme="error">
+                <Button
+                  isLoading={deleteClientParams.loading}
+                  onPress={() => handleDeleteClient(item.id)}
+                  colorScheme="error"
+                >
                   <Icon as={Feather} name="trash-2" color="gray.50" size="4" />
                 </Button>
               </HStack>

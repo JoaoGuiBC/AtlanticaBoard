@@ -49,6 +49,21 @@ export function ListOrders() {
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
+  function handleError(message: string) {
+    revalidate(user!);
+
+    toast.show({
+      render: () => (
+        <Toast
+          title="Erro"
+          description={message}
+          type="error"
+        />
+      ),
+      placement: 'top-right',
+    });
+  }
+
   const {
     refetch,
     loading: listLoading,
@@ -66,7 +81,7 @@ export function ListOrders() {
       setTotalOrders(data.listOrders.totalOrders);
     },
   });
-  const [loadDelete, { error, loading }] = useDeleteOrderMutation({
+  const [loadDelete, deleteOrderParams] = useDeleteOrderMutation({
     context: {
       headers: {
         Authorization: user?.token,
@@ -75,11 +90,14 @@ export function ListOrders() {
   });
 
   async function handleDeleteBudget(id: string) {
-    await loadDelete({ variables: { deleteOrderId: id } });
-
-    if (!error) {
-      refetch();
-    }
+    await loadDelete({
+      variables: { deleteOrderId: id },
+      onCompleted: () => {
+        const filteredOrder = orders.filter((order) => id !== order.id);
+        setOrders(filteredOrder);
+      },
+      onError: (error) => handleError(error.message),
+    });
   }
 
   function handleFetchMore() {
@@ -114,21 +132,10 @@ export function ListOrders() {
   }
 
   useEffect(() => {
-    if (error || listError) {
-      revalidate(user!);
-
-      toast.show({
-        render: () => (
-          <Toast
-            title="Erro"
-            description={error ? error.message : listError?.message}
-            type="error"
-          />
-        ),
-        placement: 'top-right',
-      });
+    if (listError) {
+      handleError(listError.message);
     }
-  }, [error, listLoading]);
+  }, [listLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -184,7 +191,7 @@ export function ListOrders() {
             >
               <OrderCard
                 data={item}
-                isLoading={loading}
+                isLoading={deleteOrderParams.loading}
                 onDeleteOrder={handleDeleteBudget}
                 onSignOrder={handleSignOrder}
               />

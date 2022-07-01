@@ -6,12 +6,12 @@ import { UpdateClient } from '@screens/clients/UpdateClient';
 import { UpdateProduct } from '@screens/products/UpdateProduct';
 import { UpdateBudget } from '@screens/budgets/UpdateBudget';
 import { DetailedBudget } from '@screens/budgets/DetailedBudget';
+import { ListOrders } from '@screens/orders/ListOrders';
 
 import { EmployeeTabRoutes } from './tabRoutes/employee.tab.routes';
 import { ClientTabRoutes } from './tabRoutes/client.tab.routes';
 import { ProductTabRoutes } from './tabRoutes/product.tab.routes';
 import { BudgetTabRoutes } from './tabRoutes/budget.tab.routes';
-import { OrderTabRoutes } from './tabRoutes/order.tab.routes';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -35,7 +35,7 @@ export function StackRoutes() {
       <Screen name="budgetUpdate" component={UpdateBudget} options={{ detachPreviousScreen: false }} />
       <Screen name="budgetDetail" component={DetailedBudget} options={{ detachPreviousScreen: false }} />
 
-      <Screen name="order" component={OrderTabRoutes} />
+      <Screen name="order" component={ListOrders} />
     </Navigator>
   );
 }

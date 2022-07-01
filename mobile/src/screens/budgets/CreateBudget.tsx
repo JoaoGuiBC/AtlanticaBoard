@@ -171,7 +171,7 @@ export function CreateBudget() {
 
             {products.map((product, index) => (
               <HStack
-                key={product.id}
+                key={`${product.id}-${product.base}-${product.height}-${product.cost}`}
                 w="100%"
                 space="2"
                 mb="5"

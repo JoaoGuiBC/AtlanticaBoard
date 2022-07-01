@@ -21,6 +21,21 @@ export function ListProducts() {
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
+  function handleError(message: string) {
+    revalidate(user!);
+
+    toast.show({
+      render: () => (
+        <Toast
+          title="Erro"
+          description={message}
+          type="error"
+        />
+      ),
+      placement: 'top-right',
+    });
+  }
+
   const {
     refetch,
     loading: listLoading,
@@ -38,7 +53,7 @@ export function ListProducts() {
       setTotalProducts(data.listProducts.totalProducts);
     },
   });
-  const [loadDelete, { error, loading }] = useDeleteProductMutation({
+  const [loadDelete, deleteProductParams] = useDeleteProductMutation({
     context: {
       headers: {
         Authorization: user?.token,
@@ -47,11 +62,14 @@ export function ListProducts() {
   });
 
   async function handleDeleteProduct(id: string) {
-    await loadDelete({ variables: { deleteProductId: id } });
-
-    if (!error) {
-      refetch();
-    }
+    await loadDelete({
+      variables: { deleteProductId: id },
+      onCompleted: () => {
+        const filteredProduct = products.filter((product) => id !== product.id);
+        setProducts(filteredProduct);
+      },
+      onError: (error) => handleError(error.message),
+    });
   }
 
   function handleFetchMore() {
@@ -66,21 +84,10 @@ export function ListProducts() {
   }
 
   useEffect(() => {
-    if (error || listError) {
-      revalidate(user!);
-
-      toast.show({
-        render: () => (
-          <Toast
-            title="Erro"
-            description={error ? error.message : listError?.message}
-            type="error"
-          />
-        ),
-        placement: 'top-right',
-      });
+    if (listError) {
+      handleError(listError.message);
     }
-  }, [error, listLoading]);
+  }, [listLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -193,7 +200,11 @@ export function ListProducts() {
                   <Icon as={Feather} name="edit-2" color="gray.50" size="4" />
                 </Button>
 
-                <Button isLoading={loading} onPress={() => handleDeleteProduct(item.id)} colorScheme="error">
+                <Button
+                  isLoading={deleteProductParams.loading}
+                  onPress={() => handleDeleteProduct(item.id)}
+                  colorScheme="error"
+                >
                   <Icon as={Feather} name="trash-2" color="gray.50" size="4" />
                 </Button>
               </HStack>

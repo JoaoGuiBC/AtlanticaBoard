@@ -7,7 +7,7 @@ import {
 
 import { UseAuth } from '@hooks/auth';
 import { Client } from '@screens/clients/ListClients';
-import { useDeleteBudgetMutation, useListBudgetsQuery } from '@graphql/generated/graphql';
+import { useCreateOrderMutation, useDeleteBudgetMutation, useListBudgetsQuery } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
@@ -48,6 +48,21 @@ export function ListBudgets() {
   const { navigate } = useNavigation();
   const { user, revalidate } = UseAuth();
 
+  function handleError(message: string) {
+    revalidate(user!);
+
+    toast.show({
+      render: () => (
+        <Toast
+          title="Erro"
+          description={message}
+          type="error"
+        />
+      ),
+      placement: 'top-right',
+    });
+  }
+
   const {
     refetch,
     loading: listLoading,
@@ -59,26 +74,39 @@ export function ListBudgets() {
       },
     },
     variables: { take: 10, skip: (page - 1) * 10 },
-    initialFetchPolicy: 'network-only',
     onCompleted(data) {
       setBudgets([...budgets, ...data.listBudgets.budgets]);
       setTotalBudgets(data.listBudgets.totalBudgets);
     },
   });
-  const [loadDelete, { error, loading }] = useDeleteBudgetMutation({
+  const [loadDelete, deleteBudgetParams] = useDeleteBudgetMutation({
     context: {
       headers: {
         Authorization: user?.token,
       },
     },
   });
+  const [loadApprove, createOrderParams] = useCreateOrderMutation({
+    context: {
+      headers: {
+        Authorization: user?.token,
+      },
+    },
+    onError: (error) => handleError(error.message),
+  });
 
   async function handleDeleteBudget(id: string) {
-    await loadDelete({ variables: { deleteBudgetId: id } });
-
-    if (!error) {
-      refetch();
-    }
+    await loadDelete({
+      variables: { deleteBudgetId: id },
+      onCompleted: () => {
+        const filteredBudget = budgets.filter((budget) => id !== budget.id);
+        setBudgets(filteredBudget);
+      },
+      onError: (error) => handleError(error.message),
+    });
+  }
+  async function handleApproveBudget(id: string) {
+    await loadApprove({ variables: { budgetId: id } });
   }
 
   function handleFetchMore() {
@@ -97,21 +125,10 @@ export function ListBudgets() {
   }
 
   useEffect(() => {
-    if (error || listError) {
-      revalidate(user!);
-
-      toast.show({
-        render: () => (
-          <Toast
-            title="Erro"
-            description={error ? error.message : listError?.message}
-            type="error"
-          />
-        ),
-        placement: 'top-right',
-      });
+    if (listError) {
+      handleError(listError.message);
     }
-  }, [error, listLoading]);
+  }, [listLoading]);
 
   useFocusEffect(
     useCallback(() => {
@@ -167,7 +184,9 @@ export function ListBudgets() {
             >
               <BudgetCard
                 data={item}
-                isLoading={loading}
+                isDeleting={deleteBudgetParams.loading}
+                isApproving={createOrderParams.loading}
+                onApproveBudget={handleApproveBudget}
                 onDeleteBudget={handleDeleteBudget}
                 onGoToUpdate={handleGoToUpdate}
               />

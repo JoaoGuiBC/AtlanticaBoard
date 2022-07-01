@@ -38,13 +38,15 @@ type Budget = {
 
 interface BudgetCardProps {
   data: Budget;
-  isLoading: boolean;
+  isDeleting: boolean;
+  isApproving: boolean;
   onDeleteBudget: (id: string) => Promise<void>; // eslint-disable-line
+  onApproveBudget: (id: string) => Promise<void>; // eslint-disable-line
   onGoToUpdate: (budgetId: string) => void; // eslint-disable-line
 }
 
 export function BudgetCard({
-  data, isLoading, onDeleteBudget, onGoToUpdate,
+  data, isDeleting, isApproving, onDeleteBudget, onApproveBudget, onGoToUpdate,
 }: BudgetCardProps) {
   const {
     id, serialNumber, created_at, deadline, price, discount, client, products,
@@ -122,7 +124,7 @@ export function BudgetCard({
 
       <HStack
         mt="5"
-        px="3"
+        px="1"
         justifyContent="space-evenly"
         position="absolute"
         bottom="3"
@@ -133,7 +135,11 @@ export function BudgetCard({
           <Icon as={Feather} name="edit-2" color="gray.50" size="4" />
         </Button>
 
-        <Button isLoading={isLoading} onPress={() => onDeleteBudget(id)} colorScheme="error">
+        <Button isLoading={isApproving} onPress={() => onApproveBudget(id)} colorScheme="success">
+          <Icon as={Feather} name="check" color="gray.50" size="4" />
+        </Button>
+
+        <Button isLoading={isDeleting} onPress={() => onDeleteBudget(id)} colorScheme="error">
           <Icon as={Feather} name="trash-2" color="gray.50" size="4" />
         </Button>
       </HStack>
