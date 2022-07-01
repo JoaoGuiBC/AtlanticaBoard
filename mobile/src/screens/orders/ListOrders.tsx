@@ -75,7 +75,6 @@ export function ListOrders() {
       },
     },
     variables: { take: 10, skip: (page - 1) * 10 },
-    initialFetchPolicy: 'network-only',
     onCompleted(data) {
       setOrders([...orders, ...data.listOrders.orders]);
       setTotalOrders(data.listOrders.totalOrders);
@@ -128,7 +127,7 @@ export function ListOrders() {
   }
 
   function handleGoToDetail(orderId: string) {
-    // navigate('orderDetail', { id: orderId });
+    navigate('orderDetail', { id: orderId });
   }
 
   useEffect(() => {

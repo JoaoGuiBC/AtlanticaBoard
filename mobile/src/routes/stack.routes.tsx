@@ -7,6 +7,7 @@ import { UpdateProduct } from '@screens/products/UpdateProduct';
 import { UpdateBudget } from '@screens/budgets/UpdateBudget';
 import { DetailedBudget } from '@screens/budgets/DetailedBudget';
 import { ListOrders } from '@screens/orders/ListOrders';
+import { DetailedOrder } from '@screens/orders/DetailedOrder';
 
 import { EmployeeTabRoutes } from './tabRoutes/employee.tab.routes';
 import { ClientTabRoutes } from './tabRoutes/client.tab.routes';
@@ -36,6 +37,7 @@ export function StackRoutes() {
       <Screen name="budgetDetail" component={DetailedBudget} options={{ detachPreviousScreen: false }} />
 
       <Screen name="order" component={ListOrders} />
+      <Screen name="orderDetail" component={DetailedOrder} />
     </Navigator>
   );
 }
