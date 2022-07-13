@@ -23,6 +23,7 @@ import { BudgetDetail } from '@pages/dashboard/functional/budgets/budgetDetail';
 
 import { OrderList } from '@pages/dashboard/functional/orders';
 import { OrderDetail } from '@pages/dashboard/functional/orders/orderDetail';
+import { OrderPDF } from '@pages/dashboard/functional/orders/orderPDF';
 
 export function Router() {
   return (
@@ -126,6 +127,12 @@ export function Router() {
             path="/pedidos"
             element={
               <ProtectedRoute component={<OrderList />} redirectTo="/signIn" />
+            }
+          />
+          <Route
+            path="/pedidos/pdf"
+            element={
+              <ProtectedRoute component={<OrderPDF />} redirectTo="/signIn" />
             }
           />
           <Route

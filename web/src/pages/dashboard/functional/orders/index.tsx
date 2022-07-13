@@ -102,7 +102,9 @@ export function OrderList() {
   function handleSelectOrder(id: string) {
     navigate(`/pedidos/pedido?id=${id}`);
   }
-
+  function handleGenerateOrderPDF(id: string) {
+    navigate(`/pedidos/pdf?id=${id}`);
+  }
   function handleSignOrder(clientId: string, orderId: string) {
     navigate(`/assinarPedido?cliente=${clientId}&pedido=${orderId}`);
   }
@@ -142,16 +144,6 @@ export function OrderList() {
               <Heading size="lg" fontWeight="normal">
                 Pedidos
               </Heading>
-
-              <Button
-                size="sm"
-                fontSize="sm"
-                colorScheme="blue"
-                borderRadius={4}
-                leftIcon={<Icon as={RiArticleLine} fontSize="20" />}
-              >
-                Gerar PDF com todos os pedidos não concluídos
-              </Button>
             </Flex>
 
             {listError ? (
@@ -337,6 +329,7 @@ export function OrderList() {
                           colorScheme="blue"
                           borderRadius={4}
                           leftIcon={<Icon as={RiArticleLine} fontSize="20" />}
+                          onClick={() => handleGenerateOrderPDF(order.id)}
                         >
                           Gerar PDF
                         </Button>

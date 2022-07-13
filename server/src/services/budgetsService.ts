@@ -98,11 +98,10 @@ export class BudgetsService {
       throw new Error('Orçamento não cadastrado');
     }
 
-    await prisma.budget.delete({
-      where: { serialNumber: budgetExist.serialNumber },
-    });
-
+    
     await this.budgetProductsService.deleteBudgetProducts({ id });
+
+    await prisma.budget.delete({where: { id }});
   }
 
   async updateBudgetInfo({
