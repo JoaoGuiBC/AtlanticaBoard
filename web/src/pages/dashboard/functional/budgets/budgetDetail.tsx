@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import {
   RiArrowLeftLine,
+  RiArticleLine,
   RiCheckLine,
   RiDeleteBinLine,
   RiPencilLine,
 } from 'react-icons/ri';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -44,6 +45,7 @@ export function BudgetDetail() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logOut } = useAuth();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const {
     data,
@@ -92,6 +94,10 @@ export function BudgetDetail() {
 
   async function handleCreateOrder(id: string) {
     await loadCreateOrder({ variables: { budgetId: id } });
+  }
+
+  function handleGenerateBudgetPDF(id: string) {
+    navigate(`/orcamentos/pdf?id=${id}`);
   }
 
   const isWideVersion = useBreakpointValue({
@@ -250,10 +256,22 @@ export function BudgetDetail() {
                     </Text>
                   </VStack>
 
-                  <Flex paddingTop="14" wrap="wrap" maxWidth="32" gap="0.5rem">
+                  <Flex paddingTop="14" wrap="wrap" maxWidth="72" gap="0.5rem">
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
+                      fontSize="sm"
+                      lineHeight="sm"
+                      borderRadius={4}
+                      colorScheme="blue"
+                      onClick={() => handleGenerateBudgetPDF(data?.getBudget.id || '')}
+                      leftIcon={<Icon as={RiArticleLine} fontSize="16" />}
+                    >
+                      Gerar PDF
+                    </Button>
+                    <Button
+                      size="sm"
+                      w="32"
                       fontSize="sm"
                       lineHeight="sm"
                       borderRadius={4}
@@ -265,7 +283,7 @@ export function BudgetDetail() {
                     </Button>
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
                       fontSize="sm"
                       lineHeight="sm"
                       borderRadius={4}
@@ -278,7 +296,7 @@ export function BudgetDetail() {
                     </Button>
                     <Button
                       size="sm"
-                      w="100%"
+                      w="32"
                       fontSize="sm"
                       lineHeight="sm"
                       borderRadius={4}

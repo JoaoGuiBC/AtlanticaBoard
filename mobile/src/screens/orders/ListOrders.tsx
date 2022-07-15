@@ -8,7 +8,7 @@ import {
 } from 'native-base';
 
 import { UseAuth } from '@hooks/auth';
-import { useDeleteOrderMutation, useListOrdersQuery } from '@graphql/generated/graphql';
+import { useDeleteOrderMutation, useFinishOrderMutation, useListOrdersQuery } from '@graphql/generated/graphql';
 
 import { Toast } from '@components/Toast';
 import { Header } from '@components/Header';
@@ -87,6 +87,13 @@ export function ListOrders() {
       },
     },
   });
+  const [loadFinish] = useFinishOrderMutation({
+    context: {
+      headers: {
+        Authorization: user?.token,
+      },
+    },
+  });
 
   async function handleDeleteBudget(id: string) {
     await loadDelete({
@@ -95,6 +102,12 @@ export function ListOrders() {
         const filteredOrder = orders.filter((order) => id !== order.id);
         setOrders(filteredOrder);
       },
+      onError: (error) => handleError(error.message),
+    });
+  }
+  async function handleFinishOrder(id: string) {
+    await loadFinish({
+      variables: { finishOrderId: id },
       onError: (error) => handleError(error.message),
     });
   }
@@ -193,6 +206,7 @@ export function ListOrders() {
                 isLoading={deleteOrderParams.loading}
                 onDeleteOrder={handleDeleteBudget}
                 onSignOrder={handleSignOrder}
+                onFinishOrder={handleFinishOrder}
               />
             </Pressable>
           )}

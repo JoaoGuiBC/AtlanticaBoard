@@ -116,10 +116,8 @@ export function CreateBudget() {
     const newProductList = products.filter((product) => product.id !== id);
     const [removedProduct] = products.filter((product) => product.id === id);
 
-    const removalPrice = removedProduct.price * (removedProduct.base * removedProduct.height);
-
     setProducts(newProductList);
-    setPrice(price - removalPrice);
+    setPrice(price - removedProduct.price);
   }
 
   const onSubmit = (data: any) => handleCreateBudget(data);
@@ -278,7 +276,7 @@ export function CreateBudget() {
               {' '}
               {watchDiscount
                 ? currencyFormatter(price - watchDiscount)
-                : currencyFormatter(price - 0)}
+                : currencyFormatter(price)}
             </Text>
 
             <Button

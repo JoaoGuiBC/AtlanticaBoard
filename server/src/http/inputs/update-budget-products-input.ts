@@ -9,6 +9,9 @@ export class Product {
 @InputType()
 export class ProductBudgetList {
   @Field()
+  id: string;
+
+  @Field()
   base: number;
 
   @Field()

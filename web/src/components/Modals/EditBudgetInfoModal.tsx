@@ -163,6 +163,7 @@ export function EditBudgetInfoModal({
   async function handleSubmitNewProductList() {
     setLoading(true);
     const products = selectedProducts.map(product => ({
+      id: product.id,
       base: product.base,
       height: product.height,
       price: product.price,

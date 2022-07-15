@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { RiAddLine, RiCheckLine, RiDeleteBinLine } from 'react-icons/ri';
+import { RiAddLine, RiArticleLine, RiCheckLine, RiDeleteBinLine } from 'react-icons/ri';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -84,7 +84,9 @@ export function BudgetList() {
   async function handleCreateOrder(id: string) {
     await loadCreateOrder({ variables: { budgetId: id } });
   }
-
+  function handleGenerateBudgetPDF(id: string) {
+    navigate(`/orcamentos/pdf?id=${id}`);
+  }
   function handleSelectBudget(id: string) {
     navigate(`/orcamentos/orcamento?id=${id}`);
   }
@@ -260,6 +262,17 @@ export function BudgetList() {
                       </Flex>
 
                       <Flex wrap="wrap" maxWidth="32" gap="0.5rem">
+                      <Button
+                          size="sm"
+                          w="100%"
+                          fontSize="sm"
+                          colorScheme="blue"
+                          borderRadius={4}
+                          leftIcon={<Icon as={RiArticleLine} fontSize="20" />}
+                          onClick={() => handleGenerateBudgetPDF(budget.id)}
+                        >
+                          Gerar PDF
+                        </Button>
                         <Button
                           size="sm"
                           w="100%"

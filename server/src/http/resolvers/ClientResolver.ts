@@ -39,6 +39,7 @@ export class ClientResolver {
 
   @Query(() => String, { nullable: true })
   async getClientSignature(@Arg('id') id: string) {
+    console.log(id);
     const signature = await this.clientsService.getClientSignature(id);
 
     return signature;

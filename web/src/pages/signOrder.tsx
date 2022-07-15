@@ -37,8 +37,10 @@ export function SignOrder() {
   const canvas = useRef<any>(null);
   const toast = useToast();
 
+  const clientId = `${searchParams.get('cliente')}`;
+
   const { data } = useGetClientSignatureQuery({
-    variables: { getClientSignatureId: searchParams.get('cliente') || '' },
+    variables: { getClientSignatureId: clientId },
   });
   const [loadSignOrder] = useSignOrderMutation({
     onCompleted: () => setSigned(true),

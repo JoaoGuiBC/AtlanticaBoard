@@ -176,6 +176,7 @@ type ProductBudget {
 input ProductBudgetList {
   base: Float!
   height: Float!
+  id: String!
   price: Float!
   productId: String!
 }

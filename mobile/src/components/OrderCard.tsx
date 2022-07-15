@@ -34,11 +34,12 @@ interface OrderCardProps {
   data: Order;
   isLoading: boolean;
   onDeleteOrder: (id: string) => Promise<void>; // eslint-disable-line
+  onFinishOrder: (id: string) => Promise<void>; // eslint-disable-line
   onSignOrder: (orderId: string, clientId: string) => Promise<void>; // eslint-disable-line
 }
 
 export function OrderCard({
-  data, isLoading, onDeleteOrder, onSignOrder,
+  data, isLoading, onDeleteOrder, onFinishOrder, onSignOrder,
 }: OrderCardProps) {
   const {
     id, serialNumber, budgetSerialNumber, deadline, price, client, products, signed, finished_at,
@@ -122,24 +123,19 @@ export function OrderCard({
         left="0"
         space="3"
       >
-        <HStack justifyContent="space-evenly">
-          <Button colorScheme="darkBlue">
-            <Icon as={Feather} name="file-text" color="gray.50" size="4" />
-          </Button>
-
+        <HStack
+          justifyContent="space-between"
+          w="100%"
+        >
           <Button isLoading={isLoading} onPress={() => onSignOrder(id, client.id)} colorScheme="teal">
             <Icon as={Feather} name="edit-3" color="gray.50" size="4" />
           </Button>
-        </HStack>
 
-        <HStack
-          justifyContent="space-evenly"
-        >
           <Button isLoading={isLoading} onPress={() => onDeleteOrder(id)} colorScheme="error">
             <Icon as={Feather} name="trash-2" color="gray.50" size="4" />
           </Button>
 
-          <Button isLoading={isLoading} colorScheme="emerald">
+          <Button isLoading={isLoading} onPress={() => onFinishOrder(id)} colorScheme="emerald">
             <Icon as={Feather} name="check" color="gray.50" size="4" />
           </Button>
         </HStack>

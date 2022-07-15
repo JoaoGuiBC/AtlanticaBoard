@@ -1,4 +1,5 @@
 input ProductBudgetList {
+  id: String!
   base: Float!
   height: Float!
   price: Float!

@@ -13,7 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
 };
 
@@ -284,6 +283,7 @@ export type ProductBudget = {
 export type ProductBudgetList = {
   base: Scalars['Float'];
   height: Scalars['Float'];
+  id: Scalars['String'];
   price: Scalars['Float'];
   productId: Scalars['String'];
 };

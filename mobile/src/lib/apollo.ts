@@ -7,12 +7,12 @@ import {
 
 import { SERVER_URI } from '@env';
 
+console.log(`${SERVER_URI}`);
+
 const httpLink = createHttpLink({
   uri: SERVER_URI,
   fetch,
 });
-
-console.log(`${SERVER_URI}`);
 
 const cache = new InMemoryCache();
 

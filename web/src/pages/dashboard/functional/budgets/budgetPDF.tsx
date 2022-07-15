@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Box, Flex, Spinner, useToast } from "@chakra-ui/react";
-import { useGetOrderQuery } from "@graphql/generated/graphql";
+import { useGetBudgetQuery } from "@graphql/generated/graphql";
 
 import ReactPDF from "@react-pdf/renderer";
 const { PDFViewer } = ReactPDF;
@@ -10,16 +10,16 @@ import { useAuth } from "@contexts/AuthContext";
 
 import { Header } from "@components/Header";
 import { Sidebar } from "@components/Sidebar";
-import { SingleOrderPDF } from "@components/PDF/SingleOrderPDF";
+import { SingleBudgetPDF } from "@components/PDF/SingleBudgetPDF";
 
 type Product = {
   name: string;
-  base: number;
-  height: number;
-  total: number;
+  price: number;
+  totalPrice: number;
+  size: number;
 }
 
-export function OrderPDF() {
+export function BudgetPDF() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const [searchParams] = useSearchParams();
@@ -28,13 +28,13 @@ export function OrderPDF() {
 
   const {
     data,
-  } = useGetOrderQuery({
+  } = useGetBudgetQuery({
     context: {
       headers: {
         Authorization: user.token,
       },
     },
-    variables: { getOrderId: searchParams.get('id') || '' },
+    variables: { getBudgetId: searchParams.get('id') || '' },
     onError: err =>
       toast({
         title: 'Erro',
@@ -44,12 +44,12 @@ export function OrderPDF() {
         isClosable: true,
       }),
     onCompleted(info) {
-      const parsedProduct: Product[] = info.getOrder.products.map(product => (
+      const parsedProduct: Product[] = info.getBudget.products.map(product => (
         {
-          base: product.base,
-          height: product.height,
+          price: product.price,
           name: product.product.name,
-          total: product.base * product.height,
+          size: product.base * product.height,
+          totalPrice: product.price * (product.base * product.height),
         }
       ));
       setProducts(parsedProduct);
@@ -71,10 +71,12 @@ export function OrderPDF() {
               </Flex>
             ) : (
               <PDFViewer style={{ height: '30rem', width: '70%' }} >
-                <SingleOrderPDF
-                  client={data.getOrder.client.name}
-                  order={String(data.getOrder.serialNumber)}
+                <SingleBudgetPDF
+                  client={data.getBudget.client.name}
+                  budget={String(data.getBudget.serialNumber)}
                   products={products}
+                  discount={data.getBudget.discount}
+                  price={data.getBudget.price}
                 />
               </PDFViewer>
             )}

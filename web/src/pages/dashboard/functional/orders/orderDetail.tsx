@@ -102,6 +102,9 @@ export function OrderDetail() {
   function handleSignOrder(clientId: string, orderId: string) {
     navigate(`/assinarPedido?cliente=${clientId}&pedido=${orderId}`);
   }
+  function handleGenerateOrderPDF(id: string) {
+    navigate(`/pedidos/pdf?id=${id}`);
+  }
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -286,6 +289,7 @@ export function OrderDetail() {
                       lineHeight="sm"
                       borderRadius={4}
                       colorScheme="blue"
+                      onClick={() => handleGenerateOrderPDF(data.getOrder.client.id)}
                       leftIcon={<Icon as={RiArticleLine} fontSize="16" />}
                     >
                       Gerar PDF

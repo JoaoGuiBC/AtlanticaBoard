@@ -20,6 +20,7 @@ import { CreateProduct } from '@pages/dashboard/registrationQuery/products/creat
 import { BudgetList } from '@pages/dashboard/functional/budgets';
 import { CreateBudget } from '@pages/dashboard/functional/budgets/create';
 import { BudgetDetail } from '@pages/dashboard/functional/budgets/budgetDetail';
+import { BudgetPDF } from '@pages/dashboard/functional/budgets/budgetPDF';
 
 import { OrderList } from '@pages/dashboard/functional/orders';
 import { OrderDetail } from '@pages/dashboard/functional/orders/orderDetail';
@@ -102,6 +103,12 @@ export function Router() {
             path="/orcamentos"
             element={
               <ProtectedRoute component={<BudgetList />} redirectTo="/signIn" />
+            }
+          />
+          <Route
+            path="/orcamentos/pdf"
+            element={
+              <ProtectedRoute component={<BudgetPDF />} redirectTo="/signIn" />
             }
           />
           <Route

@@ -93,6 +93,18 @@ export class OrdersService {
     await this.budgetProductsService.deleteBudgetProducts({ id });
   }
 
+  async deleteOrderFromBudget(serialNumber: number) {
+    const orderExist = await prisma.order.findUnique({
+      where: { budgetSerialNumber: serialNumber },
+    });
+
+    if (orderExist) {
+      await prisma.order.delete({ where: { budgetSerialNumber: serialNumber } });
+
+      await this.budgetProductsService.deleteBudgetProducts({ id: orderExist.id });
+    }
+  }
+
   async signOrder(id: string) {
     const orderExist = await prisma.order.findUnique({
       where: { id },
