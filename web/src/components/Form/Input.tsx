@@ -25,7 +25,7 @@ interface InputProps extends ChakraInputProps {
   name: string;
   label?: string;
   info?: string;
-  error?: FieldError;
+  error?: any;
   leftContent?: string | ReactNode;
 }
 

@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "generate": "graphql-codegen --config --overwrite codegen.yml"
+    "generate": "graphql-codegen --config --overwrite codegen.yml",
+    "setbuild": "eas build:configure",
+    "build": "eas build -p android --profile preview"
   },
   "dependencies": {
     "@apollo/client": "^3.6.6",

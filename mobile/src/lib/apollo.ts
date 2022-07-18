@@ -7,7 +7,7 @@ import {
 
 import { SERVER_URI } from '@env';
 
-console.log(`${SERVER_URI}`);
+console.log(SERVER_URI);
 
 const httpLink = createHttpLink({
   uri: SERVER_URI,

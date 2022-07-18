@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 
+import { SERVER_URI } from '@env';
 import { Toast } from '@components/Toast';
 import { useRevalidateJwtLazyQuery, useSignInLazyQuery } from '@graphql/generated/graphql';
 
@@ -43,6 +44,17 @@ function AuthProvider({ children }: AuthProviderProps) {
   const toast = useToast();
 
   async function signIn(email: string, password: string) {
+    toast.show({
+      render: () => (
+        <Toast
+          title="Login"
+          description={SERVER_URI}
+          type="info"
+        />
+      ),
+      placement: 'top-right',
+    });
+
     if (!email || !password) {
       return toast.show({
         render: () => (
